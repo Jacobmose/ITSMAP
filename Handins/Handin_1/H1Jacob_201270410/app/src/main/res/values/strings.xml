@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">AdressAPP_201270410</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_address_input">Enter address details</string>
+    <string name="title_activity_main">A Dress</string>
+    <string name="btn_input_details">Enter Address Details</string>
+    
+    <string name="road_name_input_et_activity_address_input">Road Name</string>
+    <string name="house_number_input_et_activity_address_input">House Number</string>
+    <string name="post_code_input_et_activity_address_input">Post Code</string>
+    <string name="city_name_et_activity_address_input">City Name</string>
+    <string name="btn_back_activity_address_input">Back</string>
+    <string name="tv_enterDetails_activity_address_input">Enter address to get A Dress</string>
+
+    <string name="address_details_show_tw_activity_main"></string>
+    <string name="accept_address_details_btn_activity_address_input">Accept</string>
+</resources>
