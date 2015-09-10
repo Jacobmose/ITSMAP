@@ -1,6 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
-    android:layout_height="fill_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -46,14 +48,12 @@
             android:layout_height="wrap_content"
             android:gravity="center">
 
-            <EditText
-                android:layout_width="fill_parent"
+            <Spinner
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberSigned"
-                android:id="@+id/et_time"
-                android:gravity="center"
-                android:layout_margin="24dp"
-                android:hint="@string/timeDelay" />
+                android:id="@+id/spinner"
+                android:layout_gravity="center"
+                android:gravity="center" />
 
         </TableRow>
 

@@ -3,9 +3,9 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_2">Activity2</string>
+    <string name="title_activity_2">Your Message</string>
     <string name="timeDelay">Delay Time</string>
-    <string name="textMessage">Text Messsage</string>
+    <string name="textMessage">Text Message</string>
     <string name="startDelay">Start Delay</string>
     <string name="title_mainActivity">Message Delayer</string>
 </resources>

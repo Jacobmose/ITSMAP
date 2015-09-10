@@ -5,8 +5,7 @@ import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-
-import static android.content.Intent.getIntent;
+import android.util.Log;
 
 public class TimerService extends Service {
 
@@ -18,7 +17,6 @@ public class TimerService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
@@ -31,6 +29,7 @@ public class TimerService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId){
 
+        Log.i("TimerService", "onStartCommand called");
         String data = (String) intent.getExtras().get("Message");
         int time = (Integer) intent.getExtras().get("Time");
 
@@ -48,6 +47,7 @@ public class TimerService extends Service {
             public void onTick(long milliUntilFinished) {
                 broadcastIntent.putExtra("ProgressTime", milliUntilFinished / 1000);
                 LocalBroadcastManager.getInstance(TimerService.this).sendBroadcast(broadcastIntent);
+                Log.i("TimerService", "onTick called");
             }
 
             @Override
@@ -55,6 +55,7 @@ public class TimerService extends Service {
                 broadcastIntent.putExtra("ProgressTime", 0);
                 LocalBroadcastManager.getInstance(TimerService.this).sendBroadcast(broadcastIntent);
                 startActivity(activity2Intent);
+                Log.i("TimerService", "onFinish called");
             }
         }.start();
 

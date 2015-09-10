@@ -1,8 +1,8 @@
 package com.jacobmosehansen.h2_group_4;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -15,6 +15,7 @@ public class Activity2 extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_2);
+        Log.i("Activity2", "onCreate called");
 
         TextView tvMessage = (TextView) findViewById(R.id.tv_receivedMessage);
 
