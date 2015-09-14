@@ -1,16 +1,73 @@
 package com.jacobmosehansen.h3_group_4;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Button btnCreate, btnSave, btnShow;
+    private String result;
+    private DAO dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        dao = new DAO(this);
+
+        btnCreate = (Button)findViewById(R.id.btnCreate);
+        btnSave = (Button)findViewById(R.id.btnSave);
+        btnShow = (Button)findViewById(R.id.btnShow);
+
+        btnCreate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this, Activity2.class);
+
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                dao.insert(result);
+            }
+        });
+
+        btnShow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(MainActivity.this, Activity3.class);
+
+                startActivityForResult(intent, 4);
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+
+        if(requestCode == 1){
+
+            if(resultCode == RESULT_OK){
+
+                result = data.getStringExtra("Text");
+
+            }
+
+            if(resultCode == RESULT_CANCELED){}
+        }
+
     }
 
     @Override
