@@ -12,14 +12,14 @@ public class MainActivity extends AppCompatActivity {
 
     private Button btnCreate, btnSave, btnShow;
     private String result;
-    private DAO dao;
+    private NoteDataSource notedata;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dao = new DAO(this);
+        notedata = new NoteDataSource(this);
 
         btnCreate = (Button)findViewById(R.id.btnCreate);
         btnSave = (Button)findViewById(R.id.btnSave);
@@ -28,9 +28,7 @@ public class MainActivity extends AppCompatActivity {
         btnCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(MainActivity.this, Activity2.class);
-
                 startActivityForResult(intent, 1);
             }
         });
@@ -38,17 +36,14 @@ public class MainActivity extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                dao.insert(result);
+                notedata.insertNote(result);
             }
         });
 
         btnShow.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent intent = new Intent(MainActivity.this, Activity3.class);
-
                 startActivityForResult(intent, 4);
             }
         });
@@ -60,11 +55,8 @@ public class MainActivity extends AppCompatActivity {
         if(requestCode == 1){
 
             if(resultCode == RESULT_OK){
-
                 result = data.getStringExtra("Text");
-
             }
-
             if(resultCode == RESULT_CANCELED){}
         }
 

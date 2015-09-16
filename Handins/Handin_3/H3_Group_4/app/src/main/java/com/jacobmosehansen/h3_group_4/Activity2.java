@@ -11,13 +11,14 @@ import android.widget.EditText;
 
 public class Activity2 extends AppCompatActivity {
 
-    Button btnReturn, btnCancel;
-    EditText edTextField;
+    private Button btnReturn, btnCancel;
+    private EditText edTextField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_2);
+
 
         btnReturn = (Button)findViewById(R.id.btnReturnNote);
         btnCancel = (Button)findViewById(R.id.btnCancelNote);
