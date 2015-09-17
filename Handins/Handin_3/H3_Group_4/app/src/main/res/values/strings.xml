@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">H3_Group_4</string>
+    <string name="app_name">NoteAPP_Group_4</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -10,10 +10,13 @@
     <string name="btn_save">Save Note</string>
     <string name="btn_show">Show Notes</string>
 
+    <string name="btn_delete">Delete All Notes</string>
+
     <string name="btn_return_note">Return Note</string>
     <string name="btn_cancel_note">Cancel Note</string>
     <string name="insert_note">Insert note</string>
 
-    <string name="title_activity_2">Activity2</string>
-    <string name="title_activity_3">Activity3</string>
+    <string name="title_activity_2">Create Note</string>
+    <string name="title_activity_3">Show Notes</string>
+    <string name="title_mainActivity">The Note App</string>
 </resources>

@@ -1,16 +1,22 @@
 package com.jacobmosehansen.h3_group_4;
 
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 public class Activity3 extends AppCompatActivity {
 
     private NoteDataSource notedata;
     private ListView listview;
+    private Button btnCancel;
+    private ArrayAdapter<String> arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,13 +26,39 @@ public class Activity3 extends AppCompatActivity {
         notedata = new NoteDataSource(this);
 
         listview = (ListView) findViewById(R.id.listView);
+        btnCancel = (Button)findViewById(R.id.btnDelete);
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, notedata.getAllNotes());
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, notedata.getAllNotes());
 
         listview.setAdapter(arrayAdapter);
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                new AlertDialog.Builder(Activity3.this)
+                        .setTitle("Delete entry")
+                        .setMessage("Are you sure you want to delete this entry?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
 
+                                notedata.deleteAll();
+
+                                arrayAdapter = new ArrayAdapter<String>(Activity3.this, android.R.layout.simple_list_item_1, notedata.getAllNotes());
+
+                                listview.setAdapter(arrayAdapter);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                // do nothing
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+
+            }
+        });
     }
 
     @Override
