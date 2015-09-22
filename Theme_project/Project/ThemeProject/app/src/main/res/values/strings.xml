@@ -3,4 +3,10 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <string name="mainActivity_btn_posts">Posts</string>
+    <string name="mainActivity_btn_profile">Profile</string>
+    <string name="mainActivity_btn_newPost">New Post</string>
+    <string name="mainActivity_btn_chat">Chat</string>
+    <string name="mainActivity_search">Search</string>
 </resources>
