@@ -16,6 +16,26 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".PostsActivity"
+            android:label="@string/title_activity_posts" >
+        </activity>
+        <activity
+            android:name=".NewPostActivity"
+            android:label="@string/title_activity_new_post" >
+        </activity>
+        <activity
+            android:name=".ChatListActivity"
+            android:label="@string/title_activity_chat_list" >
+        </activity>
+        <activity
+            android:name=".ChatWindowActivity"
+            android:label="@string/title_activity_chat_window" >
+        </activity>
+        <activity
+            android:name=".ProfileActivity"
+            android:label="@string/title_activity_profile" >
+        </activity>
     </application>
 
 </manifest>
