@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="darkGreen" type="color">#044C44</item>
+    <item name="lightGreen" type="color">#71B37D</item>
+    <item name="lightGreenShade" type="color">#5D9365</item>
+    <item name="darkBlue" type="color">#5C9FD6</item>
+    <item name="blueGrey" type="color">#B1C8E1</item>
+    <item name="neon" type="color">#439B00</item>
+
+</resources>

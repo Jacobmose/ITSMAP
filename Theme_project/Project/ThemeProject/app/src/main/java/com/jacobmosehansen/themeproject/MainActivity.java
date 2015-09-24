@@ -1,16 +1,67 @@
 package com.jacobmosehansen.themeproject;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+
+    Button btn_posts, btn_chat, btn_newPost, btn_profile, btn_search;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        btn_posts = (Button) findViewById(R.id.btn_posts);
+        btn_chat = (Button) findViewById(R.id.btn_chat);
+        btn_newPost = (Button) findViewById(R.id.btn_newPost);
+        btn_profile = (Button) findViewById(R.id.btn_profile);
+        btn_search = (Button) findViewById(R.id.btn_search);
+
+
+        btn_posts.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, PostsActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        btn_chat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ChatListActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        btn_newPost.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, NewPostActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        btn_profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
+
+        btn_search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
     @Override
