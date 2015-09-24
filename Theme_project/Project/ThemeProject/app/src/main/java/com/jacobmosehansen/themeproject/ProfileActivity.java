@@ -1,16 +1,31 @@
 package com.jacobmosehansen.themeproject;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
+
+
 
 public class ProfileActivity extends AppCompatActivity {
+
+    ImageView imvProfilePicture;
+    RoundImage roundImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+
+        // set round profile picture //
+        imvProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.profile);
+        roundImage = new RoundImage(bm);
+        imvProfilePicture.setImageDrawable(roundImage);
+
     }
 
     @Override
