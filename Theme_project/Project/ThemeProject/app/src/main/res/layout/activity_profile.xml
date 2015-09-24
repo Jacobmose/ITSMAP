@@ -35,7 +35,7 @@
                 <RatingBar
                     style="@style/ratingBarGraduationHat"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:id="@+id/ratingBar_profileRating"
                     android:stepSize="0.5"
                     android:numStars="5"

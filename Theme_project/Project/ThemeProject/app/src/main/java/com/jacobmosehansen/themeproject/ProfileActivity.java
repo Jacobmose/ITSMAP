@@ -2,18 +2,22 @@ package com.jacobmosehansen.themeproject;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Rating;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
-
+import android.widget.RatingBar;
+import android.widget.Toast;
 
 
 public class ProfileActivity extends AppCompatActivity {
 
-    ImageView imvProfilePicture;
     RoundImage roundImage;
+
+    ImageView ivProfilePicture;
+    RatingBar rbGradRating;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +25,19 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
 
         // set round profile picture //
-        imvProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
+        ivProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
         Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.profile);
         roundImage = new RoundImage(bm);
-        imvProfilePicture.setImageDrawable(roundImage);
+        ivProfilePicture.setImageDrawable(roundImage);
+
+        // Set ratingbar //
+        rbGradRating = (RatingBar) findViewById(R.id.ratingBar_profileRating);
+        rbGradRating.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+            @Override
+            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                Toast.makeText(getApplicationContext(), Float.toString(rating), Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
