@@ -7,10 +7,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
+
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -19,6 +24,10 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView ivProfilePicture;
     RatingBar rbGradRating;
     Spinner sprSubjects;
+    Button btnAddSubject;
+    ListView lvSubjects;
+    TextView hejsa;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +53,20 @@ public class ProfileActivity extends AppCompatActivity {
         // Set Subject Selection Preset Text //
         sprSubjects.setAdapter(new NothingSelectedSpinnerAdapter(myAdapter,
                 R.layout.spinner_row_nothing_selected,this));
+
+        // Do on btn_addSubject add chosen subject to listView //
+        btnAddSubject = (Button) findViewById(R.id.btn_addSubject);
+        //lvSubjects = (ListView) findViewById(R.id.lv_subjects);
+
+        hejsa = (TextView) findViewById(R.id.textView6);
+
+        btnAddSubject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String selectedSubject = sprSubjects.getSelectedItem().toString();
+                hejsa.setText(selectedSubject);
+            }
+        });
 
 
     }
