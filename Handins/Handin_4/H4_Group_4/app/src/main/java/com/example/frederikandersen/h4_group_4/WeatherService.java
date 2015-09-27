@@ -1,22 +1,14 @@
 package com.example.frederikandersen.h4_group_4;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,17 +17,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.MalformedInputException;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
 
 public class WeatherService extends Service {
 
     private String HTTP_ADDRESS = "http://api.openweathermap.org/data/2.5/weather?id=2624652&units=metric";
 
     private final IBinder mBinder = new LocalBinder();
+
+    private Timer timer;
 
     public class LocalBinder extends Binder{
         WeatherService getService(){
@@ -49,10 +40,15 @@ public class WeatherService extends Service {
         return mBinder;
     }
 
+    @Override
+    public void onDestroy(){
+        timer.cancel();
+    }
+
     public void startServiceHandler(long timeInMilliSec){
         final android.os.Handler handler = new android.os.Handler();
 
-        Timer timer = new Timer();
+        timer = new Timer();
 
         TimerTask timerTask = new TimerTask() {
             @Override
@@ -68,7 +64,7 @@ public class WeatherService extends Service {
         timer.schedule(timerTask, 0, timeInMilliSec);
     }
 
-    private class DownloadweatherData extends AsyncTask<String, Void, String> {
+    private class DownloadWeatherData extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... urls){
@@ -102,7 +98,7 @@ public class WeatherService extends Service {
 
     public void startWeatherRequest(){
         Log.i("weatherService", "startWeatherRequest");
-        new DownloadweatherData().execute(HTTP_ADDRESS);
+        new DownloadWeatherData().execute(HTTP_ADDRESS);
 
     }
 
