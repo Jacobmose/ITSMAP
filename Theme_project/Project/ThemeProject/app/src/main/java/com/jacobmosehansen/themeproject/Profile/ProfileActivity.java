@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
+import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -33,9 +35,8 @@ public class ProfileActivity extends AppCompatActivity {
     Spinner sprSubjects;
     Button btnAddSubject, btnRate;
     ListView lvSubjects;
-    ArrayList<String> addArray = new ArrayList<String>();
-    TextView tvtest;
-
+    ArrayList<String> subjectArray = new ArrayList<String>();
+    private ArrayAdapter<String> mySubjectAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,41 +55,64 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Set Subject Spinner //
         sprSubjects = (Spinner) findViewById(R.id.spinner_subjects);
-        ArrayAdapter<CharSequence> myAdapter = ArrayAdapter.createFromResource(this,
+        final ArrayAdapter<CharSequence> myAdapter = ArrayAdapter.createFromResource(this,
                 R.array.subjects_array, android.R.layout.simple_spinner_item);
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sprSubjects.setPrompt("Select a subject");
 
         // Set Subject Selection Preset Text //
         sprSubjects.setAdapter(new NothingSelectedSpinnerAdapter(myAdapter,
-                R.layout.spinner_row_nothing_selected,this));
+                R.layout.spinner_row_nothing_selected, this));
 
         // Do on btn_addSubject add chosen subject to listView //
         btnAddSubject = (Button) findViewById(R.id.btn_addSubject);
         lvSubjects = (ListView) findViewById(R.id.lv_subjects);
+        mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_list_item_1, subjectArray);
 
         btnAddSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try{
-                String selectedSubject = sprSubjects.getSelectedItem().toString();
+                    String selectedSubject = sprSubjects.getSelectedItem().toString();
 
-                if(addArray.size() < 5){
-                    if(addArray.contains(selectedSubject)){
-                        Toast.makeText(getBaseContext(), "Subject already added", Toast.LENGTH_LONG);
-                    }else{
-                        addArray.add(selectedSubject);
-                        ArrayAdapter<String> mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this,
-                                android.R.layout.simple_list_item_1, addArray);
+                    if(subjectArray.size() < 5){
+                    if(subjectArray.contains(selectedSubject)){
+                        Toast.makeText(getBaseContext(), "Subject already added", Toast.LENGTH_SHORT).show();
+                    }else {
+                        mySubjectAdapter.add(selectedSubject);
                         lvSubjects.setAdapter(mySubjectAdapter);
                     }}
-                else{Toast.makeText(getBaseContext(), "Too many subjects added", Toast.LENGTH_LONG);}
+                else{Toast.makeText(getBaseContext(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
                 }catch(Exception e){
-                    Toast.makeText(getBaseContext(), "No subject selected", Toast.LENGTH_LONG);
+                    Toast.makeText(getBaseContext(), "No subject selected", Toast.LENGTH_SHORT).show();
                 }
 
             }
         });
+
+        // Do on subject swipe remove subject from array //
+
+        // This code is based on the Android-SwipeToDismiss example of use of the
+        // SwipeDissmissListViewTouchListener class//
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        lvSubjects,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    mySubjectAdapter.remove(mySubjectAdapter.getItem(position));
+                                }
+                                mySubjectAdapter.notifyDataSetChanged();
+                            }
+                        });
+        lvSubjects.setOnTouchListener(touchListener);
+
     }
 
     @Override
