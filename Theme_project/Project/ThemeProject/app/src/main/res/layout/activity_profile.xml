@@ -117,7 +117,7 @@
                         android:layout_width="fill_parent"
                         android:layout_height="48dp"
                         android:text="@string/rateBtn_text"
-                        android:id="@+id/button" />
+                        android:id="@+id/btn_rate" />
                 </LinearLayout>
             </RelativeLayout>
 
@@ -153,12 +153,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
+            <ListView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Large Text"
-                android:id="@+id/textView6" />
+                android:id="@+id/lv_subjects"
+                android:layout_weight="1" />
         </TableRow>
     </LinearLayout>
 

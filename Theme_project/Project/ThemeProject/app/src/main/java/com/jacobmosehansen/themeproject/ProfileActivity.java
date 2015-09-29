@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -15,6 +16,9 @@ import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -24,9 +28,10 @@ public class ProfileActivity extends AppCompatActivity {
     ImageView ivProfilePicture;
     RatingBar rbGradRating;
     Spinner sprSubjects;
-    Button btnAddSubject;
+    Button btnAddSubject, btnRate;
     ListView lvSubjects;
-    TextView hejsa;
+    ArrayList<String> addArray = new ArrayList<String>();
+    TextView tvtest;
 
 
     @Override
@@ -42,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Set Rating Bar //
         rbGradRating = (RatingBar) findViewById(R.id.ratingBar_profileRating);
+        btnRate = (Button) findViewById(R.id.btn_rate);
 
         // Set Subject Spinner //
         sprSubjects = (Spinner) findViewById(R.id.spinner_subjects);
@@ -56,18 +62,44 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Do on btn_addSubject add chosen subject to listView //
         btnAddSubject = (Button) findViewById(R.id.btn_addSubject);
-        //lvSubjects = (ListView) findViewById(R.id.lv_subjects);
-
-        hejsa = (TextView) findViewById(R.id.textView6);
+        lvSubjects = (ListView) findViewById(R.id.lv_subjects);
 
         btnAddSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try{
                 String selectedSubject = sprSubjects.getSelectedItem().toString();
-                hejsa.setText(selectedSubject);
+
+                if(addArray.size() < 5){
+                    if(addArray.contains(selectedSubject)){
+                        Toast.makeText(getBaseContext(), "Subject already added", Toast.LENGTH_LONG);
+                    }else{
+                        addArray.add(selectedSubject);
+                        ArrayAdapter<String> mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this,
+                                android.R.layout.simple_list_item_1, addArray);
+                        lvSubjects.setAdapter(mySubjectAdapter);
+                    }}
+                else{Toast.makeText(getBaseContext(), "Too many subjects added", Toast.LENGTH_LONG);}
+                }catch(Exception e){
+                    Toast.makeText(getBaseContext(), "No subject selected", Toast.LENGTH_LONG);
+                }
+
             }
         });
 
+        // Remove list subject on swipe //
+        lvSubjects.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                // TODO Auto-generated method stub
+                switch (event.getAction())
+                {
+
+                }
+                return false;
+
+            }
+        });
 
     }
 
