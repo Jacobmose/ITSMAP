@@ -2,7 +2,6 @@ package com.jacobmosehansen.themeproject;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Rating;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -19,6 +18,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+import com.jacobmosehansen.themeproject.Tools.RoundImage;
 
 
 public class ProfileActivity extends AppCompatActivity {

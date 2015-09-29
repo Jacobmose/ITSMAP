@@ -1,22 +1,50 @@
 package com.jacobmosehansen.themeproject;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 
-public class NewPostActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
+
+    Button btn_login, btn_createUser;
+    CreateUserFragment mCreateUserFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_post);
+        setContentView(R.layout.activity_login);
+
+        btn_login = (Button) findViewById(R.id.btn_login);
+        btn_createUser = (Button) findViewById(R.id.btn_createUser);
+        mCreateUserFragment = new CreateUserFragment();
+
+        btn_login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+            }
+        });
+
+        btn_createUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_post, menu);
+        getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 
