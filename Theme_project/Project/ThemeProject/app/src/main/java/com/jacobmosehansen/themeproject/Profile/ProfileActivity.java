@@ -1,4 +1,4 @@
-package com.jacobmosehansen.themeproject;
+package com.jacobmosehansen.themeproject.Profile;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
 
@@ -88,21 +89,6 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-
-        // Remove list subject on swipe //
-        lvSubjects.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // TODO Auto-generated method stub
-                switch (event.getAction())
-                {
-
-                }
-                return false;
-
-            }
-        });
-
     }
 
     @Override

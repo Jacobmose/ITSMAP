@@ -11,6 +11,7 @@ import android.widget.Button;
 import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
 import com.jacobmosehansen.themeproject.Post.NewPostActivity;
 import com.jacobmosehansen.themeproject.Post.PostsActivity;
+import com.jacobmosehansen.themeproject.Profile.ProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
 

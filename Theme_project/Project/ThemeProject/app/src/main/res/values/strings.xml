@@ -16,40 +16,6 @@
     <string name="title_activity_profile">ProfileActivity</string>
 
 
-    <!-- activity_profile strings -->
-    <!-- TextViews -->
-    <string name="userName_text">User Name</string>
-    <string name="fullName_text">Full Name</string>
-    <string name="userSex_text">Male/Female</string>
-    <string name="userAge_text">Age</string>
-    <string name="userLocation_text">Location</string>
-    <!-- Buttons -->
-    <string name="rateBtn_text">Rate</string>
-    <string name="addSubject_text">Add Subject</string>
-    <!-- Subjects -->
-    <string-array name="subjects_array">
-        <!-- Humanities -->
-        <item>Danish</item>
-        <item>English</item>
-        <item>Religions</item>
-        <item>History</item>
-        <item>Social Studies</item>
-        <!-- Natural Subjects -->
-        <item>Mathematics</item>
-        <item>Natural Science</item>
-        <item>Geography</item>
-        <item>Biology</item>
-        <item>Physics/Chemistry</item>
-        <!-- Practical/Music Subjects -->
-        <item>Sports</item>
-        <item>Music</item>
-        <item>Art</item>
-        <item>Needlework</item>
-        <item>Woodwork</item>
-        <item>Cooking</item>
-    </string-array>
-    <string name="selectSubject">Select a subject...</string>
-    <string name="title_activity_login">LoginActivity</string>
 
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
