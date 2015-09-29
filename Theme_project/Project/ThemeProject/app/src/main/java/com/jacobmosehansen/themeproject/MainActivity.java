@@ -8,6 +8,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
+import com.jacobmosehansen.themeproject.Post.NewPostActivity;
+import com.jacobmosehansen.themeproject.Post.PostsActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     Button btn_posts, btn_chat, btn_newPost, btn_profile, btn_search;
@@ -63,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,4 +1,4 @@
-package com.jacobmosehansen.themeproject;
+package com.jacobmosehansen.themeproject.Tools;
 
 /**
  * Created by Morten on 25-09-2015.

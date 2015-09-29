@@ -1,22 +1,24 @@
-package com.jacobmosehansen.themeproject;
+package com.jacobmosehansen.themeproject.Chat;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class ChatWindowActivity extends AppCompatActivity {
+import com.jacobmosehansen.themeproject.R;
+
+public class ChatListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_window);
+        setContentView(R.layout.activity_chat_list);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_chat_window, menu);
+        getMenuInflater().inflate(R.menu.menu_chat_list, menu);
         return true;
     }
 
