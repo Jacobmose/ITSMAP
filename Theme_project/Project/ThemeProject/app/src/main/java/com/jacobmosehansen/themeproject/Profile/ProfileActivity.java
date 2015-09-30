@@ -1,7 +1,9 @@
 package com.jacobmosehansen.themeproject.Profile;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -36,7 +38,9 @@ public class ProfileActivity extends AppCompatActivity {
     Button btnAddSubject, btnRate;
     ListView lvSubjects;
     ArrayList<String> subjectArray = new ArrayList<String>();
+
     private ArrayAdapter<String> mySubjectAdapter;
+    private static final int CAMERA_REQUEST = 1888;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class ProfileActivity extends AppCompatActivity {
         Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.default_profile);
         roundImage = new RoundImage(bm);
         ivProfilePicture.setImageDrawable(roundImage);
+
+
 
         // Set Rating Bar //
         rbGradRating = (RatingBar) findViewById(R.id.ratingBar_profileRating);
@@ -113,7 +119,26 @@ public class ProfileActivity extends AppCompatActivity {
                         });
         lvSubjects.setOnTouchListener(touchListener);
 
+
+        // On profile picture press, open camera and take picture for imageView //
+        ivProfilePicture.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent myCameraIntent = new Intent (MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(myCameraIntent, CAMERA_REQUEST);
+            }
+        });
     }
+
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        if(requestCode == CAMERA_REQUEST && resultCode == RESULT_OK){
+            Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
+            roundImage = new RoundImage(profilePicture);
+            ivProfilePicture.setImageDrawable(roundImage);
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
