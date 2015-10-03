@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.jacobmosehansen.themeproject" >
-    <uses-feature android:name="android.hardware.camera"></uses-feature>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-feature android:name="android.hardware.camera" />
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -10,7 +12,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".Login.LoginActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,8 +41,12 @@
             android:label="@string/title_activity_profile" >
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_login" >
+        </activity>
+        <activity
+            android:name=".Login.CreateUserActivity"
+            android:label="@string/title_activity_create_user" >
         </activity>
     </application>
 

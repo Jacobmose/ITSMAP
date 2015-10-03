@@ -4,16 +4,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="4"
-    tools:context="com.jacobmosehansen.themeproject.LoginActivity">
+    tools:context="com.jacobmosehansen.themeproject.Login.LoginActivity">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="3"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center">
 
-    </LinearLayout>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:weightSum="2">
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:ems="10"
+                android:id="@+id/edLoginEmail"
+                android:layout_weight="1"
+                android:layout_margin="20dp"
+                android:hint="@string/txt_email"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/edLoginPassword"
+                android:layout_weight="1"
+                android:layout_margin="20dp"
+                android:hint="@string/txt_password"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -35,14 +65,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/btn_login"/>
+                android:text="@string/btn_login"
+                android:background="@color/lightGreen"
+                android:layout_margin="5dp" />
 
             <Button
                 android:id="@+id/btn_createUser"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/btn_createUser"/>
+                android:text="@string/btn_createUser"
+                android:background="@color/lightGreen"
+                android:layout_margin="5dp" />
 
         </LinearLayout>
 
