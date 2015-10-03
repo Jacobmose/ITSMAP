@@ -53,13 +53,29 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_list_item_1, subjectArray);
+
+        // Get content if rotated //
+        if (savedInstanceState != null){
+            String[] subjects = savedInstanceState.getStringArray("myKey");
+            if(subjects != null){
+                mySubjectAdapter.addAll(subjects);
+            }
+        }
+
         // Set Round Profile Picture //
         ivProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
         Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.default_profile);
         roundImage = new RoundImage(bm);
         ivProfilePicture.setImageDrawable(roundImage);
 
-
+        // On profile picture press, open camera and take picture for imageView //
+        ivProfilePicture.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                selectImage();
+            }
+        });
 
         // Set Rating Bar //
         rbGradRating = (RatingBar) findViewById(R.id.ratingBar_profileRating);
@@ -79,26 +95,12 @@ public class ProfileActivity extends AppCompatActivity {
         // Do on btn_addSubject add chosen subject to listView //
         btnAddSubject = (Button) findViewById(R.id.btn_addSubject);
         lvSubjects = (ListView) findViewById(R.id.lv_subjects);
-        mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_list_item_1, subjectArray);
+
 
         btnAddSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try{
-                    String selectedSubject = sprSubjects.getSelectedItem().toString();
-
-                    if(subjectArray.size() < 5){
-                    if(subjectArray.contains(selectedSubject)){
-                        Toast.makeText(getBaseContext(), "Subject already added", Toast.LENGTH_SHORT).show();
-                    }else {
-                        mySubjectAdapter.add(selectedSubject);
-                        lvSubjects.setAdapter(mySubjectAdapter);
-                    }}
-                else{Toast.makeText(getBaseContext(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
-                }catch(Exception e){
-                    Toast.makeText(getBaseContext(), "No subject selected", Toast.LENGTH_SHORT).show();
-                }
-
+                selectFromSpinner();
             }
         });
 
@@ -124,15 +126,6 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         });
         lvSubjects.setOnTouchListener(touchListener);
-
-
-        // On profile picture press, open camera and take picture for imageView //
-        ivProfilePicture.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v){
-                selectImage();
-            }
-        });
 
     }
 
@@ -205,6 +198,37 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    public void selectFromSpinner(){
+        try{
+            String selectedSubject = sprSubjects.getSelectedItem().toString();
+
+            if(subjectArray.size() < 5){
+                if(subjectArray.contains(selectedSubject)){
+                    Toast.makeText(getBaseContext(), "Subject already added", Toast.LENGTH_SHORT).show();
+                }else {
+                    mySubjectAdapter.add(selectedSubject);
+                    lvSubjects.setAdapter(mySubjectAdapter);
+                }}
+            else{Toast.makeText(getBaseContext(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
+        }catch(Exception e){
+            Toast.makeText(getBaseContext(), "No subject selected", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void onSaveInstanceState(Bundle savedState){
+        super.onSaveInstanceState(savedState);
+
+
+        lvSubjects.setAdapter(mySubjectAdapter);
+        int count = mySubjectAdapter.getCount();
+        String[] subjects = new String[count];
+
+        for (int i = 0; i < count; i++){
+            subjects[i] = mySubjectAdapter.getItem(i).toString();
+        }
+        savedState.putStringArray("myKey", subjects);
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
