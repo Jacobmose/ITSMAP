@@ -10,21 +10,14 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.net.URI;
 import java.util.ArrayList;
 
 import com.jacobmosehansen.themeproject.R;
@@ -36,7 +29,6 @@ import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
 public class ProfileActivity extends AppCompatActivity {
 
     RoundImage roundImage;
-
     ImageView ivProfilePicture;
     RatingBar rbGradRating;
     Spinner sprSubjects;
@@ -51,23 +43,23 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_profile);
-
         mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_list_item_1, subjectArray);
-
-        // Get content if rotated //
-        if (savedInstanceState != null){
-            String[] subjects = savedInstanceState.getStringArray("myKey");
-            if(subjects != null){
-                mySubjectAdapter.addAll(subjects);
-            }
-        }
+        ivProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
+        rbGradRating = (RatingBar) findViewById(R.id.ratingBar_profileRating);
+        btnRate = (Button) findViewById(R.id.btn_rate);
+        sprSubjects = (Spinner) findViewById(R.id.spinner_subjects);
+        btnAddSubject = (Button) findViewById(R.id.btn_addSubject);
+        lvSubjects = (ListView) findViewById(R.id.lv_subjects);
 
         // Set Round Profile Picture //
-        ivProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
-        Bitmap bm = BitmapFactory.decodeResource(getResources(),R.drawable.default_profile);
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
         roundImage = new RoundImage(bm);
         ivProfilePicture.setImageDrawable(roundImage);
+
+
 
         // On profile picture press, open camera and take picture for imageView //
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
@@ -77,12 +69,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
-        // Set Rating Bar //
-        rbGradRating = (RatingBar) findViewById(R.id.ratingBar_profileRating);
-        btnRate = (Button) findViewById(R.id.btn_rate);
-
         // Set Subject Spinner //
-        sprSubjects = (Spinner) findViewById(R.id.spinner_subjects);
         final ArrayAdapter<CharSequence> myAdapter = ArrayAdapter.createFromResource(this,
                 R.array.subjects_array, android.R.layout.simple_spinner_item);
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -93,10 +80,6 @@ public class ProfileActivity extends AppCompatActivity {
                 R.layout.spinner_row_nothing_selected, this));
 
         // Do on btn_addSubject add chosen subject to listView //
-        btnAddSubject = (Button) findViewById(R.id.btn_addSubject);
-        lvSubjects = (ListView) findViewById(R.id.lv_subjects);
-
-
         btnAddSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -215,40 +198,4 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
-    public void onSaveInstanceState(Bundle savedState){
-        super.onSaveInstanceState(savedState);
-
-
-        lvSubjects.setAdapter(mySubjectAdapter);
-        int count = mySubjectAdapter.getCount();
-        String[] subjects = new String[count];
-
-        for (int i = 0; i < count; i++){
-            subjects[i] = mySubjectAdapter.getItem(i).toString();
-        }
-        savedState.putStringArray("myKey", subjects);
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_profile, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 }
