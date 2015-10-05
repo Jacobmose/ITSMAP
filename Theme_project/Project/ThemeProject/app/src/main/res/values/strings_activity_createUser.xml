@@ -3,6 +3,7 @@
 
     <!-- Strings related to create user -->
     <string name="txt_title">Create new user</string>
+    <string name="txt_createUser">Create User</string>
 
     <string name="txt_first_name">First Name</string>
     <string name="txt_last_name">Last Name</string>
