@@ -29,10 +29,6 @@
             android:label="@string/title_activity_chat_list" >
         </activity>
         <activity
-            android:name=".Chat.ChatWindowActivity"
-            android:label="@string/title_activity_chat_window" >
-        </activity>
-        <activity
             android:name=".Profile.ProfileActivity"
             android:label="@string/title_activity_profile" >
         </activity>
