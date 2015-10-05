@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.util.ArrayList;
+
 /**
  * Created by Jacobmosehansen on 03-10-2015.
  */
@@ -107,7 +109,7 @@ public class DBUserAdapter {
         return false;
     }
 
-    User getUser(int id){
+    ArrayList<String> getUser(int id){
         Cursor mCursor = db.query(DATABASE_TABLE, new String[]{ KEY_ROWID, KEY_USERNAME, KEY_AGE, KEY_GENDER }, KEY_ROWID + "=?", new String[] {String.valueOf(id)}, null, null, null);
 
         if (mCursor != null) {
@@ -119,9 +121,13 @@ public class DBUserAdapter {
         String userAge = mCursor.getString(2);
         String userGender = mCursor.getString(4);
 
-        User user = new User(userId, userName, userAge, userGender);
+        ArrayList<String> data = new ArrayList<String>();
+        data.add(Integer.toString(userId));
+        data.add(userName);
+        data.add(userAge);
+        data.add(userGender);
 
-        return user;
+        return data;
     }
 
     public int getUserId(String email)throws SQLException {
@@ -137,20 +143,5 @@ public class DBUserAdapter {
         return id;
     }
 
-}
-
-class User {
-
-    int _id;
-    String _name;
-    String _age;
-    String _gender;
-
-    User(int id, String name, String age, String gender){
-        this._id = id;
-        this._name = name;
-        this._age = age;
-        this._gender = gender;
-    }
 }
 
