@@ -1,19 +1,26 @@
 package com.jacobmosehansen.themeproject.Login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.MainActivity;
 import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 public class CreateUserActivity extends AppCompatActivity {
 
@@ -21,6 +28,13 @@ public class CreateUserActivity extends AppCompatActivity {
     private EditText inputFullName;
     private EditText inputEmail;
     private EditText inputPassword;
+    private Spinner sprAge;
+    private Spinner sprGender;
+    private ArrayAdapter<String> ageArrayAdapter;
+    private ArrayAdapter<String> genderArrayAdapter;
+    private ArrayList<String> ageValues;
+    private ArrayList<String> genderValues;
+    Integer userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,11 +45,28 @@ public class CreateUserActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         btnRegister = (Button) findViewById(R.id.btnRegister);
+        sprAge = (Spinner) findViewById(R.id.spinAge);
+        sprGender = (Spinner) findViewById(R.id.spinGender);
+
+        ageValues = new ArrayList<String>();
+        for (Integer i = 10; i <= 99; i++){
+            ageValues.add(Integer.toString(i));
+        }
+        ageArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ageValues);
+        sprAge.setAdapter(ageArrayAdapter);
+
+        genderValues = new ArrayList<String>();
+        genderValues.add("Male");
+        genderValues.add("Female");
+        genderArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genderValues);
+        sprGender.setAdapter(genderArrayAdapter);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String name = inputFullName.getText().toString();
+                String age = sprAge.getSelectedItem().toString();
+                String gender = sprGender.getSelectedItem().toString();
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
 
@@ -44,7 +75,7 @@ public class CreateUserActivity extends AppCompatActivity {
                     DBUserAdapter dbUser = new DBUserAdapter(CreateUserActivity.this);
 
                     dbUser.open();
-                    dbUser.AddUser(name, email, password);
+                    dbUser.AddUser(name, age, gender, email, password);
                     dbUser.close();
 
                     Intent intent = new Intent(CreateUserActivity.this, LoginActivity.class);
@@ -58,6 +89,11 @@ public class CreateUserActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void loadSavedPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        userId = sharedPreferences.getInt("USER_ID", 0);
     }
 
     @Override

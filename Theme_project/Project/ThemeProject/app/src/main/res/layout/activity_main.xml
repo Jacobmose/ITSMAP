@@ -39,6 +39,16 @@
                 android:background="@color/lightGreen"
                 android:layout_margin="5dp" />
 
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_search"
+                android:spinnerMode="dialog"
+                android:layout_margin="5dp"
+                android:layout_toLeftOf="@+id/btn_search"
+                android:layout_below="@+id/et_search" />
+
+
         </RelativeLayout>
 
         <GridLayout

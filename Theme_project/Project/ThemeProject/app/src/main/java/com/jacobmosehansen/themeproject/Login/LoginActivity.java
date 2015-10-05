@@ -1,6 +1,8 @@
 package com.jacobmosehansen.themeproject.Login;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -18,6 +20,9 @@ public class LoginActivity extends AppCompatActivity {
 
     Button btnLogin, btnCreateUser;
     EditText edLoginEmail, edLoginPassword;
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    Integer userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +33,7 @@ public class LoginActivity extends AppCompatActivity {
         btnCreateUser = (Button) findViewById(R.id.btn_createUser);
         edLoginEmail = (EditText) findViewById(R.id.edLoginEmail);
         edLoginPassword = (EditText) findViewById(R.id.edLoginPassword);
+
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -39,14 +45,20 @@ public class LoginActivity extends AppCompatActivity {
                     try {
 
                         DBUserAdapter dbUser = new DBUserAdapter(LoginActivity.this);
+
                         dbUser.open();
 
                         final String tmpEmail = "admin";
                         final String tmpName= "admin";
+                        final String tmpAge= "admin";
+                        final String tmpGender= "admin";
                         final String tmpPassword = "admin";
-                        dbUser.AddUser(tmpEmail, tmpName, tmpPassword);
+                        dbUser.AddUser(tmpEmail, tmpName,tmpAge, tmpGender, tmpPassword);
 
                         if (dbUser.Login(email, password)){
+
+                            savePreferences("USER_ID", dbUser.getUserId(email));
+
                             Toast.makeText(LoginActivity.this, "Login Success!", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -75,6 +87,19 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    private void savePreferences(String key, int userId){
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        editor = sharedPreferences.edit();
+        editor.putInt(key, userId);
+        editor.commit();
+    }
+
+    private void loadSavedPreferences(){
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        userId = sharedPreferences.getInt("USER_ID", 0);
     }
 
     @Override
