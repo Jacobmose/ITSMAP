@@ -1,55 +1,57 @@
 package com.jacobmosehansen.themeproject.Chat;
 
-import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jacobmosehansen.themeproject.R;
+import com.jacobmosehansen.themeproject.Tools.RoundImage;
 
 
 public class ChatWindowFragment extends Fragment {
 
-    private OnItemSelectedListener listener;
+    TextView txtTopic;
+    TextView txtPerson;
+    ImageView imgPerson;
+    ListView lvwMessages;
+
+    RoundImage roundImage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chat_window,
-                container, false);
-        Button button = (Button) view.findViewById(R.id.button1);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                updateDetail("fake");
-            }
-        });
+        View view = inflater.inflate(R.layout.fragment_chat_window, container, false);
+
+        txtPerson = (TextView) view.findViewById(R.id.txtChatWindowPerson);
+        txtTopic = (TextView) view.findViewById(R.id.txtChatWindowTopic);
+        imgPerson = (ImageView) view.findViewById(R.id.imvChatWindowImage);
+
         return view;
     }
 
-    public interface OnItemSelectedListener {
-        public void onRssItemSelected(String link);
-    }
+    public void setChat(ChatItem chat)
+    {
+        txtTopic.setText(chat.getTopic());
+        txtPerson.setText(chat.getPerson());
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnItemSelectedListener) {
-            listener = (OnItemSelectedListener) context;
-        } else {
-            throw new ClassCastException(context.toString()
-                    + " must implement MyListFragment.OnItemSelectedListener");
+        if(chat.getPersonImg() != null){
+            imgPerson.setImageDrawable(chat.getPersonImg());
+        }else{
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
+            roundImage = new RoundImage(bm);
+            imgPerson.setImageDrawable(roundImage);
         }
-    }
 
-    // triggers update of the details fragment
-    public void updateDetail(String uri) {
-        // create fake data
-        String newTime = String.valueOf(System.currentTimeMillis());
-        // Send data to Activity
-        listener.onRssItemSelected(newTime);
+        if(chat.getMessageItems() != null){
+
+        }
+
     }
 }
