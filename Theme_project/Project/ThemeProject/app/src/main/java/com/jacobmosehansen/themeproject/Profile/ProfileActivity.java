@@ -1,12 +1,16 @@
 package com.jacobmosehansen.themeproject.Profile;
 
 import android.app.AlertDialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,17 +21,30 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.util.ArrayList;
 
-import com.jacobmosehansen.themeproject.R;
+
+// MUST BE DELETED//
+/*import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
-
+*/
 
 public class ProfileActivity extends AppCompatActivity {
 
+    //User/Database variables//
+    SharedPreferences mySharedPreferences;
+    Integer userId;
+    Integer requestId;
+
+    //UI variables//
+    TextView mytextview;
+
+    // MUST BE DELETED//
+    /*
     RoundImage roundImage;
     ImageView ivProfilePicture;
     RatingBar rbGradRating;
@@ -39,12 +56,32 @@ public class ProfileActivity extends AppCompatActivity {
     private ArrayAdapter<String> mySubjectAdapter;
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 0;
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
+        OwnProfileFragment ownProfileFragment = new OwnProfileFragment();
+        AnotherProfileFragment anotherProfileFragment = new AnotherProfileFragment();
+
+        Intent intent = getIntent();
+        requestId = intent.getIntExtra("USER_ID", 0);
+
+        loadSavedPreferences();
+
+        if (requestId.intValue() == userId.intValue()){
+            fragmentTransaction.replace(android.R.id.content, ownProfileFragment);
+        } else {
+            fragmentTransaction.replace(android.R.id.content, anotherProfileFragment);
+        }fragmentTransaction.commit();
+
+
+        // MUST BE DELETED//
+        /*
         setContentView(R.layout.activity_profile);
         mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_list_item_1, subjectArray);
         ivProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
@@ -109,9 +146,17 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         });
         lvSubjects.setOnTouchListener(touchListener);
-
+        */
     }
 
+    private void loadSavedPreferences(){
+        mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        userId = mySharedPreferences.getInt("USER_ID", 0);
+    }
+
+
+    // MUST BE DELETED//
+    /*
     // Note by Morten: //
     // This function was inspired by the tutorial http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample//
     // Function makes it posible for user to either take new picture or select a picture from the library for profile picture//
@@ -137,6 +182,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
         dialogBuilder.show();
     }
+
+
     // Note by Morten: //
     // This function was inspired by the tutorial http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample//
     // Function makes it posible for user to either take new picture or select a picture from the library for profile picture//
@@ -197,5 +244,7 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(getBaseContext(), "No subject selected", Toast.LENGTH_SHORT).show();
         }
     }
+    */
+
 
 }

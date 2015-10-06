@@ -1,3 +1,4 @@
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -6,165 +7,14 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.jacobmosehansen.themeproject.Profile.ProfileActivity">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <fragment
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_profile_own"/>
 
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <ImageView
-                android:layout_width="110dp"
-                android:layout_height="110dp"
-                android:id="@+id/imageView_profilePicture"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentStart="true"
-                android:clickable="true"/>
-
-            <TableLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/userName_text"
-                        android:id="@+id/textView" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="@string/fullName_text"
-                        android:id="@+id/textView2" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/userAge_text"
-                        android:id="@+id/textView3" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/userSex_text"
-                        android:id="@+id/textView4" />
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/userLocation_text"
-                        android:id="@+id/textView5" />
-                </TableRow>
-            </TableLayout>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <RatingBar
-                        style="@style/ratingBarGraduationHat"
-                        android:layout_width="wrap_content"
-                        android:layout_height="48dp"
-                        android:id="@+id/ratingBar_profileRating"
-                        android:stepSize="0.5"
-                        android:numStars="5"
-                        android:rating="3"
-                        android:layout_alignParentEnd="false" />
-
-                    <Button
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="fill_parent"
-                        android:layout_height="48dp"
-                        android:text="@string/rateBtn_text"
-                        android:id="@+id/btn_rate" />
-                </LinearLayout>
-            </RelativeLayout>
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <Spinner
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:id="@+id/spinner_subjects"
-                    android:spinnerMode="dialog"
-                    android:layout_weight="1" />
-
-                <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:text="@string/addSubject_text"
-                    android:id="@+id/btn_addSubject" />
-
-
-            </LinearLayout>
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <ListView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/lv_subjects"
-                android:layout_weight="1"
-                android:contextClickable="false"
-                android:drawSelectorOnTop="true" />
-        </TableRow>
-
-    </LinearLayout>
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/fragment_profile_another"/>
 
 </RelativeLayout>
-    <!--android:ellipsize="marquee" android:textColor="#808080" -->

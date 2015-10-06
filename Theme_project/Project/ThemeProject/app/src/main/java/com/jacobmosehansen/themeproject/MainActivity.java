@@ -17,6 +17,7 @@ import android.widget.ListAdapter;
 import android.widget.SimpleAdapter;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
 import com.jacobmosehansen.themeproject.Post.NewPostActivity;
@@ -86,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                intent.putExtra("USER_ID", userId);
                 startActivityForResult(intent, 1);
             }
         });
