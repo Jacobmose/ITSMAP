@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.jacobmosehansen.themeproject.Profile.ProfileActivity">
+
 
     <LinearLayout
         android:orientation="vertical"
@@ -34,7 +39,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:text="@string/userName_text"
-                        android:id="@+id/textView" />
+                        android:id="@+id/tv_userName" />
 
                 </TableRow>
 
@@ -47,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="@string/fullName_text"
-                        android:id="@+id/textView2" />
+                        android:id="@+id/tv_fullName" />
                 </TableRow>
 
                 <TableRow
@@ -59,7 +64,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="@string/userAge_text"
-                        android:id="@+id/textView3" />
+                        android:id="@+id/tv_age" />
                 </TableRow>
 
                 <TableRow
@@ -70,8 +75,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/userSex_text"
-                        android:id="@+id/textView4" />
+                        android:text="@string/userGender_text"
+                        android:id="@+id/tv_gender" />
                 </TableRow>
 
                 <TableRow
@@ -83,7 +88,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:text="@string/userLocation_text"
-                        android:id="@+id/textView5" />
+                        android:id="@+id/tv_location" />
                 </TableRow>
             </TableLayout>
         </TableRow>
@@ -109,7 +114,8 @@
                         android:stepSize="0.5"
                         android:numStars="5"
                         android:rating="3"
-                        android:layout_alignParentEnd="false" />
+                        android:layout_alignParentEnd="false"
+                        android:isIndicator="true"/>
 
                 </LinearLayout>
             </RelativeLayout>
@@ -130,7 +136,8 @@
                     android:layout_height="48dp"
                     android:id="@+id/spinner_subjects"
                     android:spinnerMode="dialog"
-                    android:layout_weight="1" />
+                    android:layout_weight="1"
+                    android:prompt="@string/selectSubjectPrefix"/>
 
                 <Button
                     android:layout_width="wrap_content"

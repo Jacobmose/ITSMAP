@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 
 // MUST BE DELETED//
-/*import com.jacobmosehansen.themeproject.R;
+/*
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
@@ -155,7 +155,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    // MUST BE DELETED//
+    // MUST BE DELETED _ CPY //
     /*
     // Note by Morten: //
     // This function was inspired by the tutorial http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample//

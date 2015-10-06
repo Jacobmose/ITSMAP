@@ -109,7 +109,7 @@ public class DBUserAdapter {
         return false;
     }
 
-    ArrayList<String> getUser(int id){
+    public ArrayList<String> getUser(int id){
         Cursor mCursor = db.query(DATABASE_TABLE, new String[]{ KEY_ROWID, KEY_USERNAME, KEY_AGE, KEY_GENDER }, KEY_ROWID + "=?", new String[] {String.valueOf(id)}, null, null, null);
 
         if (mCursor != null) {
