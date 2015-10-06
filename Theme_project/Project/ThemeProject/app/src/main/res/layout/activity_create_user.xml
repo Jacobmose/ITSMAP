@@ -27,7 +27,29 @@
                 android:padding="10dp"
                 android:singleLine="true"
                 android:inputType="textCapWords"
-                android:hint="@string/txt_username"/>
+                android:hint="@string/txt_username" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Spinner
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinAge" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Spinner
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinGender" />
+
         </TableRow>
 
         <TableRow
@@ -41,7 +63,7 @@
                 android:inputType="textEmailAddress"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:hint="@string/txt_email"/>
+                android:hint="@string/txt_email" />
         </TableRow>
 
         <TableRow
@@ -55,8 +77,7 @@
                 android:inputType="textPassword"
                 android:padding="10dp"
                 android:singleLine="true"
-                android:hint="@string/txt_password"
-                android:layout_marginBottom="20dp" />
+                android:hint="@string/txt_password" />
         </TableRow>
 
         <TableRow
@@ -69,7 +90,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/txt_createUser"
                 android:background="@color/lightGreen"
-                android:layout_marginTop="20dp"
                 android:layout_margin="5dp" />
         </TableRow>
 

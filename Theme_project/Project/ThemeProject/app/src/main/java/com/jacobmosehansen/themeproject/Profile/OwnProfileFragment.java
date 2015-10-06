@@ -1,8 +1,8 @@
 package com.jacobmosehansen.themeproject.Profile;
 
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,11 +10,13 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,98 +25,107 @@ import android.widget.RatingBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+
+import com.jacobmosehansen.themeproject.R;
+
+import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
+import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 
-// MUST BE DELETED//
-/*
-import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
-import com.jacobmosehansen.themeproject.Tools.RoundImage;
-import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
-*/
 
-public class ProfileActivity extends AppCompatActivity {
-
-    //User/Database variables//
-    SharedPreferences mySharedPreferences;
-    Integer userId;
-    Integer requestId;
-
-    //UI variables//
-    TextView mytextview;
-
-    // MUST BE DELETED//
-    /*
-    RoundImage roundImage;
+/**
+ * Created by Morten on 06-10-2015.
+ */
+public class OwnProfileFragment extends Fragment
+{
+    // UI variables //
     ImageView ivProfilePicture;
+    TextView tvUserName,tvFullName, tvAge, tvGender, tvLocation;
     RatingBar rbGradRating;
     Spinner sprSubjects;
-    Button btnAddSubject, btnRate;
-    ListView lvSubjects;
+    Button btnAddSubject;
     ArrayList<String> subjectArray = new ArrayList<String>();
-
     private ArrayAdapter<String> mySubjectAdapter;
+    ListView lvSubjects;
+
+
+
+
+    // DB variables //
+    Integer userId;
+    SharedPreferences mySharedPreferences;
+    ArrayList<String> userInfo;
+
+
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 0;
-    */
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        OwnProfileFragment ownProfileFragment = new OwnProfileFragment();
-        AnotherProfileFragment anotherProfileFragment = new AnotherProfileFragment();
-
-        Intent intent = getIntent();
-        requestId = intent.getIntExtra("USER_ID", 0);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View myFragmentView = inflater.inflate(R.layout.fragment_profile_own, container, false);
 
         loadSavedPreferences();
-
-        if (requestId.intValue() == userId.intValue()){
-            fragmentTransaction.replace(android.R.id.content, ownProfileFragment);
-        } else {
-            fragmentTransaction.replace(android.R.id.content, anotherProfileFragment);
-        }fragmentTransaction.commit();
-
-
-        // MUST BE DELETED//
-        /*
-        setContentView(R.layout.activity_profile);
-        mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_list_item_1, subjectArray);
-        ivProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
-        rbGradRating = (RatingBar) findViewById(R.id.ratingBar_profileRating);
-        btnRate = (Button) findViewById(R.id.btn_rate);
-        sprSubjects = (Spinner) findViewById(R.id.spinner_subjects);
-        btnAddSubject = (Button) findViewById(R.id.btn_addSubject);
-        lvSubjects = (ListView) findViewById(R.id.lv_subjects);
-
-        // Set Round Profile Picture //
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
-        roundImage = new RoundImage(bm);
-        ivProfilePicture.setImageDrawable(roundImage);
+        tvUserName = (TextView) myFragmentView.findViewById(R.id.tv_userName);
+        tvFullName = (TextView) myFragmentView.findViewById(R.id.tv_fullName);
+        tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
+        tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
+        tvLocation = (TextView) myFragmentView.findViewById(R.id.tv_location);
+        ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
+        sprSubjects = (Spinner) myFragmentView.findViewById(R.id.spinner_subjects);
+        btnAddSubject = (Button) myFragmentView.findViewById(R.id.btn_addSubject);
+        lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
+        mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
+        rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
 
 
+        Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
+
+        // Load current profile //
+        DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
+        dbUserAdapter.open();
+        //userInfo = dbUserAdapter.getUser(userId);
+        dbUserAdapter.close();
+
+        // Set textView's with database information //
+
+
+        // Set picture with database information //
+
+        // Set ratingbar with database information//
+        //rating calculations
+        //rbGradRating.setRating(result of calculations);
+
+        // Set list view with database information//
 
         // On profile picture press, open camera and take picture for imageView //
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
+                // SAVE PICTURE TO DATABASE!!!!!!!!!!!!!!!!!!!!!
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
         });
 
         // Set Subject Spinner //
-        final ArrayAdapter<CharSequence> myAdapter = ArrayAdapter.createFromResource(this,
+        final ArrayAdapter<CharSequence> myAdapter = ArrayAdapter.createFromResource(getActivity(),
                 R.array.subjects_array, android.R.layout.simple_spinner_item);
         myAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        sprSubjects.setPrompt("Select a subject");
+
 
         // Set Subject Selection Preset Text //
         sprSubjects.setAdapter(new NothingSelectedSpinnerAdapter(myAdapter,
-                R.layout.spinner_row_nothing_selected, this));
+                R.layout.spinner_row_nothing_selected, getActivity()));
+
 
         // Do on btn_addSubject add chosen subject to listView //
         btnAddSubject.setOnClickListener(new View.OnClickListener() {
@@ -125,7 +136,6 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         // Do on subject swipe remove subject from array //
-
         // This code is based on the Android-SwipeToDismiss example of use of the
         // SwipeDissmissListViewTouchListener class//
         SwipeDismissListViewTouchListener touchListener =
@@ -146,24 +156,17 @@ public class ProfileActivity extends AppCompatActivity {
                             }
                         });
         lvSubjects.setOnTouchListener(touchListener);
-        */
+
+        return myFragmentView;
     }
 
-    private void loadSavedPreferences(){
-        mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        userId = mySharedPreferences.getInt("USER_ID", 0);
-    }
-
-
-    // MUST BE DELETED _ CPY //
-    /*
     // Note by Morten: //
     // This function was inspired by the tutorial http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample//
     // Function makes it posible for user to either take new picture or select a picture from the library for profile picture//
     private void selectImage(){
         final CharSequence[] options = {"Take new photo", "Choose photo from library", "Cancel"};
 
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(ProfileActivity.this);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         dialogBuilder.setTitle("Add profile picture");
         dialogBuilder.setItems(options, new DialogInterface.OnClickListener() {
             @Override
@@ -183,14 +186,13 @@ public class ProfileActivity extends AppCompatActivity {
         dialogBuilder.show();
     }
 
-
     // Note by Morten: //
     // This function was inspired by the tutorial http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample//
     // Function makes it posible for user to either take new picture or select a picture from the library for profile picture//
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
 
             if (requestCode == CAMERA_REQUEST) {
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
@@ -201,7 +203,7 @@ public class ProfileActivity extends AppCompatActivity {
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 String[] myProjection = {MediaStore.MediaColumns.DATA};
-                Cursor myCursor = getContentResolver().query(selectedImageUri, myProjection, null, null, null);
+                Cursor myCursor = getActivity().getContentResolver().query(selectedImageUri, myProjection, null, null, null);
 
                 int column_index = myCursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
                 myCursor.moveToFirst();
@@ -234,17 +236,21 @@ public class ProfileActivity extends AppCompatActivity {
 
             if(subjectArray.size() < 5){
                 if(subjectArray.contains(selectedSubject)){
-                    Toast.makeText(getBaseContext(), "Subject already added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Subject already added", Toast.LENGTH_SHORT).show();
                 }else {
                     mySubjectAdapter.add(selectedSubject);
                     lvSubjects.setAdapter(mySubjectAdapter);
                 }}
-            else{Toast.makeText(getBaseContext(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
+            else{Toast.makeText(getActivity(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
         }catch(Exception e){
-            Toast.makeText(getBaseContext(), "No subject selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "No subject selected", Toast.LENGTH_SHORT).show();
         }
     }
-    */
 
+
+    private void loadSavedPreferences(){
+        mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        userId = mySharedPreferences.getInt("USER_ID", 0);
+    }
 
 }

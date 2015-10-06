@@ -1,33 +1,63 @@
 package com.jacobmosehansen.themeproject;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListAdapter;
+import android.widget.SimpleAdapter;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
 import com.jacobmosehansen.themeproject.Post.NewPostActivity;
 import com.jacobmosehansen.themeproject.Post.PostsActivity;
 import com.jacobmosehansen.themeproject.Profile.ProfileActivity;
+import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private SQLiteDatabase db;
     Button btn_posts, btn_chat, btn_newPost, btn_profile, btn_search;
+    EditText etSearch;
+    ListAdapter mListAdapter;
+    Spinner sprSearch;
+    Integer userId;
+    ArrayAdapter<String> arrayAdapter;
+    ArrayList<String> userIdHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        loadSavedPreferences();
+
         btn_posts = (Button) findViewById(R.id.btn_posts);
         btn_chat = (Button) findViewById(R.id.btn_chat);
         btn_newPost = (Button) findViewById(R.id.btn_newPost);
         btn_profile = (Button) findViewById(R.id.btn_profile);
         btn_search = (Button) findViewById(R.id.btn_search);
+        etSearch = (EditText) findViewById(R.id.et_search);
+        sprSearch = (Spinner) findViewById(R.id.spinner_search);
 
+        // Test to verify the correct user ID is saved in SharedPreferences
+        userIdHolder = new ArrayList<String>();
+        userIdHolder.add(Integer.toString(userId));
+        arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, userIdHolder);
+        sprSearch.setAdapter(arrayAdapter);
 
         btn_posts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,18 +87,48 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                intent.putExtra("USER_ID", userId);
                 startActivityForResult(intent, 1);
             }
         });
 
+
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
             }
         });
     }
 
+    public ArrayList<String> getList(String search){
 
+        ArrayList<String> results = new ArrayList<String>();
+
+        try {
+            Cursor mCursor = db.rawQuery("SELECT * FROM users WHERE username || ' ' || email LIKE ?", new String[]{"%" + etSearch.getText().toString() + "%"});
+
+            if (mCursor != null) {
+                mCursor.moveToFirst();
+                for (int i = 0; i < mCursor.getCount(); i++) {
+                    results.add(mCursor.getString(0));
+                    mCursor.moveToNext();
+                }
+                mCursor.close();
+                return results;
+            }
+            return results;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return results;
+    }
+
+    private void loadSavedPreferences(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        userId = sharedPreferences.getInt("USER_ID", 0);
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

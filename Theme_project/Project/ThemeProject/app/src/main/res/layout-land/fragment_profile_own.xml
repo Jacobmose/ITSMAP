@@ -48,7 +48,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceLarge"
                                 android:text="@string/userName_text"
-                                android:id="@+id/textView6" />
+                                android:id="@+id/tv_userName" />
                         </TableRow>
 
                         <TableRow
@@ -60,7 +60,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:text="@string/fullName_text"
-                                android:id="@+id/textView13" />
+                                android:id="@+id/tv_fullName" />
                         </TableRow>
 
                         <TableRow
@@ -72,7 +72,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:text="@string/userAge_text"
-                                android:id="@+id/textView14" />
+                                android:id="@+id/tv_age" />
                         </TableRow>
 
                         <TableRow
@@ -83,8 +83,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:text="@string/userSex_text"
-                                android:id="@+id/textView15" />
+                                android:text="@string/userGender_text"
+                                android:id="@+id/tv_gender" />
                         </TableRow>
 
                         <TableRow
@@ -96,7 +96,7 @@
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:text="@string/userLocation_text"
-                                android:id="@+id/textView16" />
+                                android:id="@+id/tv_location" />
                         </TableRow>
                     </TableLayout>
                 </TableRow>
@@ -116,7 +116,7 @@
 
                             <TableRow
                                 android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" >
+                                android:layout_height="wrap_content">
 
                                 <RatingBar
                                     style="@style/ratingBarGraduationHat"
@@ -126,19 +126,33 @@
                                     android:stepSize="0.5"
                                     android:numStars="5"
                                     android:rating="3"
-                                    android:layout_alignParentEnd="false" />
+                                    android:layout_alignParentEnd="false"
+                                    android:isIndicator="true"/>
                             </TableRow>
 
                             <TableRow
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent" >
 
-                                <Button
-                                    style="?android:attr/buttonStyleSmall"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="48dp"
-                                    android:text="@string/rateBtn_text"
-                                    android:id="@+id/button3" />
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" >
+
+                                    <Spinner
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="48dp"
+                                        android:id="@+id/spinner_subjects"
+                                        android:spinnerMode="dialog"
+                                        android:layout_weight="1"
+                                        android:prompt="@string/selectSubjectPrefix"/>
+
+                                    <Button
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="48dp"
+                                        android:text="@string/addSubject_text"
+                                        android:id="@+id/btn_addSubject" />
+                                </LinearLayout>
                             </TableRow>
                         </LinearLayout>
                     </RelativeLayout>
@@ -150,30 +164,6 @@
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" >
-
-                    <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" >
-
-                        <Spinner
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:id="@+id/spinner_subjects"
-                            android:spinnerMode="dialog"
-                            android:layout_weight="1" />
-
-                        <Button
-                            android:layout_width="wrap_content"
-                            android:layout_height="48dp"
-                            android:text="@string/addSubject_text"
-                            android:id="@+id/btn_addSubject" />
-                    </LinearLayout>
-                </TableRow>
 
                 <TableRow
                     android:layout_width="match_parent"

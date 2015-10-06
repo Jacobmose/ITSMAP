@@ -4,13 +4,14 @@
     <!-- TextViews -->
     <string name="userName_text">User Name</string>
     <string name="fullName_text">Full Name</string>
-    <string name="userSex_text">Male/Female</string>
+    <string name="userGender_text">Gender</string>
     <string name="userAge_text">Age</string>
     <string name="userLocation_text">Location</string>
     <!-- Buttons -->
     <string name="rateBtn_text">Rate</string>
     <string name="addSubject_text">Add Subject</string>
     <!-- Subjects -->
+    <string name="selectSubjectPrefix">Select a subject</string>
     <string-array name="subjects_array">
         <!-- Humanities -->
         <item>Danish</item>
@@ -34,4 +35,6 @@
     </string-array>
     <string name="selectSubject">Select a subject...</string>
     <string name="title_activity_login">LoginActivity</string>
+
+
 </resources>
