@@ -53,6 +53,9 @@ public class MainActivity extends AppCompatActivity {
         etSearch = (EditText) findViewById(R.id.et_search);
         sprSearch = (Spinner) findViewById(R.id.spinner_search);
 
+
+
+
         // Test to verify the correct user ID is saved in SharedPreferences
         userIdHolder = new ArrayList<String>();
         userIdHolder.add(Integer.toString(userId));
@@ -96,7 +99,12 @@ public class MainActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                //Remove this! - made for testing//
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                Integer anotherId = 20;
+                intent.putExtra("USER_ID", anotherId);
+                startActivityForResult(intent, 1);
+                //Remove this! - made for testing//
 
             }
         });
