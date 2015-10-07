@@ -7,12 +7,16 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+
 import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
+import com.sinch.android.rtc.messaging.WritableMessage;
 
 
 public class ChatWindowFragment extends Fragment {
@@ -21,18 +25,33 @@ public class ChatWindowFragment extends Fragment {
     TextView txtPerson;
     ImageView imgPerson;
     ListView lvwMessages;
+    EditText etxMessage;
+    Button btnSend;
 
+    String message;
     RoundImage roundImage;
+    MessageAdapter messageAdapter;
+    private ChatListInterface chatListInterface;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat_window, container, false);
 
         txtPerson = (TextView) view.findViewById(R.id.txtChatWindowPerson);
         txtTopic = (TextView) view.findViewById(R.id.txtChatWindowTopic);
         imgPerson = (ImageView) view.findViewById(R.id.imvChatWindowImage);
+        etxMessage = (EditText) view.findViewById(R.id.etxChatWindow);
+        btnSend = (Button) view.findViewById(R.id.btnChatWindow);
 
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                message = etxMessage.getText().toString();
+                if(message != ""){
+                    chatListInterface.sendMessage(message);
+                }
+            }
+        });
         return view;
     }
 
@@ -43,7 +62,7 @@ public class ChatWindowFragment extends Fragment {
 
         if(chat.getPersonImg() != null){
             imgPerson.setImageDrawable(chat.getPersonImg());
-        }else{
+        } else {
             Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
             roundImage = new RoundImage(bm);
             imgPerson.setImageDrawable(roundImage);
@@ -54,4 +73,9 @@ public class ChatWindowFragment extends Fragment {
         }
 
     }
+
+    public void addMessageToList(WritableMessage message, int direction){
+        messageAdapter.addMessage(message, direction);
+    }
+
 }

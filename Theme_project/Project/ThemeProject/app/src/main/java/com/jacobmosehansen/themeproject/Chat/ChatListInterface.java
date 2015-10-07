@@ -9,5 +9,7 @@ public interface ChatListInterface {
 
     public void onChatSelected(int pos);
     public ArrayList<ChatItem> getChatList();
+    public void sendMessage(String message);
+
 
 }
