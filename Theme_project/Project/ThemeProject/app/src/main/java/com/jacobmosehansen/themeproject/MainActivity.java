@@ -14,16 +14,16 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListAdapter;
-import android.widget.SimpleAdapter;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
 import com.jacobmosehansen.themeproject.Post.NewPostActivity;
 import com.jacobmosehansen.themeproject.Post.PostsActivity;
 import com.jacobmosehansen.themeproject.Profile.ProfileActivity;
-import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+
+import com.jacobmosehansen.themeproject.Profile.UserProfile;
+import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
+
 
 import java.util.ArrayList;
 
@@ -37,6 +37,10 @@ public class MainActivity extends AppCompatActivity {
     Integer userId;
     ArrayAdapter<String> arrayAdapter;
     ArrayList<String> userIdHolder;
+    UserProfile userProfile =  new UserProfile();
+    DBUserAdapter dbUser;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,11 +60,15 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        // Test to verify the correct user ID is saved in SharedPreferences
+        // TEST to verify the correct user ID is saved in SharedPreferences
+        dbUser = new DBUserAdapter(MainActivity.this);
+        userProfile = dbUser.getUserProfile(userId);
+        String name = userProfile.getName();
         userIdHolder = new ArrayList<String>();
-        userIdHolder.add(Integer.toString(userId));
+        userIdHolder.add(name);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, userIdHolder);
         sprSearch.setAdapter(arrayAdapter);
+        // TEST
 
         btn_posts.setOnClickListener(new View.OnClickListener() {
             @Override

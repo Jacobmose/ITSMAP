@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.List;
+import com.jacobmosehansen.themeproject.Profile.UserProfile;
+
 
 /**
  * Created by Jacobmosehansen on 03-10-2015.
@@ -76,7 +79,6 @@ public class DBUserAdapter {
         }
     }
 
-
     public void open() throws SQLException {
         db = DBHelper.getWritableDatabase();
     }
@@ -87,10 +89,16 @@ public class DBUserAdapter {
     }
 
     public long AddUser(String username, String age, String gender, String email, String password) {
+
+        String ra = "ra";
+        String r = "r";
+
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_USERNAME, username);
         initialValues.put(KEY_AGE, age);
         initialValues.put(KEY_GENDER, gender);
+        initialValues.put(KEY_RATINGAMOUNT, ra);
+        initialValues.put(KEY_RATING, r);
         initialValues.put(KEY_EMAIL, email);
         initialValues.put(KEY_PASSWORD, password);
 
@@ -98,7 +106,7 @@ public class DBUserAdapter {
     }
 
     public boolean Login(String email, String password) throws SQLException {
-        Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE email=? AND password=?", new String[]{email,password});
+        Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE email=? AND password=?", new String[]{email, password});
         if (mCursor != null) {
             if(mCursor.getCount() > 0)
             {
@@ -109,25 +117,48 @@ public class DBUserAdapter {
         return false;
     }
 
-    public ArrayList<String> getUser(int id){
-        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{ KEY_ROWID, KEY_USERNAME, KEY_AGE, KEY_GENDER }, KEY_ROWID + "=?", new String[] {String.valueOf(id)}, null, null, null);
+    public UserProfile getUserProfile(int id){
+        db = DBHelper.getReadableDatabase();
 
-        if (mCursor != null) {
+        UserProfile userProfile;
+        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING},
+                KEY_ROWID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
+
+        if (mCursor != null){
             mCursor.moveToFirst();
         }
 
-        int userId = Integer.parseInt(mCursor.getString(0));
-        String userName = mCursor.getString(1);
-        String userAge = mCursor.getString(2);
-        String userGender = mCursor.getString(4);
+        userProfile = new UserProfile(
+                mCursor.getString(0),
+                mCursor.getString(1),
+                mCursor.getString(2),
+                mCursor.getString(3),
+                mCursor.getString(4));
 
-        ArrayList<String> data = new ArrayList<String>();
-        data.add(Integer.toString(userId));
-        data.add(userName);
-        data.add(userAge);
-        data.add(userGender);
+        return userProfile;
+    }
 
-        return data;
+    public List<UserProfile> getAllUserProfiles() {
+        List<UserProfile> profilesList = new ArrayList<UserProfile>();
+
+        db = DBHelper.getReadableDatabase();
+
+        Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE, null);
+
+        if (mCursor != null) {
+            do {
+                UserProfile userProfile = new UserProfile();
+                userProfile.setName(mCursor.getString(1));
+                userProfile.setAge(mCursor.getString(2));
+                userProfile.setGender(mCursor.getString(3));
+                userProfile.setRatingAmount(mCursor.getString(4));
+                userProfile.setRating(mCursor.getString(5));
+
+                profilesList.add(userProfile);
+
+            } while (mCursor.moveToNext());
+        }
+        return profilesList;
     }
 
     public int getUserId(String email)throws SQLException {
@@ -142,6 +173,5 @@ public class DBUserAdapter {
         }
         return id;
     }
-
 }
 
