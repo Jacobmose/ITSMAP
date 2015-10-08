@@ -3,6 +3,7 @@ package com.jacobmosehansen.themeproject.Profile;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import com.jacobmosehansen.themeproject.R;
 
 import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
 
 import org.w3c.dom.Text;
@@ -53,16 +55,19 @@ public class OwnProfileFragment extends Fragment
     ArrayList<String> subjectArray = new ArrayList<String>();
     private ArrayAdapter<String> mySubjectAdapter;
     ListView lvSubjects;
+    private Uri profilePicture;
+    RoundImage roundImage;
 
 
     // DB variables //
     Integer userId;
     SharedPreferences mySharedPreferences;
-    UserProfile userProfile =  new UserProfile();
+    UserProfile userProfile = new UserProfile();
 
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 0;
+    final int PIC_CROP = 2;
 
 
     @Nullable
@@ -105,6 +110,7 @@ public class OwnProfileFragment extends Fragment
         // _TODO Set picture with database information //
 
         // _TODO Set ratingbar with database information//
+        rbGradRating.setRating(Float.parseFloat(userProfile.getRating())/Float.parseFloat(userProfile.getRatingAmount()));
 
         // _TODO Set list view with database information//
 
@@ -202,9 +208,24 @@ public class OwnProfileFragment extends Fragment
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
                 //_TODO Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
                 //roundImage = new RoundImage(ScaledImage);
-                ivProfilePicture.setImageBitmap(profilePicture);
+                Bitmap croppedPicture;
 
-            } else if (requestCode == SELECT_FILE) {
+                if(profilePicture.getWidth() >= profilePicture.getHeight()) {
+                    croppedPicture = Bitmap.createBitmap(profilePicture,
+                            profilePicture.getWidth()/2 - profilePicture.getHeight()/2, 0,
+                            profilePicture.getHeight(), profilePicture.getHeight());
+                }else{
+                    croppedPicture = Bitmap.createBitmap(profilePicture, 0,
+                            profilePicture.getHeight()/2 - profilePicture.getWidth()/2,
+                            profilePicture.getWidth(), profilePicture.getWidth());
+                }
+                roundImage = new RoundImage(croppedPicture);
+                ivProfilePicture.setImageDrawable(roundImage);
+            }
+
+
+
+            /*else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 String[] myProjection = {MediaStore.MediaColumns.DATA};
                 Cursor myCursor = getActivity().getContentResolver().query(selectedImageUri, myProjection, null, null, null);
@@ -230,9 +251,10 @@ public class OwnProfileFragment extends Fragment
                 // _TODO Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
                 //roundImage = new RoundImage(ScaledImage);
                 ivProfilePicture.setImageBitmap(profilePicture);
-            }
+            }*/
         }
     }
+
 
     public void selectFromSpinner(){
         try{

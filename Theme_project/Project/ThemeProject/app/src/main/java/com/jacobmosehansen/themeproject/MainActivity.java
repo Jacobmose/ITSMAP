@@ -107,9 +107,9 @@ public class MainActivity extends AppCompatActivity {
         btn_search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Remove this! - made for testing//
+                //_TODO Remove this! - made for testing//
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                Integer anotherId = 54;
+                Integer anotherId = 4;
                 intent.putExtra("USER_ID", anotherId);
                 startActivityForResult(intent, 1);
                 //Remove this! - made for testing//

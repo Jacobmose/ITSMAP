@@ -188,6 +188,21 @@ public class DBUserAdapter {
         return _id;
     }
 
+    public Integer setRating(String id, String rating)throws SQLException {
+        db = DBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_RATING, rating);
+        return db.update(DATABASE_TABLE, values, KEY_ROWID + " =?", new String[]{id});
+    }
+
+    public Integer setRatingAmount(String id, String rating_amount)throws SQLException {
+        db = DBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_RATINGAMOUNT, rating_amount);
+        return db.update(DATABASE_TABLE, values, KEY_ROWID + " =?", new String[]{id});
+    }
+
+
     public int getUserId(String email)throws SQLException {
         int id = 0;
         Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE email=?", new String[]{email});

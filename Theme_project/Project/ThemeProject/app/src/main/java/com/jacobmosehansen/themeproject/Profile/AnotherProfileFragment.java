@@ -3,6 +3,7 @@ package com.jacobmosehansen.themeproject.Profile;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class AnotherProfileFragment extends Fragment {
         // Load current profile //
         Bundle idBundle = this.getArguments();
         requestId = idBundle.getInt("ID_KEY");
-        DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
+        final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
         userProfile = dbUserAdapter.getUserProfile(requestId);
 
         // Initialize Views//
@@ -63,9 +64,6 @@ public class AnotherProfileFragment extends Fragment {
         lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
 
-        // _REMOVE Test for requested ID//
-        Toast.makeText(getActivity(), userProfile.getRating().toString(), Toast.LENGTH_SHORT).show();
-
         // Set textView's with database information //
         tvFullName.setText(userProfile.getName());
         tvAge.setText(userProfile.getAge());
@@ -81,17 +79,18 @@ public class AnotherProfileFragment extends Fragment {
 
         btnRating.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
+                userProfile = dbUserAdapter.getUserProfile(requestId);
                 float rating = rbGradRating.getRating();
                 float totalRating = Float.parseFloat(userProfile.getRating());
                 Integer numberOfRatings = Integer.parseInt(userProfile.getRatingAmount());
 
                 totalRating = totalRating+rating;
-                userProfile.setRating(Float.toString(totalRating));
+                dbUserAdapter.setRating(requestId.toString(), Float.toString(totalRating));
 
-                numberOfRatings++;
-                userProfile.setRatingAmount(Integer.toString(numberOfRatings));
+                numberOfRatings = numberOfRatings + 1;
+                dbUserAdapter.setRatingAmount(requestId.toString(), Integer.toString(numberOfRatings));
 
-                float currentRating = (float) Math.round((totalRating/numberOfRatings)*2)/2;
+                float currentRating = totalRating/numberOfRatings;
 
                 rbGradRating.setRating(currentRating);
 
@@ -100,7 +99,7 @@ public class AnotherProfileFragment extends Fragment {
             }
         });
 
-
+        // _REMOVE Test for requested ID//
 
 
         return myFragmentView;

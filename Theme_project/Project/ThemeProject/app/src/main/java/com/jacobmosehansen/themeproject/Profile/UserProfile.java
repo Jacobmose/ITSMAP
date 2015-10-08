@@ -1,9 +1,11 @@
 package com.jacobmosehansen.themeproject.Profile;
 
+import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
+
 /**
  * Created by Jacobmosehansen on 07-10-2015.
  */
-public class UserProfile {
+public class UserProfile{
 
     String _id;
     String _name;
@@ -12,6 +14,7 @@ public class UserProfile {
     String _email;
     String _ratingAmount;
     String _rating;
+
 
     public UserProfile(){
 
