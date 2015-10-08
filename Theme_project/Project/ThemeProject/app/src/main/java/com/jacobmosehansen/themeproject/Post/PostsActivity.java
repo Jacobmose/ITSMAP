@@ -6,7 +6,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.jacobmosehansen.themeproject.R;
-
+/**
+ * Created by Marlene on 08-10-2015.
+ */
 public class PostsActivity extends AppCompatActivity {
 
     @Override
