@@ -58,9 +58,7 @@ public class OwnProfileFragment extends Fragment
     // DB variables //
     Integer userId;
     SharedPreferences mySharedPreferences;
-    ArrayList<String> userInfo;
     UserProfile userProfile =  new UserProfile();
-    DBUserAdapter dbUserAdapter;
 
 
     private static final int CAMERA_REQUEST = 1888;
@@ -71,26 +69,31 @@ public class OwnProfileFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View myFragmentView = inflater.inflate(R.layout.fragment_profile_own, container, false);
-
         loadSavedPreferences();
-        tvEmail = (TextView) myFragmentView.findViewById(R.id.tv_email);
-        tvFullName = (TextView) myFragmentView.findViewById(R.id.tv_fullName);
-        tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
-        tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
-        tvLocation = (TextView) myFragmentView.findViewById(R.id.tv_location);
-        ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
-        sprSubjects = (Spinner) myFragmentView.findViewById(R.id.spinner_subjects);
-        btnAddSubject = (Button) myFragmentView.findViewById(R.id.btn_addSubject);
-        lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
-        mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
-        rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
-
-        //TEST for own profile id//
-        Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
 
         // Load current profile //
         DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
         userProfile = dbUserAdapter.getUserProfile(userId);
+
+        // Initialize Views//
+        ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
+
+        tvFullName = (TextView) myFragmentView.findViewById(R.id.tv_fullName);
+        tvEmail = (TextView) myFragmentView.findViewById(R.id.tv_email);
+        tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
+        tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
+        tvLocation = (TextView) myFragmentView.findViewById(R.id.tv_location);
+
+        rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
+
+        sprSubjects = (Spinner) myFragmentView.findViewById(R.id.spinner_subjects);
+        btnAddSubject = (Button) myFragmentView.findViewById(R.id.btn_addSubject);
+        lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
+        mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
+
+
+        // _REMOVE TEST for own profile id//
+        Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
 
         // Set textView's with database information //
         tvFullName.setText(userProfile.getName());
@@ -197,7 +200,7 @@ public class OwnProfileFragment extends Fragment
 
             if (requestCode == CAMERA_REQUEST) {
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
-                //Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
+                //_TODO Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
                 //roundImage = new RoundImage(ScaledImage);
                 ivProfilePicture.setImageBitmap(profilePicture);
 
@@ -224,7 +227,7 @@ public class OwnProfileFragment extends Fragment
                 options.inSampleSize = scale;
                 options.inJustDecodeBounds = false;
                 profilePicture = BitmapFactory.decodeFile(selectedImagePath, options);
-                //Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
+                // _TODO Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
                 //roundImage = new RoundImage(ScaledImage);
                 ivProfilePicture.setImageBitmap(profilePicture);
             }

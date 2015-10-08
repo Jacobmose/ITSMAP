@@ -90,8 +90,8 @@ public class DBUserAdapter {
 
     public long AddUser(String username, String age, String gender, String email, String password) {
 
-        String ra = "ra";
-        String r = "r";
+        String ra = "0";
+        String r = "0.0";
 
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_USERNAME, username);
@@ -160,6 +160,32 @@ public class DBUserAdapter {
             } while (mCursor.moveToNext());
         }
         return profilesList;
+    }
+
+    public int getRating(String id)throws SQLException {
+        int _id = 0;
+        Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE rating=?", new String[]{id});
+        if (mCursor != null) {
+            if (mCursor.moveToFirst()){
+                _id = mCursor.getInt(mCursor.getColumnIndex("rating"));
+
+                return _id;
+            }
+        }
+        return _id;
+    }
+
+    public int getRatingAmount(String id)throws SQLException {
+        int _id = 0;
+        Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE " + KEY_RATINGAMOUNT + "=?", new String[]{id});
+        if (mCursor != null) {
+            if (mCursor.moveToFirst()){
+                _id = mCursor.getInt(mCursor.getColumnIndex(KEY_RATINGAMOUNT));
+
+                return _id;
+            }
+        }
+        return _id;
     }
 
     public int getUserId(String email)throws SQLException {
