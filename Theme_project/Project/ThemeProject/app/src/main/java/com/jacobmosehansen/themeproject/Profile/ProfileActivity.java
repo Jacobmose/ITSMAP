@@ -70,6 +70,9 @@ public class ProfileActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         requestId = intent.getIntExtra("USER_ID", 0);
+        Bundle idBundle = new Bundle();
+        idBundle.putInt("ID_KEY", requestId);
+        anotherProfileFragment.setArguments(idBundle);
 
         loadSavedPreferences();
 

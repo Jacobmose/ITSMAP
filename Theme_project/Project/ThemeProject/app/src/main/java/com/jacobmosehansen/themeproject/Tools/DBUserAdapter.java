@@ -121,7 +121,7 @@ public class DBUserAdapter {
         db = DBHelper.getReadableDatabase();
 
         UserProfile userProfile;
-        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING},
+        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_EMAIL, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING},
                 KEY_ROWID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (mCursor != null){
@@ -133,7 +133,8 @@ public class DBUserAdapter {
                 mCursor.getString(1),
                 mCursor.getString(2),
                 mCursor.getString(3),
-                mCursor.getString(4));
+                mCursor.getString(4),
+                mCursor.getString(5));
 
         return userProfile;
     }

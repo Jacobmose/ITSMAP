@@ -46,7 +46,7 @@ public class OwnProfileFragment extends Fragment
 {
     // UI variables //
     ImageView ivProfilePicture;
-    TextView tvUserName,tvFullName, tvAge, tvGender, tvLocation;
+    TextView tvFullName, tvEmail, tvAge, tvGender, tvLocation;
     RatingBar rbGradRating;
     Spinner sprSubjects;
     Button btnAddSubject;
@@ -55,12 +55,12 @@ public class OwnProfileFragment extends Fragment
     ListView lvSubjects;
 
 
-
-
     // DB variables //
     Integer userId;
     SharedPreferences mySharedPreferences;
     ArrayList<String> userInfo;
+    UserProfile userProfile =  new UserProfile();
+    DBUserAdapter dbUserAdapter;
 
 
     private static final int CAMERA_REQUEST = 1888;
@@ -73,7 +73,7 @@ public class OwnProfileFragment extends Fragment
         View myFragmentView = inflater.inflate(R.layout.fragment_profile_own, container, false);
 
         loadSavedPreferences();
-        tvUserName = (TextView) myFragmentView.findViewById(R.id.tv_userName);
+        tvEmail = (TextView) myFragmentView.findViewById(R.id.tv_email);
         tvFullName = (TextView) myFragmentView.findViewById(R.id.tv_fullName);
         tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
         tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
@@ -85,32 +85,32 @@ public class OwnProfileFragment extends Fragment
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
         rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
 
-
+        //TEST for own profile id//
         Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
 
         // Load current profile //
         DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-        dbUserAdapter.open();
-        //userInfo = dbUserAdapter.getUser(userId);
-        dbUserAdapter.close();
+        userProfile = dbUserAdapter.getUserProfile(userId);
 
         // Set textView's with database information //
+        tvFullName.setText(userProfile.getName());
+        tvEmail.setText(userProfile.getEmail());
+        tvAge.setText(userProfile.getAge());
+        tvGender.setText(userProfile.getGender());
+        //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
 
+        // _TODO Set picture with database information //
 
-        // Set picture with database information //
+        // _TODO Set ratingbar with database information//
 
-        // Set ratingbar with database information//
-        //rating calculations
-        //rbGradRating.setRating(result of calculations);
-
-        // Set list view with database information//
+        // _TODO Set list view with database information//
 
         // On profile picture press, open camera and take picture for imageView //
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
-                // SAVE PICTURE TO DATABASE!!!!!!!!!!!!!!!!!!!!!
+                // _TODO SAVE PICTURE TO DATABASE!!!!!!!!!!!!!!!!!!!!!
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
@@ -152,6 +152,7 @@ public class OwnProfileFragment extends Fragment
                                 for (int position : reverseSortedPositions) {
                                     mySubjectAdapter.remove(mySubjectAdapter.getItem(position));
                                 }
+                                //_TODO REMOVE FROM SUBJECT//
                                 mySubjectAdapter.notifyDataSetChanged();
                             }
                         });
@@ -240,6 +241,7 @@ public class OwnProfileFragment extends Fragment
                 }else {
                     mySubjectAdapter.add(selectedSubject);
                     lvSubjects.setAdapter(mySubjectAdapter);
+                    //_TODO SAVE SUBJECTS TO DATABASE //
                 }}
             else{Toast.makeText(getActivity(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
         }catch(Exception e){
