@@ -3,6 +3,7 @@ package com.jacobmosehansen.themeproject.Login;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.provider.CalendarContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,11 @@ import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 
 public class CreateUserActivity extends AppCompatActivity {
 
@@ -28,12 +34,21 @@ public class CreateUserActivity extends AppCompatActivity {
     private EditText inputFullName;
     private EditText inputEmail;
     private EditText inputPassword;
-    private Spinner sprAge;
+    private Spinner sprDay, sprMonth, sprYear;
     private Spinner sprGender;
-    private ArrayAdapter<String> ageArrayAdapter;
+    private ArrayAdapter<String> dayArrayAdapter;
+    private ArrayAdapter<String> monthArrayAdapter;
+    private ArrayAdapter<String> yearArrayAdapter;
     private ArrayAdapter<String> genderArrayAdapter;
-    private ArrayList<String> ageValues;
+    private ArrayList<String> dayValues;
+    private ArrayList<String> yearValues;
     private ArrayList<String> genderValues;
+    private int yourAge;
+    Calendar calenderDoB;
+    Calendar calenderToday;
+    DateTime dobDate;
+    DateTime currentDate;
+    Period period;
     Integer userId;
 
     @Override
@@ -45,15 +60,29 @@ public class CreateUserActivity extends AppCompatActivity {
         inputEmail = (EditText) findViewById(R.id.email);
         inputPassword = (EditText) findViewById(R.id.password);
         btnRegister = (Button) findViewById(R.id.btnRegister);
-        sprAge = (Spinner) findViewById(R.id.spinAge);
+        sprDay = (Spinner) findViewById(R.id.sprDay);
+        sprMonth = (Spinner) findViewById(R.id.sprMonth);
+        sprYear = (Spinner) findViewById(R.id.sprYear);
         sprGender = (Spinner) findViewById(R.id.spinGender);
 
-        ageValues = new ArrayList<String>();
-        for (Integer i = 10; i <= 99; i++){
-            ageValues.add(Integer.toString(i));
+        dayValues = new ArrayList<String>();
+        for (Integer i = 1; i <= 31; i++){
+            dayValues.add(Integer.toString(i));
         }
-        ageArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, ageValues);
-        sprAge.setAdapter(ageArrayAdapter);
+        dayArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dayValues);
+        sprDay.setAdapter(dayArrayAdapter);
+
+        monthArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.sa_months));
+        sprMonth.setAdapter(monthArrayAdapter);
+
+        yearValues = new ArrayList<String>();
+        for (Integer i = 1900; i <= 2015; i++){
+            yearValues.add(Integer.toString(i));
+        }
+        yearArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, yearValues);
+        sprYear.setAdapter(yearArrayAdapter);
+
+
 
         genderValues = new ArrayList<String>();
         genderValues.add("Male");
@@ -65,17 +94,26 @@ public class CreateUserActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String name = inputFullName.getText().toString();
-                String age = sprAge.getSelectedItem().toString();
                 String gender = sprGender.getSelectedItem().toString();
                 String email = inputEmail.getText().toString();
                 String password = inputPassword.getText().toString();
+
+                String day = sprDay.getSelectedItem().toString();
+                int month = sprMonth.getCount();
+                String year = sprYear.getSelectedItem().toString();
+
+                dobDate = new DateTime(Integer.parseInt(year), month, Integer.parseInt(day), 0, 0, 0, 0);
+                currentDate = new DateTime();
+                period = new Period(dobDate, currentDate);
+
+                String actualAge = Integer.toString(period.getYears()+1);
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
 
                     DBUserAdapter dbUser = new DBUserAdapter(CreateUserActivity.this);
 
                     dbUser.open();
-                    dbUser.AddUser(name, age, gender, email, password);
+                    dbUser.AddUser(name, actualAge, gender, email, password);
                     dbUser.close();
 
                     Intent intent = new Intent(CreateUserActivity.this, LoginActivity.class);
