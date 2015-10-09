@@ -29,6 +29,7 @@ public class DBUserAdapter {
     public static final String KEY_SUBJECTS= "subjects";
     public static final String KEY_PICTURE= "picture";
     public static final String KEY_PASSWORD = "password";
+    public static final String KEY_PARSEID = "parseid";
     private static final String TAG = "DBAdapter";
 
     private static final String DATABASE_NAME = "usersdb";
@@ -45,7 +46,8 @@ public class DBUserAdapter {
                     + "rating text, "
                     + "subjects text, "
                     + "picture text, "
-                    + "password text not null);";
+                    + "password text not null, "
+                    + "parseid text);";
 
     private Context context = null;
     private DatabaseHelper DBHelper;
@@ -88,7 +90,7 @@ public class DBUserAdapter {
         DBHelper.close();
     }
 
-    public long AddUser(String username, String age, String gender, String email, String password) {
+    public long AddUser(String username, String age, String gender, String email, String password, String parseId) {
 
         String ra = "ra";
         String r = "r";
@@ -101,6 +103,7 @@ public class DBUserAdapter {
         initialValues.put(KEY_RATING, r);
         initialValues.put(KEY_EMAIL, email);
         initialValues.put(KEY_PASSWORD, password);
+        initialValues.put(KEY_PARSEID, parseId);
 
         return db.insert(DATABASE_TABLE, null, initialValues);
     }
@@ -121,21 +124,23 @@ public class DBUserAdapter {
         db = DBHelper.getReadableDatabase();
 
         UserProfile userProfile;
-        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING},
+        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING, KEY_PARSEID},
                 KEY_ROWID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (mCursor != null){
             mCursor.moveToFirst();
         }
 
-        userProfile = new UserProfile(
-                mCursor.getString(0),
-                mCursor.getString(1),
-                mCursor.getString(2),
-                mCursor.getString(3),
-                mCursor.getString(4));
+            userProfile = new UserProfile(
+                    mCursor.getString(0),
+                    mCursor.getString(1),
+                    mCursor.getString(2),
+                    mCursor.getString(3),
+                    mCursor.getString(4),
+                    mCursor.getString(5));
 
-        return userProfile;
+            return userProfile;
+
     }
 
     public List<UserProfile> getAllUserProfiles() {
@@ -163,9 +168,11 @@ public class DBUserAdapter {
 
     public int getUserId(String email)throws SQLException {
         int id = 0;
+        Log.d("get user id", email);
         Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE email=?", new String[]{email});
         if (mCursor != null) {
             if (mCursor.moveToFirst()){
+                Log.d("get user id", "true");
                 id = mCursor.getInt(mCursor.getColumnIndex("_id"));
 
                 return id;

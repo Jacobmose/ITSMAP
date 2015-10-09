@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
+        Log.d("userId", userId.toString());
         // TEST to verify the correct user ID is saved in SharedPreferences
         dbUser = new DBUserAdapter(MainActivity.this);
         userProfile = dbUser.getUserProfile(userId);
@@ -82,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ChatListActivity.class);
+                intent.putExtra("PARSE_ID", userProfile.getParseId());
                 startActivityForResult(intent, 1);
             }
         });

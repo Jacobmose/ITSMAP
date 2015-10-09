@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 
 import com.parse.ParseUser;
 import com.sinch.android.rtc.ClientRegistration;
@@ -34,6 +35,8 @@ public class MessageService extends Service implements SinchClientListener{
 
         currentUserId = ParseUser.getCurrentUser().getObjectId();
 
+        Log.d("service", currentUserId);
+
         if (currentUserId != null && !isSinchClientStarted()) {
             startSinchClient(currentUserId);
         }
@@ -62,6 +65,7 @@ public class MessageService extends Service implements SinchClientListener{
 
     @Override
     public void onClientFailed(SinchClient client, SinchError error) {
+        Log.d("client", "client failed");
         broadcastIntent.putExtra("success", false);
         broadcaster.sendBroadcast(broadcastIntent);
 
@@ -70,6 +74,7 @@ public class MessageService extends Service implements SinchClientListener{
 
     @Override
     public void onClientStarted(SinchClient client) {
+        Log.d("client", "client succes");
         broadcastIntent.putExtra("success", true);
         broadcaster.sendBroadcast(broadcastIntent);
 

@@ -70,9 +70,9 @@ public class MessageAdapter extends BaseAdapter {
         if (convertView == null) {
             int res = 0;
             if (direction == DIRECTION_INCOMING) {
-                res = R.layout.chat_message_right;
-            } else if (direction == DIRECTION_OUTGOING) {
                 res = R.layout.chat_message_left;
+            } else if (direction == DIRECTION_OUTGOING) {
+                res = R.layout.chat_message_right;
             }
             convertView = layoutInflater.inflate(res, viewGroup, false);
         }

@@ -12,9 +12,19 @@ public class UserProfile {
     String _email;
     String _ratingAmount;
     String _rating;
+    String _parseid;
 
     public UserProfile(){
 
+    }
+
+    public UserProfile(String name, String age, String gender, String ratingAmount, String rating, String parseId){
+        this._name = name;
+        this._age = age;
+        this._gender = gender;
+        this._ratingAmount = ratingAmount;
+        this._rating = rating;
+        this._parseid = parseId;
     }
 
     public UserProfile(String name, String age, String gender, String ratingAmount, String rating){
@@ -75,4 +85,8 @@ public class UserProfile {
     public void setRating(String rating){
         this._rating = rating;
     }
+
+    public String getParseId(){return _parseid;}
+
+    public void setParseId(String parseId){this._parseid = parseId;}
 }
