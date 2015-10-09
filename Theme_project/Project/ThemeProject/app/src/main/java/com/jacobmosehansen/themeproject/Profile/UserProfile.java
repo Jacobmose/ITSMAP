@@ -14,14 +14,35 @@ public class UserProfile{
     String _email;
     String _ratingAmount;
     String _rating;
+<<<<<<< HEAD
     byte[] _picture;
+=======
+    String _parseid;
+>>>>>>> a2cc8222da8a77920a13ca058b482499222fdbea
 
 
     public UserProfile(){
 
     }
 
+<<<<<<< HEAD
     public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating, byte[] picture){
+=======
+<<<<<<< HEAD
+    public UserProfile(String name, String age, String gender, String ratingAmount, String rating, String parseId){
+        this._name = name;
+        this._age = age;
+        this._gender = gender;
+        this._ratingAmount = ratingAmount;
+        this._rating = rating;
+        this._parseid = parseId;
+    }
+
+    public UserProfile(String name, String age, String gender, String ratingAmount, String rating){
+=======
+    public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating){
+>>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
+>>>>>>> a2cc8222da8a77920a13ca058b482499222fdbea
         this._name = name;
         this._email = email;
         this._age = age;
@@ -91,4 +112,10 @@ public class UserProfile{
         this._rating = rating;
     }
 
+<<<<<<< HEAD
+    public String getParseId(){return _parseid;}
+
+    public void setParseId(String parseId){this._parseid = parseId;}
+=======
+>>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
 }

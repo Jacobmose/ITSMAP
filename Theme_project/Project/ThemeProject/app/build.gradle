@@ -23,8 +23,12 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile files('libs/sinch-android-rtc-3.7.1.jar')
+    compile files('libs/Parse-1.10.2.jar')
     compile 'com.parse.bolts:bolts-android:1.+'
+<<<<<<< HEAD
+=======
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
     compile 'joda-time:joda-time:2.8.2'
+>>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
 
 }

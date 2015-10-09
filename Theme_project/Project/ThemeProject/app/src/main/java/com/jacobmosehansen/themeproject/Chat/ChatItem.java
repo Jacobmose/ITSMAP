@@ -17,26 +17,30 @@ public class ChatItem {
     private String Person;
     private String Topic;
     private Drawable PersonImg;
-    private ArrayList<MessageItem> MessageItems;
+    private String PersonId;
 
-    public ChatItem(String person, String topic, Drawable img, ArrayList<MessageItem> messageItems) {
+    public ChatItem(String person, String topic, Drawable img, String personId) {
         Person = person;
         Topic = topic;
         PersonImg = img;
-        MessageItems = messageItems;
+        PersonId = personId;
+    }
+
+    public ChatItem(String person, String topic, String personId) {
+        Person = person;
+        Topic = topic;
+        PersonId = personId;
     }
 
     public ChatItem(String person, String topic, Drawable img){
         Person = person;
         Topic = topic;
         PersonImg = img;
-        MessageItems = null;
     }
     public ChatItem(String person, String topic){
         Person = person;
         Topic = topic;
         PersonImg = null;
-        MessageItems = null;
     }
 
     public String getPerson(){
@@ -51,6 +55,8 @@ public class ChatItem {
         return PersonImg;
     }
 
+    public String getPersonId(){return PersonId;}
+
     public void setPerson(String person) {
         Person = person;
     }
@@ -63,16 +69,10 @@ public class ChatItem {
         PersonImg = personImg;
     }
 
-    public ArrayList<MessageItem> getMessageItems() {
-        return MessageItems;
-    }
+    public void setPersonId(String personId){PersonId = personId;}
 
-    public void setMessageItems(ArrayList<MessageItem> messageItems) {
-        MessageItems = messageItems;
-    }
 
-    public void addMessageItem(MessageItem messageItem){
-        MessageItems.add(messageItem);
-    }
+
+
 }
 

@@ -1,5 +1,6 @@
 package com.jacobmosehansen.themeproject.Chat;
 
+import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ public class ChatWindowFragment extends Fragment {
     String message;
     RoundImage roundImage;
     MessageAdapter messageAdapter;
+    String recipient;
     private ChatListInterface chatListInterface;
 
     @Override
@@ -42,23 +44,35 @@ public class ChatWindowFragment extends Fragment {
         imgPerson = (ImageView) view.findViewById(R.id.imvChatWindowImage);
         etxMessage = (EditText) view.findViewById(R.id.etxChatWindow);
         btnSend = (Button) view.findViewById(R.id.btnChatWindow);
+        lvwMessages = (ListView) view.findViewById(R.id.lvwChatWindow);
+
+        chatListInterface.populateMessageHistory(recipient);
+
+        messageAdapter = new MessageAdapter(getActivity());
+
+        lvwMessages.setAdapter(messageAdapter);
 
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 message = etxMessage.getText().toString();
                 if(message != ""){
-                    chatListInterface.sendMessage(message);
+                    chatListInterface.sendMessage(recipient, message);
                 }
             }
         });
         return view;
     }
 
+    public void setRecipient(String Recipient){
+        recipient = Recipient;
+    }
+
     public void setChat(ChatItem chat)
     {
         txtTopic.setText(chat.getTopic());
         txtPerson.setText(chat.getPerson());
+        recipient = chat.getPersonId();
 
         if(chat.getPersonImg() != null){
             imgPerson.setImageDrawable(chat.getPersonImg());
@@ -67,15 +81,24 @@ public class ChatWindowFragment extends Fragment {
             roundImage = new RoundImage(bm);
             imgPerson.setImageDrawable(roundImage);
         }
-
-        if(chat.getMessageItems() != null){
-
-        }
-
     }
 
     public void addMessageToList(WritableMessage message, int direction){
         messageAdapter.addMessage(message, direction);
     }
 
+    public String getRecipientId(){
+        return recipient;
+    }
+
+    public String getMessage(){
+        return etxMessage.getText().toString();
+    }
+
+    @Override
+    public void onAttach(Activity activity){
+        super.onAttach(activity);
+
+        chatListInterface = (ChatListInterface) activity;
+    }
 }

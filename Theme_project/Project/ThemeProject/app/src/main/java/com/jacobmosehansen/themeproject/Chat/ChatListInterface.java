@@ -9,7 +9,9 @@ public interface ChatListInterface {
 
     public void onChatSelected(int pos);
     public ArrayList<ChatItem> getChatList();
-    public void sendMessage(String message);
+    public void sendMessage(String recipient, String message);
+    public void populateMessageHistory(String recipient);
+    public void populateMessageList();
 
 
 }
