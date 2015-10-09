@@ -5,7 +5,7 @@ import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 /**
  * Created by Jacobmosehansen on 07-10-2015.
  */
-public class UserProfile{
+public class UserProfile {
 
     String _id;
     String _name;
@@ -14,35 +14,16 @@ public class UserProfile{
     String _email;
     String _ratingAmount;
     String _rating;
-<<<<<<< HEAD
     byte[] _picture;
-=======
     String _parseid;
->>>>>>> a2cc8222da8a77920a13ca058b482499222fdbea
 
 
-    public UserProfile(){
+    public UserProfile() {
 
     }
 
-<<<<<<< HEAD
-    public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating, byte[] picture){
-=======
-<<<<<<< HEAD
-    public UserProfile(String name, String age, String gender, String ratingAmount, String rating, String parseId){
-        this._name = name;
-        this._age = age;
-        this._gender = gender;
-        this._ratingAmount = ratingAmount;
-        this._rating = rating;
-        this._parseid = parseId;
-    }
+    public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating, byte[] picture, String parseId) {
 
-    public UserProfile(String name, String age, String gender, String ratingAmount, String rating){
-=======
-    public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating){
->>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
->>>>>>> a2cc8222da8a77920a13ca058b482499222fdbea
         this._name = name;
         this._email = email;
         this._age = age;
@@ -50,72 +31,87 @@ public class UserProfile{
         this._ratingAmount = ratingAmount;
         this._rating = rating;
         this._picture = picture;
+        this._parseid = parseId;
     }
 
-    public UserProfile(String id, String name, String email, String age, String gender){
+    public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating, String parseId) {
+
+        this._name = name;
+        this._email = email;
+        this._age = age;
+        this._gender = gender;
+        this._ratingAmount = ratingAmount;
+        this._rating = rating;
+        this._parseid = parseId;
+    }
+
+    public UserProfile(String id, String name, String email, String age, String gender, String parseId) {
         this._id = id;
         this._name = name;
         this._email = email;
         this._age = age;
         this._gender = gender;
+        this._parseid = parseId;
     }
 
-    public String getID(){
+    public String getID() {
         return this._id;
     }
 
-    public String getName(){
+    public String getName() {
         return this._name;
     }
 
-    public void setName(String name){
+    public void setName(String name) {
         this._name = name;
     }
 
-    public String getEmail(){
+    public String getEmail() {
         return this._email;
     }
 
-    public void setEmail(String email){
+    public void setEmail(String email) {
         this._email = email;
     }
 
-    public String getAge(){
+    public String getAge() {
         return this._age;
     }
 
-    public void setAge(String age){
+    public void setAge(String age) {
         this._age = age;
     }
 
-    public String getGender(){
+    public String getGender() {
         return this._gender;
     }
 
-    public void setGender(String gender){
+    public void setGender(String gender) {
         this._gender = gender;
     }
 
-    public String getRatingAmount(){
+    public String getRatingAmount() {
         return this._ratingAmount;
     }
 
-    public void setRatingAmount(String ratingAmount){
+    public void setRatingAmount(String ratingAmount) {
         this._ratingAmount = ratingAmount;
     }
 
-    public String getRating(){
+    public String getRating() {
         return this._rating;
     }
 
-    public void setRating(String rating){
+    public void setRating(String rating) {
         this._rating = rating;
     }
 
-<<<<<<< HEAD
-    public String getParseId(){return _parseid;}
+    public String getParseId() {
+        return _parseid;
+    }
 
-    public void setParseId(String parseId){this._parseid = parseId;}
-=======
->>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
+    public void setParseId(String parseId) {
+        this._parseid = parseId;
+    }
 }
+

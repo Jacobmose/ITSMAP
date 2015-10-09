@@ -49,14 +49,9 @@ public class DBUserAdapter {
                     + "rating_amount text, "
                     + "rating text, "
                     + "subjects text, "
-<<<<<<< HEAD
                     + "picture blob, "
-                    + "password text not null);";
-=======
-                    + "picture text, "
                     + "password text not null, "
                     + "parseid text);";
->>>>>>> a2cc8222da8a77920a13ca058b482499222fdbea
 
     private Context context = null;
     private DatabaseHelper DBHelper;
@@ -133,46 +128,24 @@ public class DBUserAdapter {
         db = DBHelper.getReadableDatabase();
 
         UserProfile userProfile;
-<<<<<<< HEAD
-        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_EMAIL, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING, KEY_PICTURE},
-=======
-<<<<<<< HEAD
-        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING, KEY_PARSEID},
-=======
-        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_EMAIL, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING},
->>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
->>>>>>> a2cc8222da8a77920a13ca058b482499222fdbea
+
+        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_EMAIL, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING, KEY_PICTURE, KEY_PARSEID},
                 KEY_ROWID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (mCursor != null){
             mCursor.moveToFirst();
         }
-
-<<<<<<< HEAD
             userProfile = new UserProfile(
                     mCursor.getString(0),
                     mCursor.getString(1),
                     mCursor.getString(2),
                     mCursor.getString(3),
                     mCursor.getString(4),
-                    mCursor.getString(5));
+                    mCursor.getString(5),
+                    mCursor.getBlob(6),// Kan være jeg skal ignorer picture i getUserProfile, men force get den.
+                    mCursor.getString(7));
 
             return userProfile;
-=======
-        userProfile = new UserProfile(
-                mCursor.getString(0),
-                mCursor.getString(1),
-                mCursor.getString(2),
-                mCursor.getString(3),
-                mCursor.getString(4),
-<<<<<<< HEAD
-                mCursor.getString(5),
-                mCursor.getBlob(6)); // Kan være jeg skal ignorer picture i getUserProfile, men force get den.
-=======
-                mCursor.getString(5));
->>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
->>>>>>> a2cc8222da8a77920a13ca058b482499222fdbea
-
     }
 
     public List<UserProfile> getAllUserProfiles() {

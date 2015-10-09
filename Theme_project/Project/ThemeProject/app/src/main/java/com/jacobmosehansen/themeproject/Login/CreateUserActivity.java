@@ -62,6 +62,7 @@ public class CreateUserActivity extends AppCompatActivity {
     String gender;
     String email;
     String password;
+    String actualAge;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +78,12 @@ public class CreateUserActivity extends AppCompatActivity {
         sprYear = (Spinner) findViewById(R.id.sprYear);
         sprGender = (Spinner) findViewById(R.id.spinGender);
 
-<<<<<<< HEAD
         intent = new Intent(CreateUserActivity.this, LoginActivity.class);
         serviceIntent = new Intent(CreateUserActivity.this, MessageService.class);
 
-        ageValues = new ArrayList<String>();
-        for (Integer i = 10; i <= 99; i++){
-            ageValues.add(Integer.toString(i));
-=======
         dayValues = new ArrayList<String>();
         for (Integer i = 1; i <= 31; i++){
             dayValues.add(Integer.toString(i));
->>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
         }
         dayArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dayValues);
         sprDay.setAdapter(dayArrayAdapter);
@@ -114,18 +109,12 @@ public class CreateUserActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-<<<<<<< HEAD
+
                 name = inputFullName.getText().toString();
-                age = sprAge.getSelectedItem().toString();
                 gender = sprGender.getSelectedItem().toString();
                 email = inputEmail.getText().toString();
                 password = inputPassword.getText().toString();
-=======
-                String name = inputFullName.getText().toString();
-                String gender = sprGender.getSelectedItem().toString();
-                String email = inputEmail.getText().toString();
-                String password = inputPassword.getText().toString();
->>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
+
 
                 String day = sprDay.getSelectedItem().toString();
                 int month = sprMonth.getCount();
@@ -135,11 +124,10 @@ public class CreateUserActivity extends AppCompatActivity {
                 currentDate = new DateTime();
                 period = new Period(dobDate, currentDate);
 
-                String actualAge = Integer.toString(period.getYears()+1);
+                actualAge = Integer.toString(period.getYears()+1);
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
 
-<<<<<<< HEAD
                     dbUser = new DBUserAdapter(CreateUserActivity.this);
 
                     ParseUser user = new ParseUser();
@@ -150,31 +138,18 @@ public class CreateUserActivity extends AppCompatActivity {
                         public void done(com.parse.ParseException e) {
                             if (e == null) {
                                 dbUser.open();
-                                dbUser.AddUser(name, age, gender, email, password, ParseUser.getCurrentUser().getObjectId());
+                                dbUser.AddUser(name, actualAge, gender, email, password, ParseUser.getCurrentUser().getObjectId());
                                 dbUser.close();
                                 Toast.makeText(getApplicationContext(), "User was created!", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(getApplicationContext(), "There was an error signing up." + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "There was an error signing up." + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
-=======
-                    DBUserAdapter dbUser = new DBUserAdapter(CreateUserActivity.this);
 
-                    dbUser.open();
-                    dbUser.AddUser(name, actualAge, gender, email, password);
-                    dbUser.close();
-
-                    Intent intent = new Intent(CreateUserActivity.this, LoginActivity.class);
-
-                    Toast.makeText(getApplicationContext(), "User was created!", Toast.LENGTH_SHORT).show();
-
-                    startActivity(intent);
-
->>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
                 } else
-                    Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_SHORT).show();
             }
         });
     }
