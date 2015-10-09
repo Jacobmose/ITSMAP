@@ -1,9 +1,11 @@
 package com.jacobmosehansen.themeproject.Profile;
 
+import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
+
 /**
  * Created by Jacobmosehansen on 07-10-2015.
  */
-public class UserProfile {
+public class UserProfile{
 
     String _id;
     String _name;
@@ -14,10 +16,12 @@ public class UserProfile {
     String _rating;
     String _parseid;
 
+
     public UserProfile(){
 
     }
 
+<<<<<<< HEAD
     public UserProfile(String name, String age, String gender, String ratingAmount, String rating, String parseId){
         this._name = name;
         this._age = age;
@@ -28,16 +32,21 @@ public class UserProfile {
     }
 
     public UserProfile(String name, String age, String gender, String ratingAmount, String rating){
+=======
+    public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating){
+>>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
         this._name = name;
+        this._email = email;
         this._age = age;
         this._gender = gender;
         this._ratingAmount = ratingAmount;
         this._rating = rating;
     }
 
-    public UserProfile(String id, String name, String age, String gender){
+    public UserProfile(String id, String name, String email, String age, String gender){
         this._id = id;
         this._name = name;
+        this._email = email;
         this._age = age;
         this._gender = gender;
     }
@@ -52,6 +61,14 @@ public class UserProfile {
 
     public void setName(String name){
         this._name = name;
+    }
+
+    public String getEmail(){
+        return this._email;
+    }
+
+    public void setEmail(String email){
+        this._email = email;
     }
 
     public String getAge(){
@@ -86,7 +103,10 @@ public class UserProfile {
         this._rating = rating;
     }
 
+<<<<<<< HEAD
     public String getParseId(){return _parseid;}
 
     public void setParseId(String parseId){this._parseid = parseId;}
+=======
+>>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
 }

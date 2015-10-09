@@ -3,6 +3,7 @@ package com.jacobmosehansen.themeproject.Profile;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import com.jacobmosehansen.themeproject.R;
 
 import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
 
 import org.w3c.dom.Text;
@@ -46,71 +48,78 @@ public class OwnProfileFragment extends Fragment
 {
     // UI variables //
     ImageView ivProfilePicture;
-    TextView tvUserName,tvFullName, tvAge, tvGender, tvLocation;
+    TextView tvFullName, tvEmail, tvAge, tvGender, tvLocation;
     RatingBar rbGradRating;
     Spinner sprSubjects;
     Button btnAddSubject;
     ArrayList<String> subjectArray = new ArrayList<String>();
     private ArrayAdapter<String> mySubjectAdapter;
     ListView lvSubjects;
-
-
+    private Uri profilePicture;
+    RoundImage roundImage;
 
 
     // DB variables //
     Integer userId;
     SharedPreferences mySharedPreferences;
-    ArrayList<String> userInfo;
+    UserProfile userProfile = new UserProfile();
 
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 0;
+    final int PIC_CROP = 2;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View myFragmentView = inflater.inflate(R.layout.fragment_profile_own, container, false);
-
         loadSavedPreferences();
-        tvUserName = (TextView) myFragmentView.findViewById(R.id.tv_userName);
+
+        // Load current profile //
+        DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
+        userProfile = dbUserAdapter.getUserProfile(userId);
+
+        // Initialize Views//
+        ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
+
         tvFullName = (TextView) myFragmentView.findViewById(R.id.tv_fullName);
+        tvEmail = (TextView) myFragmentView.findViewById(R.id.tv_email);
         tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
         tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
         tvLocation = (TextView) myFragmentView.findViewById(R.id.tv_location);
-        ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
+
+        rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
+
         sprSubjects = (Spinner) myFragmentView.findViewById(R.id.spinner_subjects);
         btnAddSubject = (Button) myFragmentView.findViewById(R.id.btn_addSubject);
         lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
-        rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
 
 
+        // _REMOVE TEST for own profile id//
         Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
 
-        // Load current profile //
-        DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-        dbUserAdapter.open();
-        //userInfo = dbUserAdapter.getUser(userId);
-        dbUserAdapter.close();
-
         // Set textView's with database information //
+        tvFullName.setText(userProfile.getName());
+        tvEmail.setText(userProfile.getEmail());
+        tvAge.setText(userProfile.getAge());
+        tvGender.setText(userProfile.getGender());
+        //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
 
+        // _TODO Set picture with database information //
 
-        // Set picture with database information //
+        // _TODO Set ratingbar with database information//
+        rbGradRating.setRating(Float.parseFloat(userProfile.getRating())/Float.parseFloat(userProfile.getRatingAmount()));
 
-        // Set ratingbar with database information//
-        //rating calculations
-        //rbGradRating.setRating(result of calculations);
-
-        // Set list view with database information//
+        // _TODO Set list view with database information//
 
         // On profile picture press, open camera and take picture for imageView //
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
-                // SAVE PICTURE TO DATABASE!!!!!!!!!!!!!!!!!!!!!
+                // _TODO SAVE PICTURE TO DATABASE!!!!!!!!!!!!!!!!!!!!!
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
@@ -152,6 +161,7 @@ public class OwnProfileFragment extends Fragment
                                 for (int position : reverseSortedPositions) {
                                     mySubjectAdapter.remove(mySubjectAdapter.getItem(position));
                                 }
+                                //_TODO REMOVE FROM SUBJECT//
                                 mySubjectAdapter.notifyDataSetChanged();
                             }
                         });
@@ -196,11 +206,26 @@ public class OwnProfileFragment extends Fragment
 
             if (requestCode == CAMERA_REQUEST) {
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
-                //Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
+                //_TODO Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
                 //roundImage = new RoundImage(ScaledImage);
-                ivProfilePicture.setImageBitmap(profilePicture);
+                Bitmap croppedPicture;
 
-            } else if (requestCode == SELECT_FILE) {
+                if(profilePicture.getWidth() >= profilePicture.getHeight()) {
+                    croppedPicture = Bitmap.createBitmap(profilePicture,
+                            profilePicture.getWidth()/2 - profilePicture.getHeight()/2, 0,
+                            profilePicture.getHeight(), profilePicture.getHeight());
+                }else{
+                    croppedPicture = Bitmap.createBitmap(profilePicture, 0,
+                            profilePicture.getHeight()/2 - profilePicture.getWidth()/2,
+                            profilePicture.getWidth(), profilePicture.getWidth());
+                }
+                roundImage = new RoundImage(croppedPicture);
+                ivProfilePicture.setImageDrawable(roundImage);
+            }
+
+
+
+            /*else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 String[] myProjection = {MediaStore.MediaColumns.DATA};
                 Cursor myCursor = getActivity().getContentResolver().query(selectedImageUri, myProjection, null, null, null);
@@ -223,12 +248,13 @@ public class OwnProfileFragment extends Fragment
                 options.inSampleSize = scale;
                 options.inJustDecodeBounds = false;
                 profilePicture = BitmapFactory.decodeFile(selectedImagePath, options);
-                //Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
+                // _TODO Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
                 //roundImage = new RoundImage(ScaledImage);
                 ivProfilePicture.setImageBitmap(profilePicture);
-            }
+            }*/
         }
     }
+
 
     public void selectFromSpinner(){
         try{
@@ -240,6 +266,7 @@ public class OwnProfileFragment extends Fragment
                 }else {
                     mySubjectAdapter.add(selectedSubject);
                     lvSubjects.setAdapter(mySubjectAdapter);
+                    //_TODO SAVE SUBJECTS TO DATABASE //
                 }}
             else{Toast.makeText(getActivity(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
         }catch(Exception e){

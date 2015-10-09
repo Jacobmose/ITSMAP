@@ -92,8 +92,8 @@ public class DBUserAdapter {
 
     public long AddUser(String username, String age, String gender, String email, String password, String parseId) {
 
-        String ra = "ra";
-        String r = "r";
+        String ra = "0";
+        String r = "0.0";
 
         ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_USERNAME, username);
@@ -124,13 +124,18 @@ public class DBUserAdapter {
         db = DBHelper.getReadableDatabase();
 
         UserProfile userProfile;
+<<<<<<< HEAD
         Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING, KEY_PARSEID},
+=======
+        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_EMAIL, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING},
+>>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
                 KEY_ROWID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (mCursor != null){
             mCursor.moveToFirst();
         }
 
+<<<<<<< HEAD
             userProfile = new UserProfile(
                     mCursor.getString(0),
                     mCursor.getString(1),
@@ -140,6 +145,15 @@ public class DBUserAdapter {
                     mCursor.getString(5));
 
             return userProfile;
+=======
+        userProfile = new UserProfile(
+                mCursor.getString(0),
+                mCursor.getString(1),
+                mCursor.getString(2),
+                mCursor.getString(3),
+                mCursor.getString(4),
+                mCursor.getString(5));
+>>>>>>> 0ca372711c66623b3fc9d9fa38574958aaa0eab0
 
     }
 
@@ -165,6 +179,47 @@ public class DBUserAdapter {
         }
         return profilesList;
     }
+
+    public int getRating(String id)throws SQLException {
+        int _id = 0;
+        Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE rating=?", new String[]{id});
+        if (mCursor != null) {
+            if (mCursor.moveToFirst()){
+                _id = mCursor.getInt(mCursor.getColumnIndex("rating"));
+
+                return _id;
+            }
+        }
+        return _id;
+    }
+
+    public int getRatingAmount(String id)throws SQLException {
+        int _id = 0;
+        Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE " + KEY_RATINGAMOUNT + "=?", new String[]{id});
+        if (mCursor != null) {
+            if (mCursor.moveToFirst()){
+                _id = mCursor.getInt(mCursor.getColumnIndex(KEY_RATINGAMOUNT));
+
+                return _id;
+            }
+        }
+        return _id;
+    }
+
+    public Integer setRating(String id, String rating)throws SQLException {
+        db = DBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_RATING, rating);
+        return db.update(DATABASE_TABLE, values, KEY_ROWID + " =?", new String[]{id});
+    }
+
+    public Integer setRatingAmount(String id, String rating_amount)throws SQLException {
+        db = DBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_RATINGAMOUNT, rating_amount);
+        return db.update(DATABASE_TABLE, values, KEY_ROWID + " =?", new String[]{id});
+    }
+
 
     public int getUserId(String email)throws SQLException {
         int id = 0;
