@@ -18,9 +18,11 @@ import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.R;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.messaging.Message;
 import com.sinch.android.rtc.messaging.MessageClient;
@@ -43,11 +45,12 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
     FrameLayout ChatListContainer;
     FrameLayout ChatWindowContainer;
 
-    String User;
+    String UserId;
     String Recipient;
     boolean exists = false;
 
     MessageAdapter messageAdapter;
+
     private MessageService.MessageServiceInterface messageServiceInterface;
     private ServiceConnection serviceConnection = new MyServiceConnection();
     private MessageClientListener messageClientListener = new MyMessageClientListener();
@@ -57,13 +60,10 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_list);
 
+        UserId = ParseUser.getCurrentUser().getObjectId();
+
         ChatListContainer = (FrameLayout) findViewById(R.id.chat_list_container);
         ChatWindowContainer = (FrameLayout) findViewById(R.id.chat_window_container);
-
-        Intent intent = getIntent();
-        User = intent.getStringExtra("PARSE_ID");
-
-        Toast.makeText(ChatListActivity.this, "ParseId" + User, Toast.LENGTH_LONG).show();
 
         bindService(new Intent(this, MessageService.class), serviceConnection, BIND_AUTO_CREATE);
 
@@ -95,7 +95,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
     }
 
     public void populateMessageHistory(String recipient) {
-        String[] userIds = {User, recipient};
+        String[] userIds = {UserId, recipient};
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ParseMessage");
         query.whereContainedIn("senderId", Arrays.asList(userIds));
         query.whereContainedIn("recipientId", Arrays.asList(userIds));
@@ -106,7 +106,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
                 if (e == null) {
                     for (int i = 0; i < messageList.size(); i++) {
                         WritableMessage message = new WritableMessage(messageList.get(i).get("recipientId").toString(), messageList.get(i).get("messageText").toString());
-                        if (messageList.get(i).get("senderId").toString().equals(User)) {
+                        if (messageList.get(i).get("senderId").toString().equals(UserId)) {
                             chatWindowFragment.addMessageToList(message, MessageAdapter.DIRECTION_OUTGOING);
                         } else {
                             chatWindowFragment.addMessageToList(message, MessageAdapter.DIRECTION_INCOMING);
@@ -119,7 +119,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
 
     public void populateMessageList(){
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ParseMessage");
-        query.whereEqualTo("senderId", User);
+        query.whereEqualTo("senderId", UserId);
         query.orderByAscending("createdAt");
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -203,7 +203,7 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
                         if (e == null) {
                             if (messageList.size() == 0) {
                                 ParseObject parseMessage = new ParseObject("ParseMessage");
-                                parseMessage.put("senderId", User);
+                                parseMessage.put("senderId", UserId);
                                 parseMessage.put("recipientId", writableMessage.getRecipientIds().get(0));
                                 parseMessage.put("messageText", writableMessage.getTextBody());
                                 parseMessage.put("sinchId", message.getMessageId());

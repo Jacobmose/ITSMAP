@@ -7,13 +7,18 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.parse.ParseUser;
 
 public class ProfileActivity extends AppCompatActivity {
 
     //DB variables//
     SharedPreferences mySharedPreferences;
-    Integer userId;
-    Integer requestId;
+    ParseUser user;
+    String userId;
+    String requestId;
+
 
     //UI variables//
 
@@ -27,17 +32,26 @@ public class ProfileActivity extends AppCompatActivity {
         OwnProfileFragment ownProfileFragment = new OwnProfileFragment();
         AnotherProfileFragment anotherProfileFragment = new AnotherProfileFragment();
 
-        loadSavedPreferences();
+        userId = ParseUser.getCurrentUser().getObjectId();
+
+        //loadSavedPreferences();
 
         Intent intent = getIntent();
-        requestId = intent.getIntExtra("USER_ID", 0);
+        requestId = intent.getStringExtra("USER_ID");
+
         Bundle idBundle = new Bundle();
-        idBundle.putInt("ID_KEY", requestId);
+        idBundle.putString("ID_KEY", requestId);
         anotherProfileFragment.setArguments(idBundle);
 
-        if (requestId.intValue() == userId.intValue()){
+        Log.d("TEST", userId);
+        Log.d("TEST", requestId);
+
+        while(userId == "0"){
+
+        }
+        if (requestId.equals(userId)){
             fragmentTransaction.replace(android.R.id.content, ownProfileFragment);
-        } else if (requestId.intValue() != userId.intValue()){
+        } else{
             fragmentTransaction.replace(android.R.id.content, anotherProfileFragment);
         }fragmentTransaction.commit();
 
@@ -51,7 +65,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void loadSavedPreferences(){
         mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        userId = mySharedPreferences.getInt("USER_ID", 0);
+        userId = mySharedPreferences.getString("USER_ID", "0");
     }
 
 }

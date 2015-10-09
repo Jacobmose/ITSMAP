@@ -20,6 +20,7 @@ import com.jacobmosehansen.themeproject.Chat.MessageService;
 import com.jacobmosehansen.themeproject.MainActivity;
 import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
+import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
 import com.parse.Parse;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -63,6 +64,7 @@ public class CreateUserActivity extends AppCompatActivity {
     String email;
     String password;
     String actualAge;
+    ParseAdapter parse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,7 @@ public class CreateUserActivity extends AppCompatActivity {
         yearArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, yearValues);
         sprYear.setAdapter(yearArrayAdapter);
 
-
+        parse = new ParseAdapter();
 
         genderValues = new ArrayList<String>();
         genderValues.add("Male");
@@ -130,20 +132,15 @@ public class CreateUserActivity extends AppCompatActivity {
 
                     dbUser = new DBUserAdapter(CreateUserActivity.this);
 
-                    ParseUser user = new ParseUser();
-                    user.setUsername(email);
-                    user.setPassword(password);
+                    ParseUser user = parse.createParseUser(name, actualAge, gender, email, password);
 
                     user.signUpInBackground(new SignUpCallback() {
                         public void done(com.parse.ParseException e) {
                             if (e == null) {
-                                dbUser.open();
-                                dbUser.AddUser(name, actualAge, gender, email, password, ParseUser.getCurrentUser().getObjectId());
-                                dbUser.close();
                                 Toast.makeText(getApplicationContext(), "User was created!", Toast.LENGTH_SHORT).show();
                                 startActivity(intent);
                             } else {
-                                Toast.makeText(getApplicationContext(), "There was an error signing up." + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "There was an error signing up " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

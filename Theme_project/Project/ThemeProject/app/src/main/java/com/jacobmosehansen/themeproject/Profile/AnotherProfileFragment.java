@@ -3,6 +3,7 @@ package com.jacobmosehansen.themeproject.Profile;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +17,15 @@ import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
+import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Morten on 06-10-2015.
@@ -34,8 +42,9 @@ public class AnotherProfileFragment extends Fragment {
     ListView lvSubjects;
 
     // DB variables //
-    Integer requestId;
-    UserProfile userProfile =  new UserProfile();
+    String requestId;
+    //UserProfile userProfile =  new UserProfile();
+    ParseUser userProfile;
 
 
     @Nullable
@@ -45,9 +54,8 @@ public class AnotherProfileFragment extends Fragment {
 
         // Load current profile //
         Bundle idBundle = this.getArguments();
-        requestId = idBundle.getInt("ID_KEY");
-        final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-        userProfile = dbUserAdapter.getUserProfile(requestId);
+        requestId = idBundle.getString("ID_KEY");
+        //Frederik final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
 
         // Initialize Views//
         ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
@@ -63,24 +71,45 @@ public class AnotherProfileFragment extends Fragment {
         lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
 
-        // Set textView's with database information //
-        tvFullName.setText(userProfile.getName());
-        tvAge.setText(userProfile.getAge());
-        tvGender.setText(userProfile.getGender());
-        //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo("objectId", requestId);
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> list, ParseException e) {
+                if(e == null) {
+                    if (list.isEmpty()) {
+                        Log.d("Test", "FAIL no user with id " + requestId);
+                    } else {
+                        userProfile = list.get(0);
+                        if (userProfile.getObjectId() != null) {
+                        // Set textView's with database information //
+                        tvFullName.setText(userProfile.getUsername());
+                        tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE));
+                        tvGender.setText(userProfile.getString(ParseAdapter.KEY_GENDER));
+                        //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
 
-        // _TODO Load profile picture
+                        // _TODO Load profile picture
 
-        // Get Ratingbar amount and save onclick //
-        if(Float.parseFloat(userProfile.getRatingAmount())!=0) {
-            rbGradRating.setRating(Float.parseFloat(userProfile.getRating()) / Float.parseFloat(userProfile.getRatingAmount()));
-        } else {
-            rbGradRating.setRating(0);
-        }
+                        // Get Ratingbar amount and save onclick //
+
+                        if (userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue() != 0) {
+                            rbGradRating.setRating(userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue() / userProfile.getNumber(ParseAdapter.KEY_RATING).intValue());
+                        } else {
+                            rbGradRating.setRating(0);
+                        }
+                    }
+                    }
+
+
+                }else{
+                    Toast.makeText(getActivity(), "Could not find User", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         btnRating.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                userProfile = dbUserAdapter.getUserProfile(requestId);
+                /*userProfile = dbUserAdapter.getUserProfile(requestId);
                 float rating = rbGradRating.getRating();
                 float totalRating = Float.parseFloat(userProfile.getRating());
                 Integer numberOfRatings = Integer.parseInt(userProfile.getRatingAmount());
@@ -93,7 +122,34 @@ public class AnotherProfileFragment extends Fragment {
 
                 float currentRating = totalRating/numberOfRatings;
 
+                rbGradRating.setRating(currentRating);*/
+
+                float rating = rbGradRating.getRating();
+                float totalRating = userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue();
+                Integer numberOfRatings = userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue();
+
+                totalRating = totalRating+rating;
+                userProfile.put(ParseAdapter.KEY_RATING, totalRating);
+                //dbUserAdapter.setRating(requestId.toString(), Float.toString(totalRating));
+
+                numberOfRatings = numberOfRatings + 1;
+                userProfile.put(ParseAdapter.KEY_RATINGAMOUNT, numberOfRatings);
+                //dbUserAdapter.setRatingAmount(requestId.toString(), Integer.toString(numberOfRatings));
+
+                float currentRating = totalRating/numberOfRatings;
+
                 rbGradRating.setRating(currentRating);
+
+                userProfile.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            Log.d("Test", "succes");
+                        }else{
+                            Log.d("Test", "failed "+e.getLocalizedMessage() );
+                        }
+                    }
+                });
 
                 // _TODO REMOVE THIS TOAST
                 Toast.makeText(getActivity(), Float.toString(currentRating), Toast.LENGTH_SHORT).show();

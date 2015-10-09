@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
         txtPressure = (TextView) findViewById(R.id.pressure);
         igvWeatherIcon = (ImageView) findViewById(R.id.weatherIcon);
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(JSONReceiver, new IntentFilter("JSONIntent"));
-        LocalBroadcastManager.getInstance(this).registerReceiver(DrawableReceiver, new IntentFilter("DrawableIntent"));
-
     }
 
     @Override
@@ -63,6 +60,20 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, WeatherService.class);
         bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
 
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        LocalBroadcastManager.getInstance(this).registerReceiver(JSONReceiver, new IntentFilter("JSONIntent"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(DrawableReceiver, new IntentFilter("DrawableIntent"));
+    }
+
+    @Override
+    protected  void onPause(){
+        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(JSONReceiver);
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(DrawableReceiver);
     }
 
     @Override

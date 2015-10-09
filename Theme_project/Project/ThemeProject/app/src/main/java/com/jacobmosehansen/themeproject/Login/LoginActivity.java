@@ -54,66 +54,32 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Log.d("Login", "onClick");
                 email = edLoginEmail.getText().toString();
                 password = edLoginPassword.getText().toString();
 
                 if (email.length() > 0 && password.length() > 0) {
-                    try {
-
-                        dbUser = new DBUserAdapter(LoginActivity.this);
-
-                        dbUser.open();
 
                         if(currentUser == null)
                         {
-                            Log.d("Login", "onClick2");
                             ParseUser.logInInBackground(email, password, new LogInCallback() {
                                 public void done(ParseUser user, com.parse.ParseException e) {
                                     if (user != null) {
-                                        Log.d("Login", "onClick3");
-                                        final String tmpEmail = "admin";
-                                        final String tmpName= "admin";
-                                        final String tmpAge= "admin";
-                                        final String tmpGender= "admin";
-                                        final String tmpPassword = "admin";
-
-                                        if(ParseUser.getCurrentUser() == null){
-                                            Log.d("Login", "id: " + ParseUser.getCurrentUser().getObjectId());
-                                        }
-                                        else {
-                                            dbUser.AddUser(tmpEmail, tmpName, tmpAge, tmpGender, tmpPassword, ParseUser.getCurrentUser().getObjectId());
-                                        }
-                                            if (dbUser.Login(email, password)){
-                                                savePreferences("USER_ID", dbUser.getUserId(email));
-                                                Toast.makeText(LoginActivity.this, "Login Success on Parse!", Toast.LENGTH_LONG).show();
-                                                startActivity(intent);
-                                                startService(serviceIntent);
-                                            } else {
-                                                Toast.makeText(LoginActivity.this, "Invalid email or password in db", Toast.LENGTH_LONG).show();
-                                            }
+                                        Toast.makeText(LoginActivity.this, "Login Success!", Toast.LENGTH_SHORT).show();
+                                        startActivity(intent);
+                                        startService(serviceIntent);
                                     } else {
-                                        Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         }
                         else{
-                            if (dbUser.Login(email, password)){
-                                savePreferences("USER_ID", dbUser.getUserId(email));
-                                Toast.makeText(LoginActivity.this, "Login Success!", Toast.LENGTH_LONG).show();
-                                startActivity(intent);
-                                startService(serviceIntent);
-                            } else {
-                                Toast.makeText(LoginActivity.this, "Invalid email or password in db", Toast.LENGTH_LONG).show();
-                            }
+                            Toast.makeText(LoginActivity.this, "Login Success!", Toast.LENGTH_LONG).show();
+                            startActivity(intent);
+                            startService(serviceIntent);
+                            Toast.makeText(LoginActivity.this, "Invalid email or password", Toast.LENGTH_LONG).show();
+
                         }
-                        dbUser.close();
-                    } catch (Exception e) {
-                        Toast.makeText(LoginActivity.this, "Exception hit. This was not supposed to happen... Redirecting to MainActivity anyways", Toast.LENGTH_LONG).show();
-                        //Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                        //startActivity(intent);
-                    }
                 } else {
                     Toast.makeText(LoginActivity.this, "Email or Password cannot be null", Toast.LENGTH_LONG).show();
                 }

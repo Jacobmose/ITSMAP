@@ -18,12 +18,17 @@ import android.widget.ListAdapter;
 import android.widget.Spinner;
 
 import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
+import com.jacobmosehansen.themeproject.Login.LoginActivity;
 import com.jacobmosehansen.themeproject.Post.NewPostActivity;
 import com.jacobmosehansen.themeproject.Post.PostsActivity;
 import com.jacobmosehansen.themeproject.Profile.ProfileActivity;
 
-import com.jacobmosehansen.themeproject.Profile.UserProfile;
+//import com.jacobmosehansen.themeproject.Profile.UserProfile;
 import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
+import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
+import com.parse.LogOutCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 
 import java.util.ArrayList;
@@ -31,15 +36,16 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private SQLiteDatabase db;
-    Button btn_posts, btn_chat, btn_newPost, btn_profile, btn_search;
+    Button btn_posts, btn_chat, btn_newPost, btn_profile, btn_search, btn_logOut;
     EditText etSearch;
     ListAdapter mListAdapter;
     Spinner sprSearch;
     Integer userId;
     ArrayAdapter<String> arrayAdapter;
     ArrayList<String> userIdHolder;
-    UserProfile userProfile =  new UserProfile();
-    DBUserAdapter dbUser;
+    //UserProfile userProfile =  new UserProfile();
+    //DBUserAdapter dbUser;
+    ParseUser currentUser;
 
 
 
@@ -48,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        currentUser = ParseUser.getCurrentUser();
+
         loadSavedPreferences();
 
         btn_posts = (Button) findViewById(R.id.btn_posts);
@@ -55,13 +63,11 @@ public class MainActivity extends AppCompatActivity {
         btn_newPost = (Button) findViewById(R.id.btn_newPost);
         btn_profile = (Button) findViewById(R.id.btn_profile);
         btn_search = (Button) findViewById(R.id.btn_search);
+        btn_logOut = (Button) findViewById(R.id.btn_logout);
         etSearch = (EditText) findViewById(R.id.et_search);
         sprSearch = (Spinner) findViewById(R.id.spinner_search);
 
-
-
-        Log.d("userId", userId.toString());
-        // TEST to verify the correct user ID is saved in SharedPreferences
+        /*// TEST to verify the correct user ID is saved in SharedPreferences
         dbUser = new DBUserAdapter(MainActivity.this);
         userProfile = dbUser.getUserProfile(userId);
         String name = userProfile.getName();
@@ -69,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         userIdHolder.add(name);
         arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, userIdHolder);
         sprSearch.setAdapter(arrayAdapter);
-        // TEST
+        // TEST*/
 
         btn_posts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ChatListActivity.class);
-                intent.putExtra("PARSE_ID", userProfile.getParseId());
                 startActivityForResult(intent, 1);
             }
         });
@@ -100,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                intent.putExtra("USER_ID", userId);
+                intent.putExtra("USER_ID", currentUser.getObjectId());
                 startActivityForResult(intent, 1);
             }
         });
@@ -111,11 +116,25 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //_TODO Remove this! - made for testing//
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                Integer anotherId = 10;
-                intent.putExtra("USER_ID", anotherId);
+                intent.putExtra("USER_ID", "MmDjqfcqR7");
                 startActivityForResult(intent, 1);
                 //Remove this! - made for testing//
 
+            }
+        });
+
+        btn_logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ParseUser currentUser = ParseUser.getCurrentUser();
+
+                currentUser.logOutInBackground(new LogOutCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                    }
+                });
             }
         });
     }
@@ -146,27 +165,5 @@ public class MainActivity extends AppCompatActivity {
     private void loadSavedPreferences(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         userId = sharedPreferences.getInt("USER_ID", 0);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }

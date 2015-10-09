@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +35,18 @@ import com.jacobmosehansen.themeproject.R;
 
 import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.w3c.dom.Text;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 
@@ -60,9 +69,12 @@ public class OwnProfileFragment extends Fragment
 
 
     // DB variables //
-    Integer userId;
+    String userId;
     SharedPreferences mySharedPreferences;
-    UserProfile userProfile = new UserProfile();
+    //UserProfile userProfile = new UserProfile();
+
+    ParseUser userProfile = ParseUser.getCurrentUser();
+    ParseFile file;
 
 
     private static final int CAMERA_REQUEST = 1888;
@@ -73,11 +85,15 @@ public class OwnProfileFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View myFragmentView = inflater.inflate(R.layout.fragment_profile_own, container, false);
-        loadSavedPreferences();
 
+       //Frederik loadSavedPreferences();
+
+        userId = ParseUser.getCurrentUser().getObjectId();
+
+        //Frederik
         // Load current profile //
-        final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-        userProfile = dbUserAdapter.getUserProfile(userId);
+        /*final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
+        userProfile = dbUserAdapter.getUserProfile(userId);*/
 
         // Initialize Views//
         ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
@@ -100,10 +116,10 @@ public class OwnProfileFragment extends Fragment
         Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
 
         // Set textView's with database information //
-        tvFullName.setText(userProfile.getName());
+        tvFullName.setText(userProfile.getUsername());
         tvEmail.setText(userProfile.getEmail());
-        tvAge.setText(userProfile.getAge());
-        tvGender.setText(userProfile.getGender());
+        tvAge.setText(userProfile.get(ParseAdapter.KEY_AGE).toString());
+        tvGender.setText(userProfile.get(ParseAdapter.KEY_GENDER).toString());
         //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
 
         // _TODO Set picture with database information //
@@ -112,7 +128,8 @@ public class OwnProfileFragment extends Fragment
 
 
         // _TODO Set ratingbar with database information//
-        rbGradRating.setRating(Float.parseFloat(userProfile.getRating())/Float.parseFloat(userProfile.getRatingAmount()));
+        rbGradRating.setRating(Float.parseFloat(userProfile.get(ParseAdapter.KEY_RATING).toString())
+                / Float.parseFloat(userProfile.get(ParseAdapter.KEY_RATINGAMOUNT).toString()));
 
         // _TODO Set list view with database information//
 
@@ -123,9 +140,40 @@ public class OwnProfileFragment extends Fragment
                 Bitmap test = BitmapFactory.decodeResource(getResources(), R.drawable.books);
                 //Bitmap bitmapToDB = ((BitmapDrawable)ivProfilePicture.getDrawable()).getBitmap();
 
+                ByteArrayOutputStream stream = new  ByteArrayOutputStream();
+                test.compress(Bitmap.CompressFormat.PNG, 100, stream);
+                byte [] image = stream.toByteArray();
+
+                String name = "picture" + userId + ".png";
+
+                file = new ParseFile(name, image);
+
+                file.saveInBackground(new SaveCallback() {
+                    @Override
+                    public void done(ParseException e) {
+                        if(e == null){
+                            userProfile.put(ParseAdapter.KEY_PICTURE, file);
+                            userProfile.saveInBackground(new SaveCallback() {
+                                @Override
+                                public void done(ParseException e) {
+                                    if (e == null) {
+                                        Log.d("TEST", "succes");
+                                    } else {
+                                        Log.d("Test", "failed" + e.getLocalizedMessage());
+                                    }
+                                }
+                            });
+                        }else{
+                            Log.d("TEST", "failed create file");
+                        }
+
+                    }
+                });
+
                 // _TODO Clean up this mess
                 //final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-                dbUserAdapter.insertImage(userId.toString(), test);
+
+                //dbUserAdapter.insertImage(userId.toString(), test);
 
                 //selectImage();
             }
@@ -148,8 +196,17 @@ public class OwnProfileFragment extends Fragment
             public void onClick(View v) {
                 // _TODO Clean up this mess
 
-                ivProfilePicture.setImageBitmap(dbUserAdapter.getImage(userId.toString()));
+                //userProfile.
 
+                String bitmapString = userProfile.getString(ParseAdapter.KEY_PICTURE);
+
+                try{
+                    byte [] encodeByte= Base64.decode(bitmapString, Base64.DEFAULT);
+                    Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
+                    ivProfilePicture.setImageBitmap(bitmap);
+                }catch(Exception e){
+                    e.getMessage();
+                }
                 //selectFromSpinner();
             }
         });
@@ -297,7 +354,7 @@ public class OwnProfileFragment extends Fragment
 
     private void loadSavedPreferences(){
         mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        userId = mySharedPreferences.getInt("USER_ID", 0);
+        //Frederik userId = mySharedPreferences.getInt("USER_ID", 0);
     }
 
 }
