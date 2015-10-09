@@ -1,24 +1,18 @@
 package com.jacobmosehansen.themeproject.Chat;
 
-import android.content.BroadcastReceiver;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.R;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -35,22 +29,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ChatListActivity extends AppCompatActivity implements ChatListInterface {
+public class ChatActivity extends AppCompatActivity implements ChatInterface {
 
-    ChatListFragment chatListFragment;
-    ChatWindowFragment chatWindowFragment;
-
-    ArrayList<ChatItem> chatItems;
-
-    FrameLayout ChatListContainer;
-    FrameLayout ChatWindowContainer;
-
-    String UserId;
-    String Recipient;
-    boolean exists = false;
-
-    MessageAdapter messageAdapter;
-
+    private ChatListFragment chatListFragment;
+    private ChatWindowFragment chatWindowFragment;
+    private ArrayList<ChatItem> chatItems;
+    private FrameLayout ChatListContainer;
+    private FrameLayout ChatWindowContainer;
+    private String UserId;
+    private String RecipientId;
+    private boolean exists = false;
+    private MessageAdapter messageAdapter;
     private MessageService.MessageServiceInterface messageServiceInterface;
     private ServiceConnection serviceConnection = new MyServiceConnection();
     private MessageClientListener messageClientListener = new MyMessageClientListener();
@@ -58,19 +47,17 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_list);
+        setContentView(R.layout.activity_chat);
 
         UserId = ParseUser.getCurrentUser().getObjectId();
 
         ChatListContainer = (FrameLayout) findViewById(R.id.chat_list_container);
         ChatWindowContainer = (FrameLayout) findViewById(R.id.chat_window_container);
 
-        bindService(new Intent(this, MessageService.class), serviceConnection, BIND_AUTO_CREATE);
-
-        LocalBroadcastManager.getInstance(this).registerReceiver(receiver, new IntentFilter("com.sinch.messagingtutorial.app.ListUsersActivity"));
-
         chatListFragment = new ChatListFragment();
         chatWindowFragment = new ChatWindowFragment();
+
+        bindService(new Intent(this, MessageService.class), serviceConnection, BIND_AUTO_CREATE);
 
         chatItems = new ArrayList<>();
 
@@ -78,16 +65,37 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
 
         populateMessageList();
 
+        Intent intent = getIntent();
+        RecipientId = intent.getStringExtra("RECIPIENT_ID");
+
         getFragmentManager().beginTransaction()
                 .add(R.id.chat_list_container, chatListFragment, "CHAT_LIST")
                 .add(R.id.chat_window_container, chatWindowFragment, "CHAT_WINDOW")
                 .commit();
+
+        if(RecipientId != null){
+            setVisible(ChatWindowContainer);
+            chatWindowFragment.setChat(RecipientId);
+        }else{
+            setVisible(ChatListContainer);
+        }
+
+
     }
 
     public void onChatSelected(int pos) {
-        chatWindowFragment.setChat(chatItems.get(pos));
-        ChatListContainer.setVisibility(View.GONE);
-        ChatWindowContainer.setVisibility(View.VISIBLE);
+        chatWindowFragment.setChat(RecipientId);
+        setVisible(ChatWindowContainer);
+    }
+
+    public void setVisible(FrameLayout frame){
+        if(frame == ChatListContainer) {
+            ChatListContainer.setVisibility(View.VISIBLE);
+            ChatWindowContainer.setVisibility(View.GONE);
+        }else{
+            ChatListContainer.setVisibility(View.GONE);
+            ChatWindowContainer.setVisibility(View.VISIBLE);
+        }
     }
 
     public ArrayList<ChatItem> getChatList(){
@@ -170,27 +178,13 @@ public class ChatListActivity extends AppCompatActivity implements ChatListInter
         }
     }
 
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            Log.i("Broadcast", "Broadcast received");
-            Boolean success = intent.getBooleanExtra("success", false);
-            if (!success) {
-                Toast.makeText(getApplicationContext(), "Messaging service failed to start", Toast.LENGTH_LONG).show();
-            }else{
-                Toast.makeText(getApplicationContext(), "Messaging service succes", Toast.LENGTH_LONG).show();
-            }
-
-        }
-    };
-
     private class MyMessageClientListener implements MessageClientListener {
         @Override
         public void onMessageFailed(MessageClient client, Message message, MessageFailureInfo failureInfo) {}
 
         @Override
         public void onIncomingMessage(MessageClient client, final Message message) {
-            Toast.makeText(ChatListActivity.this, "message", Toast.LENGTH_LONG).show();
+            Toast.makeText(ChatActivity.this, "message", Toast.LENGTH_LONG).show();
             if (message.getSenderId().equals(chatWindowFragment.getRecipientId())) {
                 final WritableMessage writableMessage = new WritableMessage(message.getRecipientIds().get(0), message.getTextBody());
 

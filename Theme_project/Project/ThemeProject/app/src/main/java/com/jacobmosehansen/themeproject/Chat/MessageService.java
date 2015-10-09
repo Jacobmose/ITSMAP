@@ -28,7 +28,6 @@ public class MessageService extends Service implements SinchClientListener{
     private MessageClient messageClient = null;
     private String currentUserId;
     private LocalBroadcastManager broadcaster;
-    private Intent broadcastIntent = new Intent("com.sinch.messagingtutorial.app.ListUsersActivity");
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -66,8 +65,6 @@ public class MessageService extends Service implements SinchClientListener{
     @Override
     public void onClientFailed(SinchClient client, SinchError error) {
         Log.d("client", "client failed");
-        broadcastIntent.putExtra("success", false);
-        broadcaster.sendBroadcast(broadcastIntent);
 
         sinchClient = null;
     }
@@ -75,8 +72,6 @@ public class MessageService extends Service implements SinchClientListener{
     @Override
     public void onClientStarted(SinchClient client) {
         Log.d("client", "client succes");
-        broadcastIntent.putExtra("success", true);
-        broadcaster.sendBroadcast(broadcastIntent);
 
         client.startListeningOnActiveConnection();
         messageClient = client.getMessageClient();

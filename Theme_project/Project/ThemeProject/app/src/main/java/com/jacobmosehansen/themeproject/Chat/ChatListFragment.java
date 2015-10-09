@@ -11,12 +11,10 @@ import android.widget.ListView;
 
 import com.jacobmosehansen.themeproject.R;
 
-import java.util.ArrayList;
-
 public class ChatListFragment extends Fragment {
 
     private ListView listView;
-    private ChatListInterface chatListInterface;
+    private ChatInterface chatInterface;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -25,14 +23,14 @@ public class ChatListFragment extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.listView3);
 
-        ChatListAdaptor adapter = new ChatListAdaptor(getActivity(), chatListInterface.getChatList());
+        ChatListAdaptor adapter = new ChatListAdaptor(getActivity(), chatInterface.getChatList());
 
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                chatListInterface.onChatSelected(position);
+                chatInterface.onChatSelected(position);
             }
         });
 
@@ -43,7 +41,7 @@ public class ChatListFragment extends Fragment {
     public void onAttach(Activity activity){
         super.onAttach(activity);
 
-        chatListInterface = (ChatListInterface) activity;
+        chatInterface = (ChatInterface) activity;
     }
 }
 

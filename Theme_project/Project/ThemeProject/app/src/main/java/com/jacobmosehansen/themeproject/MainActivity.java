@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,15 +14,13 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
 
-import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
+import com.jacobmosehansen.themeproject.Chat.ChatActivity;
 import com.jacobmosehansen.themeproject.Login.LoginActivity;
 import com.jacobmosehansen.themeproject.Post.NewPostActivity;
 import com.jacobmosehansen.themeproject.Post.PostsActivity;
 import com.jacobmosehansen.themeproject.Profile.ProfileActivity;
 
 //import com.jacobmosehansen.themeproject.Profile.UserProfile;
-import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
-import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -88,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         btn_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChatListActivity.class);
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                 startActivityForResult(intent, 1);
             }
         });
@@ -115,10 +110,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //_TODO Remove this! - made for testing//
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                /*Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 intent.putExtra("USER_ID", "MmDjqfcqR7");
-                startActivityForResult(intent, 1);
+                startActivityForResult(intent, 1);*/
                 //Remove this! - made for testing//
+
+                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                intent.putExtra("RECIPIENT_ID", "MmDjqfcqR7");
+                startActivity(intent);
 
             }
         });

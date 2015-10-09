@@ -2,13 +2,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.jacobmosehansen.themeproject.Chat.ChatListActivity">
+    tools:context="com.jacobmosehansen.themeproject.Chat.ChatActivity">
 
     <FrameLayout
 
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/chat_list_container">
+        android:id="@+id/chat_list_container"
+        android:visibility="gone">
     </FrameLayout>
     <FrameLayout
         android:id="@+id/chat_window_container"

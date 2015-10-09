@@ -38,12 +38,6 @@ public class ProfileActivity extends AppCompatActivity {
         idBundle.putString("ID_KEY", requestId);
         anotherProfileFragment.setArguments(idBundle);
 
-        Log.d("TEST", userId);
-        Log.d("TEST", requestId);
-
-        while(userId == "0"){
-
-        }
         if (requestId.equals(userId)){
             fragmentTransaction.replace(android.R.id.content, ownProfileFragment);
         } else{
