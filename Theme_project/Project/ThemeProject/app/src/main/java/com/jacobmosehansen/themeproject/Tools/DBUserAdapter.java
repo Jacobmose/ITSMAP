@@ -6,8 +6,12 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import com.jacobmosehansen.themeproject.Profile.UserProfile;
@@ -44,7 +48,7 @@ public class DBUserAdapter {
                     + "rating_amount text, "
                     + "rating text, "
                     + "subjects text, "
-                    + "picture text, "
+                    + "picture blob, "
                     + "password text not null);";
 
     private Context context = null;
@@ -121,7 +125,7 @@ public class DBUserAdapter {
         db = DBHelper.getReadableDatabase();
 
         UserProfile userProfile;
-        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_EMAIL, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING},
+        Cursor mCursor = db.query(DATABASE_TABLE, new String[]{KEY_USERNAME, KEY_EMAIL, KEY_AGE, KEY_GENDER, KEY_RATINGAMOUNT, KEY_RATING, KEY_PICTURE},
                 KEY_ROWID + "=?", new String[]{String.valueOf(id)}, null, null, null, null);
 
         if (mCursor != null){
@@ -134,7 +138,8 @@ public class DBUserAdapter {
                 mCursor.getString(2),
                 mCursor.getString(3),
                 mCursor.getString(4),
-                mCursor.getString(5));
+                mCursor.getString(5),
+                mCursor.getBlob(6)); // Kan være jeg skal ignorer picture i getUserProfile, men force get den.
 
         return userProfile;
     }
@@ -214,6 +219,40 @@ public class DBUserAdapter {
             }
         }
         return id;
+    }
+
+    //Insert bytearray with blob
+    public Integer insertImage(String id, Bitmap image)throws SQLException{
+        byte[] data = getBitmapAsByteArray(image);
+        db = DBHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(KEY_PICTURE, data);
+        return db.update(DATABASE_TABLE, values, KEY_ROWID + " =?", new String[]{id});
+    }
+
+    //Convert to bytearray
+    public static byte[] getBitmapAsByteArray(Bitmap bitmap){
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        return outputStream.toByteArray();
+    }
+
+    //Get image from bytearray
+    public Bitmap getImage(String id){
+
+        Log.d("Entering", "Entering");
+        Cursor mCursor = db.rawQuery("SELECT * FROM " + DATABASE_TABLE + " WHERE " + KEY_PICTURE + "=?", new String[]{id});
+        byte[] data = mCursor.getBlob(0);
+        if (mCursor != null) {
+            if (mCursor.moveToFirst()){
+                //byte[] data = mCursor.getBlob(0);
+                mCursor.close();
+                Log.d("Cursor", "jepjep");
+                return BitmapFactory.decodeByteArray(data, 0, data.length);
+            }
+        }
+        Log.d("Exiting", "Exiting");
+        return BitmapFactory.decodeByteArray(data, 0, data.length);
     }
 }
 

@@ -10,7 +10,7 @@ import android.os.Bundle;
 
 public class ProfileActivity extends AppCompatActivity {
 
-    //User/Database variables//
+    //DB variables//
     SharedPreferences mySharedPreferences;
     Integer userId;
     Integer requestId;
@@ -41,19 +41,9 @@ public class ProfileActivity extends AppCompatActivity {
             fragmentTransaction.replace(android.R.id.content, anotherProfileFragment);
         }fragmentTransaction.commit();
 
-        // MUST BE DELETED//
-        /*
-        setContentView(R.layout.activity_profile);
-        mySubjectAdapter = new ArrayAdapter<String>(ProfileActivity.this, android.R.layout.simple_list_item_1, subjectArray);
-        ivProfilePicture = (ImageView) findViewById(R.id.imageView_profilePicture);
-        rbGradRating = (RatingBar) findViewById(R.id.ratingBar_profileRating);
-        btnRate = (Button) findViewById(R.id.btn_rate);
-        sprSubjects = (Spinner) findViewById(R.id.spinner_subjects);
-        btnAddSubject = (Button) findViewById(R.id.btn_addSubject);
-        lvSubjects = (ListView) findViewById(R.id.lv_subjects);
 
         // _TODO Set Round Profile Picture// MUST BE IMPLEMENTED AS DEFAULT TO DATABASE //
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
+        /*Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
         roundImage = new RoundImage(bm);
         ivProfilePicture.setImageDrawable(roundImage);
         */

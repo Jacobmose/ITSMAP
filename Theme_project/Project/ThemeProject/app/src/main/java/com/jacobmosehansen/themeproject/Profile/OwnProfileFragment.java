@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -55,7 +56,6 @@ public class OwnProfileFragment extends Fragment
     ArrayList<String> subjectArray = new ArrayList<String>();
     private ArrayAdapter<String> mySubjectAdapter;
     ListView lvSubjects;
-    private Uri profilePicture;
     RoundImage roundImage;
 
 
@@ -67,7 +67,6 @@ public class OwnProfileFragment extends Fragment
 
     private static final int CAMERA_REQUEST = 1888;
     private static final int SELECT_FILE = 0;
-    final int PIC_CROP = 2;
 
 
     @Nullable
@@ -77,7 +76,7 @@ public class OwnProfileFragment extends Fragment
         loadSavedPreferences();
 
         // Load current profile //
-        DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
+        final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
         userProfile = dbUserAdapter.getUserProfile(userId);
 
         // Initialize Views//
@@ -109,6 +108,9 @@ public class OwnProfileFragment extends Fragment
 
         // _TODO Set picture with database information //
 
+
+
+
         // _TODO Set ratingbar with database information//
         rbGradRating.setRating(Float.parseFloat(userProfile.getRating())/Float.parseFloat(userProfile.getRatingAmount()));
 
@@ -118,10 +120,14 @@ public class OwnProfileFragment extends Fragment
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage();
-                // _TODO SAVE PICTURE TO DATABASE!!!!!!!!!!!!!!!!!!!!!
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                Bitmap test = BitmapFactory.decodeResource(getResources(), R.drawable.books);
+                //Bitmap bitmapToDB = ((BitmapDrawable)ivProfilePicture.getDrawable()).getBitmap();
+
+                // _TODO Clean up this mess
+                //final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
+                dbUserAdapter.insertImage(userId.toString(), test);
+
+                //selectImage();
             }
         });
 
@@ -140,7 +146,11 @@ public class OwnProfileFragment extends Fragment
         btnAddSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectFromSpinner();
+                // _TODO Clean up this mess
+
+                ivProfilePicture.setImageBitmap(dbUserAdapter.getImage(userId.toString()));
+
+                //selectFromSpinner();
             }
         });
 
@@ -172,7 +182,7 @@ public class OwnProfileFragment extends Fragment
 
     // Note by Morten: //
     // This function was inspired by the tutorial http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample//
-    // Function makes it posible for user to either take new picture or select a picture from the library for profile picture//
+    // Function makes it possible for user to either take new picture or select a picture from the library for profile picture//
     private void selectImage(){
         final CharSequence[] options = {"Take new photo", "Choose photo from library", "Cancel"};
 
@@ -203,29 +213,19 @@ public class OwnProfileFragment extends Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-
             if (requestCode == CAMERA_REQUEST) {
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
-                //_TODO Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
-                //roundImage = new RoundImage(ScaledImage);
-                Bitmap croppedPicture;
-
-                if(profilePicture.getWidth() >= profilePicture.getHeight()) {
-                    croppedPicture = Bitmap.createBitmap(profilePicture,
-                            profilePicture.getWidth()/2 - profilePicture.getHeight()/2, 0,
-                            profilePicture.getHeight(), profilePicture.getHeight());
-                }else{
-                    croppedPicture = Bitmap.createBitmap(profilePicture, 0,
-                            profilePicture.getHeight()/2 - profilePicture.getWidth()/2,
-                            profilePicture.getWidth(), profilePicture.getWidth());
-                }
-                roundImage = new RoundImage(croppedPicture);
-                ivProfilePicture.setImageDrawable(roundImage);
-            }
+                Bitmap croppedPicture = cropImage(profilePicture);
+                // _TODO Change this back to round imageroundImage = new RoundImage(croppedPicture);
+                ivProfilePicture.setImageBitmap(croppedPicture);
 
 
-
-            /*else if (requestCode == SELECT_FILE) {
+                Bitmap test = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_profile);
+                //Bitmap bitmapToDB = ((BitmapDrawable)ivProfilePicture.getDrawable()).getBitmap();
+                final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
+                dbUserAdapter.insertImage(userId.toString(),test);
+                // _TODO Save picture to db
+            } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 String[] myProjection = {MediaStore.MediaColumns.DATA};
                 Cursor myCursor = getActivity().getContentResolver().query(selectedImageUri, myProjection, null, null, null);
@@ -248,11 +248,31 @@ public class OwnProfileFragment extends Fragment
                 options.inSampleSize = scale;
                 options.inJustDecodeBounds = false;
                 profilePicture = BitmapFactory.decodeFile(selectedImagePath, options);
-                // _TODO Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
-                //roundImage = new RoundImage(ScaledImage);
-                ivProfilePicture.setImageBitmap(profilePicture);
-            }*/
+
+                Bitmap croppedPicture = cropImage(profilePicture);
+
+                roundImage = new RoundImage(croppedPicture);
+
+                ivProfilePicture.setImageDrawable(roundImage);
+                // _TODO Save picture to db
+            }
         }
+    }
+
+    // Function for cropping picture to a square, no matter if height>width or width>height.
+    // If else found on http://stackoverflow.com/questions/6908604/android-crop-center-of-bitmap
+    private Bitmap cropImage(Bitmap image){
+        Bitmap croppedPicture;
+        if(image.getWidth() >= image.getHeight()) {
+            croppedPicture = Bitmap.createBitmap(image,
+                    image.getWidth()/2 - image.getHeight()/2, 0,
+                    image.getHeight(), image.getHeight());
+        }else{
+            croppedPicture = Bitmap.createBitmap(image, 0,
+                    image.getHeight()/2 - image.getWidth()/2,
+                    image.getWidth(), image.getWidth());
+        }
+        return croppedPicture;
     }
 
 

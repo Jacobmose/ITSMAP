@@ -122,7 +122,7 @@
                                 android:layout_height="match_parent">
 
                                 <Button
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="fill_parent"
                                     android:layout_height="48dp"
                                     android:text="@string/rateBtn_text"
                                     android:id="@+id/btn_rating" />

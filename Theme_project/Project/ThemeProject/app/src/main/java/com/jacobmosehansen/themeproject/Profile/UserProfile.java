@@ -14,19 +14,21 @@ public class UserProfile{
     String _email;
     String _ratingAmount;
     String _rating;
+    byte[] _picture;
 
 
     public UserProfile(){
 
     }
 
-    public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating){
+    public UserProfile(String name, String email, String age, String gender, String ratingAmount, String rating, byte[] picture){
         this._name = name;
         this._email = email;
         this._age = age;
         this._gender = gender;
         this._ratingAmount = ratingAmount;
         this._rating = rating;
+        this._picture = picture;
     }
 
     public UserProfile(String id, String name, String email, String age, String gender){

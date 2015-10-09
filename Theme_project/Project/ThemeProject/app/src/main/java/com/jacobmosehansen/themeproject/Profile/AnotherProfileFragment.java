@@ -3,7 +3,6 @@ package com.jacobmosehansen.themeproject.Profile;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +69,8 @@ public class AnotherProfileFragment extends Fragment {
         tvGender.setText(userProfile.getGender());
         //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
 
+        // _TODO Load profile picture
+
         // Get Ratingbar amount and save onclick //
         if(Float.parseFloat(userProfile.getRatingAmount())!=0) {
             rbGradRating.setRating(Float.parseFloat(userProfile.getRating()) / Float.parseFloat(userProfile.getRatingAmount()));
@@ -94,14 +95,15 @@ public class AnotherProfileFragment extends Fragment {
 
                 rbGradRating.setRating(currentRating);
 
-
+                // _TODO REMOVE THIS TOAST
                 Toast.makeText(getActivity(), Float.toString(currentRating), Toast.LENGTH_SHORT).show();
             }
         });
 
-        // _REMOVE Test for requested ID//
-
+        // _TODO load subjects
 
         return myFragmentView;
     }
 }
+
+
