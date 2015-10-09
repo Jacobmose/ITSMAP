@@ -89,9 +89,9 @@ public class AnotherProfileFragment extends Fragment {
                         //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
 
                         // _TODO Load profile picture
+                            // Get function from OWN fragment
 
                         // Get Ratingbar amount and save onclick //
-
                         if (userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue() != 0) {
                             rbGradRating.setRating(userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue() / userProfile.getNumber(ParseAdapter.KEY_RATING).intValue());
                         } else {

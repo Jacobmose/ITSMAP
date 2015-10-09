@@ -14,11 +14,8 @@ import com.parse.ParseUser;
 public class ProfileActivity extends AppCompatActivity {
 
     //DB variables//
-    SharedPreferences mySharedPreferences;
-    ParseUser user;
     String userId;
     String requestId;
-
 
     //UI variables//
 
@@ -33,8 +30,6 @@ public class ProfileActivity extends AppCompatActivity {
         AnotherProfileFragment anotherProfileFragment = new AnotherProfileFragment();
 
         userId = ParseUser.getCurrentUser().getObjectId();
-
-        //loadSavedPreferences();
 
         Intent intent = getIntent();
         requestId = intent.getStringExtra("USER_ID");
@@ -56,16 +51,6 @@ public class ProfileActivity extends AppCompatActivity {
         }fragmentTransaction.commit();
 
 
-        // _TODO Set Round Profile Picture// MUST BE IMPLEMENTED AS DEFAULT TO DATABASE //
-        /*Bitmap bm = BitmapFactory.decodeResource(getResources(), R.drawable.default_profile);
-        roundImage = new RoundImage(bm);
-        ivProfilePicture.setImageDrawable(roundImage);
-        */
-    }
-
-    private void loadSavedPreferences(){
-        mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        userId = mySharedPreferences.getString("USER_ID", "0");
     }
 
 }

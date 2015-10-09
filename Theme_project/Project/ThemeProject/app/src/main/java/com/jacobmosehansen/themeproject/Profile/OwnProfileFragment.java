@@ -33,19 +33,15 @@ import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.R;
 
-import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
 import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
+import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
-
-import org.w3c.dom.Text;
-
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
@@ -70,9 +66,6 @@ public class OwnProfileFragment extends Fragment
 
     // DB variables //
     String userId;
-    SharedPreferences mySharedPreferences;
-    //UserProfile userProfile = new UserProfile();
-
     ParseUser userProfile = ParseUser.getCurrentUser();
     ParseFile file;
 
@@ -85,15 +78,8 @@ public class OwnProfileFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View myFragmentView = inflater.inflate(R.layout.fragment_profile_own, container, false);
-
-       //Frederik loadSavedPreferences();
-
+        // Get userId //
         userId = ParseUser.getCurrentUser().getObjectId();
-
-        //Frederik
-        // Load current profile //
-        /*final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-        userProfile = dbUserAdapter.getUserProfile(userId);*/
 
         // Initialize Views//
         ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
@@ -122,14 +108,15 @@ public class OwnProfileFragment extends Fragment
         tvGender.setText(userProfile.get(ParseAdapter.KEY_GENDER).toString());
         //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
 
-        // _TODO Set picture with database information //
+        // Set picture with database information //
+        loadImageFromDB();
 
-
-
-
-        // _TODO Set ratingbar with database information//
-        rbGradRating.setRating(Float.parseFloat(userProfile.get(ParseAdapter.KEY_RATING).toString())
-                / Float.parseFloat(userProfile.get(ParseAdapter.KEY_RATINGAMOUNT).toString()));
+        // Set ratingbar with database information//
+        if (userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue() != 0) {
+            rbGradRating.setRating(userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue() / userProfile.getNumber(ParseAdapter.KEY_RATING).intValue());
+        } else {
+            rbGradRating.setRating(0);
+        }
 
         // _TODO Set list view with database information//
 
@@ -137,45 +124,7 @@ public class OwnProfileFragment extends Fragment
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bitmap test = BitmapFactory.decodeResource(getResources(), R.drawable.books);
-                //Bitmap bitmapToDB = ((BitmapDrawable)ivProfilePicture.getDrawable()).getBitmap();
-
-                ByteArrayOutputStream stream = new  ByteArrayOutputStream();
-                test.compress(Bitmap.CompressFormat.PNG, 100, stream);
-                byte [] image = stream.toByteArray();
-
-                String name = "picture" + userId + ".png";
-
-                file = new ParseFile(name, image);
-
-                file.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if(e == null){
-                            userProfile.put(ParseAdapter.KEY_PICTURE, file);
-                            userProfile.saveInBackground(new SaveCallback() {
-                                @Override
-                                public void done(ParseException e) {
-                                    if (e == null) {
-                                        Log.d("TEST", "succes");
-                                    } else {
-                                        Log.d("Test", "failed" + e.getLocalizedMessage());
-                                    }
-                                }
-                            });
-                        }else{
-                            Log.d("TEST", "failed create file");
-                        }
-
-                    }
-                });
-
-                // _TODO Clean up this mess
-                //final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-
-                //dbUserAdapter.insertImage(userId.toString(), test);
-
-                //selectImage();
+                selectImage();
             }
         });
 
@@ -194,20 +143,7 @@ public class OwnProfileFragment extends Fragment
         btnAddSubject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // _TODO Clean up this mess
-
-                //userProfile.
-
-                String bitmapString = userProfile.getString(ParseAdapter.KEY_PICTURE);
-
-                try{
-                    byte [] encodeByte= Base64.decode(bitmapString, Base64.DEFAULT);
-                    Bitmap bitmap=BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.length);
-                    ivProfilePicture.setImageBitmap(bitmap);
-                }catch(Exception e){
-                    e.getMessage();
-                }
-                //selectFromSpinner();
+                selectFromSpinner();
             }
         });
 
@@ -228,7 +164,7 @@ public class OwnProfileFragment extends Fragment
                                 for (int position : reverseSortedPositions) {
                                     mySubjectAdapter.remove(mySubjectAdapter.getItem(position));
                                 }
-                                //_TODO REMOVE FROM SUBJECT//
+                                //_TODO REMOVE FROM SUBJECT remove from db aswell//
                                 mySubjectAdapter.notifyDataSetChanged();
                             }
                         });
@@ -273,15 +209,11 @@ public class OwnProfileFragment extends Fragment
             if (requestCode == CAMERA_REQUEST) {
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
                 Bitmap croppedPicture = cropImage(profilePicture);
-                // _TODO Change this back to round imageroundImage = new RoundImage(croppedPicture);
-                ivProfilePicture.setImageBitmap(croppedPicture);
 
+                saveImageToDB(croppedPicture);
 
-                Bitmap test = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.default_profile);
-                //Bitmap bitmapToDB = ((BitmapDrawable)ivProfilePicture.getDrawable()).getBitmap();
-                final DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-                dbUserAdapter.insertImage(userId.toString(),test);
-                // _TODO Save picture to db
+                roundImage = new RoundImage(croppedPicture);
+                ivProfilePicture.setImageDrawable(roundImage);
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 String[] myProjection = {MediaStore.MediaColumns.DATA};
@@ -308,10 +240,10 @@ public class OwnProfileFragment extends Fragment
 
                 Bitmap croppedPicture = cropImage(profilePicture);
 
-                roundImage = new RoundImage(croppedPicture);
+                saveImageToDB(croppedPicture);
 
+                roundImage = new RoundImage(croppedPicture);
                 ivProfilePicture.setImageDrawable(roundImage);
-                // _TODO Save picture to db
             }
         }
     }
@@ -332,6 +264,58 @@ public class OwnProfileFragment extends Fragment
         return croppedPicture;
     }
 
+    private void saveImageToDB(Bitmap picture) {
+        //Bitmap test = BitmapFactory.decodeResource(getResources(), R.drawable.books);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] image = stream.toByteArray();
+
+        String name = "picture" + userId + ".png";
+
+        file = new ParseFile(name, image);
+
+        file.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    userProfile.put(ParseAdapter.KEY_PICTURE, file);
+                    userProfile.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d("TEST", "succes");
+
+                            } else {
+                                Log.d("Test", "failed" + e.getLocalizedMessage());
+                            }
+                        }
+                    });
+                } else {
+                    Log.d("TEST", "failed create file");
+                }
+
+            }
+        });
+    }
+
+    private void loadImageFromDB() {
+        ParseFile profilePicture = (ParseFile)userProfile.get(ParseAdapter.KEY_PICTURE);
+        profilePicture.getDataInBackground(new GetDataCallback() {
+            @Override
+            public void done(byte[] bytes, ParseException e) {
+                if (e == null){
+                    Log.d("Debug", "Picture received");
+                    Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                    roundImage = new RoundImage(picture);
+                    ivProfilePicture.setImageDrawable(roundImage);
+                } else {
+                    Log.d("Debug", "Something went wrong");
+                }
+            }
+        });
+    }
+
 
     public void selectFromSpinner(){
         try{
@@ -349,12 +333,6 @@ public class OwnProfileFragment extends Fragment
         }catch(Exception e){
             Toast.makeText(getActivity(), "No subject selected", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    private void loadSavedPreferences(){
-        mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //Frederik userId = mySharedPreferences.getInt("USER_ID", 0);
     }
 
 }
