@@ -3,17 +3,21 @@ package com.jacobmosehansen.themeproject.Profile;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,12 +33,16 @@ import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.R;
 
-import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
+import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
-
-import org.w3c.dom.Text;
-
+import com.parse.GetDataCallback;
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 
@@ -46,21 +54,20 @@ public class OwnProfileFragment extends Fragment
 {
     // UI variables //
     ImageView ivProfilePicture;
-    TextView tvUserName,tvFullName, tvAge, tvGender, tvLocation;
+    TextView tvFullName, tvEmail, tvAge, tvGender, tvLocation;
     RatingBar rbGradRating;
     Spinner sprSubjects;
     Button btnAddSubject;
     ArrayList<String> subjectArray = new ArrayList<String>();
     private ArrayAdapter<String> mySubjectAdapter;
     ListView lvSubjects;
-
-
+    RoundImage roundImage;
 
 
     // DB variables //
-    Integer userId;
-    SharedPreferences mySharedPreferences;
-    ArrayList<String> userInfo;
+    String userId;
+    ParseUser userProfile = ParseUser.getCurrentUser();
+    ParseFile file;
 
 
     private static final int CAMERA_REQUEST = 1888;
@@ -71,48 +78,53 @@ public class OwnProfileFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View myFragmentView = inflater.inflate(R.layout.fragment_profile_own, container, false);
+        // Get userId //
+        userId = ParseUser.getCurrentUser().getObjectId();
 
-        loadSavedPreferences();
-        tvUserName = (TextView) myFragmentView.findViewById(R.id.tv_userName);
+        // Initialize Views//
+        ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
+
         tvFullName = (TextView) myFragmentView.findViewById(R.id.tv_fullName);
+        tvEmail = (TextView) myFragmentView.findViewById(R.id.tv_email);
         tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
         tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
         tvLocation = (TextView) myFragmentView.findViewById(R.id.tv_location);
-        ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
+
+        rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
+
         sprSubjects = (Spinner) myFragmentView.findViewById(R.id.spinner_subjects);
         btnAddSubject = (Button) myFragmentView.findViewById(R.id.btn_addSubject);
         lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
-        rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
 
 
+        // _REMOVE TEST for own profile id//
         Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
 
-        // Load current profile //
-        DBUserAdapter dbUserAdapter = new DBUserAdapter(getActivity());
-        dbUserAdapter.open();
-        //userInfo = dbUserAdapter.getUser(userId);
-        dbUserAdapter.close();
-
         // Set textView's with database information //
-
+        tvFullName.setText(userProfile.getUsername());
+        tvEmail.setText(userProfile.getEmail());
+        tvAge.setText(userProfile.get(ParseAdapter.KEY_AGE).toString());
+        tvGender.setText(userProfile.get(ParseAdapter.KEY_GENDER).toString());
+        //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
 
         // Set picture with database information //
+        loadImageFromDB();
 
         // Set ratingbar with database information//
-        //rating calculations
-        //rbGradRating.setRating(result of calculations);
+        if (userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue() != 0) {
+            rbGradRating.setRating(userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue() / userProfile.getNumber(ParseAdapter.KEY_RATING).intValue());
+        } else {
+            rbGradRating.setRating(0);
+        }
 
-        // Set list view with database information//
+        // _TODO Set list view with database information//
 
         // On profile picture press, open camera and take picture for imageView //
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
-                // SAVE PICTURE TO DATABASE!!!!!!!!!!!!!!!!!!!!!
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
             }
         });
 
@@ -152,6 +164,7 @@ public class OwnProfileFragment extends Fragment
                                 for (int position : reverseSortedPositions) {
                                     mySubjectAdapter.remove(mySubjectAdapter.getItem(position));
                                 }
+                                //_TODO REMOVE FROM SUBJECT remove from db aswell//
                                 mySubjectAdapter.notifyDataSetChanged();
                             }
                         });
@@ -162,7 +175,7 @@ public class OwnProfileFragment extends Fragment
 
     // Note by Morten: //
     // This function was inspired by the tutorial http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample//
-    // Function makes it posible for user to either take new picture or select a picture from the library for profile picture//
+    // Function makes it possible for user to either take new picture or select a picture from the library for profile picture//
     private void selectImage(){
         final CharSequence[] options = {"Take new photo", "Choose photo from library", "Cancel"};
 
@@ -193,13 +206,14 @@ public class OwnProfileFragment extends Fragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-
             if (requestCode == CAMERA_REQUEST) {
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
-                //Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
-                //roundImage = new RoundImage(ScaledImage);
-                ivProfilePicture.setImageBitmap(profilePicture);
+                Bitmap croppedPicture = cropImage(profilePicture);
 
+                saveImageToDB(croppedPicture);
+
+                roundImage = new RoundImage(croppedPicture);
+                ivProfilePicture.setImageDrawable(roundImage);
             } else if (requestCode == SELECT_FILE) {
                 Uri selectedImageUri = data.getData();
                 String[] myProjection = {MediaStore.MediaColumns.DATA};
@@ -223,12 +237,85 @@ public class OwnProfileFragment extends Fragment
                 options.inSampleSize = scale;
                 options.inJustDecodeBounds = false;
                 profilePicture = BitmapFactory.decodeFile(selectedImagePath, options);
-                //Bitmap ScaledImage = Bitmap.createScaledBitmap(profilePicture, 110, 110, false);
-                //roundImage = new RoundImage(ScaledImage);
-                ivProfilePicture.setImageBitmap(profilePicture);
+
+                Bitmap croppedPicture = cropImage(profilePicture);
+
+                saveImageToDB(croppedPicture);
+
+                roundImage = new RoundImage(croppedPicture);
+                ivProfilePicture.setImageDrawable(roundImage);
             }
         }
     }
+
+    // Function for cropping picture to a square, no matter if height>width or width>height.
+    // If else found on http://stackoverflow.com/questions/6908604/android-crop-center-of-bitmap
+    private Bitmap cropImage(Bitmap image){
+        Bitmap croppedPicture;
+        if(image.getWidth() >= image.getHeight()) {
+            croppedPicture = Bitmap.createBitmap(image,
+                    image.getWidth()/2 - image.getHeight()/2, 0,
+                    image.getHeight(), image.getHeight());
+        }else{
+            croppedPicture = Bitmap.createBitmap(image, 0,
+                    image.getHeight()/2 - image.getWidth()/2,
+                    image.getWidth(), image.getWidth());
+        }
+        return croppedPicture;
+    }
+
+    private void saveImageToDB(Bitmap picture) {
+        //Bitmap test = BitmapFactory.decodeResource(getResources(), R.drawable.books);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] image = stream.toByteArray();
+
+        String name = "picture" + userId + ".png";
+
+        file = new ParseFile(name, image);
+
+        file.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    userProfile.put(ParseAdapter.KEY_PICTURE, file);
+                    userProfile.saveInBackground(new SaveCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                            if (e == null) {
+                                Log.d("TEST", "succes");
+
+                            } else {
+                                Log.d("Test", "failed" + e.getLocalizedMessage());
+                            }
+                        }
+                    });
+                } else {
+                    Log.d("TEST", "failed create file");
+                }
+
+            }
+        });
+    }
+
+    private void loadImageFromDB() {
+        ParseFile profilePicture = (ParseFile)userProfile.get(ParseAdapter.KEY_PICTURE);
+        profilePicture.getDataInBackground(new GetDataCallback() {
+            @Override
+            public void done(byte[] bytes, ParseException e) {
+                if (e == null){
+                    Log.d("Debug", "Picture received");
+                    Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                    roundImage = new RoundImage(picture);
+                    ivProfilePicture.setImageDrawable(roundImage);
+                } else {
+                    Log.d("Debug", "Something went wrong");
+                }
+            }
+        });
+    }
+
 
     public void selectFromSpinner(){
         try{
@@ -240,17 +327,12 @@ public class OwnProfileFragment extends Fragment
                 }else {
                     mySubjectAdapter.add(selectedSubject);
                     lvSubjects.setAdapter(mySubjectAdapter);
+                    //_TODO SAVE SUBJECTS TO DATABASE //
                 }}
             else{Toast.makeText(getActivity(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
         }catch(Exception e){
             Toast.makeText(getActivity(), "No subject selected", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    private void loadSavedPreferences(){
-        mySharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        userId = mySharedPreferences.getInt("USER_ID", 0);
     }
 
 }

@@ -38,21 +38,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:text="@string/userName_text"
-                        android:id="@+id/tv_userName" />
-
-                </TableRow>
-
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
                         android:text="@string/fullName_text"
                         android:id="@+id/tv_fullName" />
+
                 </TableRow>
 
                 <TableRow
@@ -114,8 +102,7 @@
                         android:stepSize="0.5"
                         android:numStars="5"
                         android:rating="3"
-                        android:layout_alignParentEnd="false"
-                        android:isIndicator="true"/>
+                        android:layout_alignParentEnd="false" />
 
 
                     <Button
