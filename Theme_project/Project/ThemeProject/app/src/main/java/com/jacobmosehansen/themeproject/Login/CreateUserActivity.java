@@ -19,12 +19,7 @@ import android.widget.Toast;
 import com.jacobmosehansen.themeproject.Chat.MessageService;
 import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
-<<<<<<< HEAD
-import com.parse.Parse;
 import com.parse.ParseObject;
-import com.parse.ParseQuery;
-=======
->>>>>>> 4785cab72e4f147a731bea5ab84c70b29f77edb3
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -129,7 +124,9 @@ public class CreateUserActivity extends AppCompatActivity {
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(com.parse.ParseException e) {
                                     if (e == null) {
-                                        Toast.makeText(getApplicationContext(), "User was created!", Toast.LENGTH_SHORT).show();
+                                        ParseObject rating = parse.createParseRatingObject(ParseUser.getCurrentUser().getObjectId(), 0.0, 0);
+                                        rating.saveInBackground();
+
                                         startActivity(intent);
                                     } else {
                                         Toast.makeText(getApplicationContext(), "There was an error signing up " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
@@ -141,28 +138,6 @@ public class CreateUserActivity extends AppCompatActivity {
 
                     }else
                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
-
-<<<<<<< HEAD
-
-
-                    user.signUpInBackground(new SignUpCallback() {
-                        public void done(com.parse.ParseException e) {
-                            if (e == null) {
-                                Toast.makeText(getApplicationContext(), "User was created!", Toast.LENGTH_SHORT).show();
-
-                                ParseObject rating = parse.createParseRatingObject(ParseUser.getCurrentUser().getObjectId(), 0.0, 0);
-                                rating.saveInBackground();
-
-                                startActivity(intent);
-                            } else {
-                                Toast.makeText(getApplicationContext(), "There was an error signing up " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    });
-=======
->>>>>>> 4785cab72e4f147a731bea5ab84c70b29f77edb3
-
-
 
                 } else
                     Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_SHORT).show();

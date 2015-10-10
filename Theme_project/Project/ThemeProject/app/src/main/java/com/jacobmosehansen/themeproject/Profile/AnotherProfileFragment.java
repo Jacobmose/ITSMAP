@@ -89,9 +89,14 @@ public class AnotherProfileFragment extends Fragment {
                         if (userProfile.getObjectId() != null) {
                             // Set textView's with database information //
                             tvFullName.setText(userProfile.getUsername());
-                            tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE));
+                            tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + " years old");
                             tvGender.setText(userProfile.getString(ParseAdapter.KEY_GENDER));
-                            //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
+                            // Set location //
+                            if(userProfile.get(ParseAdapter.KEY_LOCATION) != null){
+                                tvLocation.setText("Last logged in at: " + userProfile.get(ParseAdapter.KEY_LOCATION).toString());
+                            } else {
+                                tvLocation.setText("Unknown Location");
+                            }
 
                             // Load profile picture
                             loadImageFromDB();
@@ -167,11 +172,6 @@ public class AnotherProfileFragment extends Fragment {
                     }
                 }
         });
-
-
-
-
-
         return myFragmentView;
     }
 

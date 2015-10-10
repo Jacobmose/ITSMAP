@@ -34,7 +34,6 @@ import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
 import com.parse.FindCallback;
 import com.parse.GetDataCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -101,13 +100,19 @@ public class OwnProfileFragment extends Fragment
         // Set textView's with database information //
         tvFullName.setText(userProfile.getUsername());
         tvEmail.setText(userProfile.getEmail());
-        tvAge.setText(userProfile.get(ParseAdapter.KEY_AGE).toString());
+        tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + " years old");
         tvGender.setText(userProfile.get(ParseAdapter.KEY_GENDER).toString());
-        //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
+        // Set location //
+        if(userProfile.get(ParseAdapter.KEY_LOCATION) != null){
+            tvLocation.setText("Last logged in at: " + userProfile.get(ParseAdapter.KEY_LOCATION).toString());
+        } else {
+            tvLocation.setText("Unknown Location");
+        }
 
         // Set picture with database information //
         loadImageFromDB();
 
+        // Set ratingbar with database information//
         ParseQuery<ParseObject> query = ParseQuery.getQuery("ratingObject");
         query.whereEqualTo("userid", userProfile.getObjectId());
         query.findInBackground(new FindCallback<ParseObject>() {
@@ -116,7 +121,6 @@ public class OwnProfileFragment extends Fragment
                 if (list.size() != 0){
                     ratingObject = list.get(0);
                     if (ratingObject.getObjectId() != null) {
-                        // Set ratingbar with database information//
                         if (ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue() != 0) {
                             Log.d("Debug", "NUMBER OF RATING != 0");
                             rbGradRating.setRating(ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue() / ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue());
