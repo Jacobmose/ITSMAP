@@ -110,15 +110,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //_TODO Remove this! - made for testing//
-                /*Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                intent.putExtra("USER_ID", "MmDjqfcqR7");
-                startActivityForResult(intent, 1);*/
+                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                intent.putExtra("USER_ID", "Hp5BsJJmAv");
+                startActivityForResult(intent, 1);
                 //Remove this! - made for testing//
 
-                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
+                /*Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                 intent.putExtra("RECIPIENT_ID", "MmDjqfcqR7");
                 startActivity(intent);
-
+                */
             }
         });
 

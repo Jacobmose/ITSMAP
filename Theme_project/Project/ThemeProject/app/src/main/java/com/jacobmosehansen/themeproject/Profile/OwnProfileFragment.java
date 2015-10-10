@@ -3,20 +3,15 @@ package com.jacobmosehansen.themeproject.Profile;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -97,10 +92,6 @@ public class OwnProfileFragment extends Fragment
         lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
 
-
-        // _REMOVE TEST for own profile id//
-        Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
-
         // Set textView's with database information //
         tvFullName.setText(userProfile.getUsername());
         tvEmail.setText(userProfile.getEmail());
@@ -118,7 +109,8 @@ public class OwnProfileFragment extends Fragment
             rbGradRating.setRating(0);
         }
 
-        // _TODO Set list view with database information//
+        // Set list view with database information//
+        loadSubjectFromDB();
 
         // On profile picture press, open camera and take picture for imageView //
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
@@ -148,8 +140,15 @@ public class OwnProfileFragment extends Fragment
         });
 
         // Do on subject swipe remove subject from array //
-        // This code is based on the Android-SwipeToDismiss example of use of the
-        // SwipeDissmissListViewTouchListener class//
+        setSwipeActive();
+
+        return myFragmentView;
+    }
+
+    // This code is based on the Android-SwipeToDismiss example of use of the
+    // SwipeDissmissListViewTouchListener class//
+    private void setSwipeActive(){
+
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         lvSubjects,
@@ -164,13 +163,11 @@ public class OwnProfileFragment extends Fragment
                                 for (int position : reverseSortedPositions) {
                                     mySubjectAdapter.remove(mySubjectAdapter.getItem(position));
                                 }
-                                //_TODO REMOVE FROM SUBJECT remove from db aswell//
+                                saveSubjectsToDB();
                                 mySubjectAdapter.notifyDataSetChanged();
                             }
                         });
         lvSubjects.setOnTouchListener(touchListener);
-
-        return myFragmentView;
     }
 
     // Note by Morten: //
@@ -265,7 +262,6 @@ public class OwnProfileFragment extends Fragment
     }
 
     private void saveImageToDB(Bitmap picture) {
-        //Bitmap test = BitmapFactory.decodeResource(getResources(), R.drawable.books);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] image = stream.toByteArray();
@@ -299,21 +295,53 @@ public class OwnProfileFragment extends Fragment
     }
 
     private void loadImageFromDB() {
-        ParseFile profilePicture = (ParseFile)userProfile.get(ParseAdapter.KEY_PICTURE);
-        profilePicture.getDataInBackground(new GetDataCallback() {
-            @Override
-            public void done(byte[] bytes, ParseException e) {
-                if (e == null){
-                    Log.d("Debug", "Picture received");
-                    Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        try {
+            final ParseFile profilePicture = (ParseFile) userProfile.get(ParseAdapter.KEY_PICTURE);
+            profilePicture.getDataInBackground(new GetDataCallback() {
+                @Override
+                public void done(byte[] bytes, ParseException e) {
+                    if (e == null) {
+                        Log.d("Debug", "Picture received");
+                        Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-                    roundImage = new RoundImage(picture);
-                    ivProfilePicture.setImageDrawable(roundImage);
+                        roundImage = new RoundImage(picture);
+                        ivProfilePicture.setImageDrawable(roundImage);
+                    } else {
+                        Log.d("Debug", "Something went wrong");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Bitmap defaultPicture = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.default_profile);
+            roundImage = new RoundImage(defaultPicture);
+            ivProfilePicture.setImageDrawable(roundImage);
+        }
+
+    }
+
+    private void saveSubjectsToDB() {
+        userProfile.put(ParseAdapter.KEY_SUBJECTS, subjectArray);
+        userProfile.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("TEST", "succes");
                 } else {
-                    Log.d("Debug", "Something went wrong");
+                    Log.d("Test", "failed" + e.getLocalizedMessage());
                 }
             }
         });
+    }
+
+    private void loadSubjectFromDB() {
+        try{
+            ArrayList<String> testStringArrayList = (ArrayList<String>)userProfile.get(ParseAdapter.KEY_SUBJECTS);
+            mySubjectAdapter.addAll(testStringArrayList);
+            lvSubjects.setAdapter(mySubjectAdapter);
+        } catch (Exception e){
+            Log.d("Debug", "Array empty");
+        }
+
     }
 
 
@@ -327,7 +355,7 @@ public class OwnProfileFragment extends Fragment
                 }else {
                     mySubjectAdapter.add(selectedSubject);
                     lvSubjects.setAdapter(mySubjectAdapter);
-                    //_TODO SAVE SUBJECTS TO DATABASE //
+                    saveSubjectsToDB();
                 }}
             else{Toast.makeText(getActivity(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
         }catch(Exception e){

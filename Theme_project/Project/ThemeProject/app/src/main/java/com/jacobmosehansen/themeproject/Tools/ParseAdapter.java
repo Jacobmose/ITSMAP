@@ -9,12 +9,12 @@ import com.parse.ParseUser;
 public class ParseAdapter {
 
 
-    public static final String KEY_AGE= "age";
-    public static final String KEY_GENDER= "gender";
-    public static final String KEY_RATINGAMOUNT= "rating_amount";
-    public static final String KEY_RATING= "rating";
-    public static final String KEY_SUBJECTS= "subjects";
-    public static final String KEY_PICTURE= "profilepicture";
+    public static final String KEY_AGE = "age";
+    public static final String KEY_GENDER = "gender";
+    public static final String KEY_RATINGAMOUNT = "rating_amount";
+    public static final String KEY_RATING = "rating";
+    public static final String KEY_SUBJECTS = "subjects";
+    public static final String KEY_PICTURE = "profilepicture";
 
 
     public ParseUser createParseUser(String username, String age, String gender, String email, String password){
