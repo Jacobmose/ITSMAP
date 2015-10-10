@@ -206,7 +206,6 @@ public class OwnProfileFragment extends Fragment
             if (requestCode == CAMERA_REQUEST) {
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
                 Bitmap croppedPicture = cropImage(profilePicture);
-
                 saveImageToDB(croppedPicture);
 
                 roundImage = new RoundImage(croppedPicture);

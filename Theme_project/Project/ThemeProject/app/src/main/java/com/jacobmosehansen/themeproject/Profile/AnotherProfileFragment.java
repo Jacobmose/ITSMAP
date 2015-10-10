@@ -94,7 +94,7 @@ public class AnotherProfileFragment extends Fragment {
                             // Load profile picture
                             loadImageFromDB();
 
-                            // _TODO load subjects
+                            // load subjects
                             loadSubjectFromDB();
 
                             // Get Ratingbar amount and save onclick //
