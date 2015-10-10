@@ -24,6 +24,7 @@ import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
@@ -49,6 +50,7 @@ public class AnotherProfileFragment extends Fragment {
     // DB variables //
     String requestId;
     ParseUser userProfile;
+    ParseObject ratingObject;
 
 
     @Nullable
@@ -97,70 +99,76 @@ public class AnotherProfileFragment extends Fragment {
                             // load subjects
                             loadSubjectFromDB();
 
-                            // Get Ratingbar amount and save onclick //
-                            if (userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue() != 0) {
-                                rbGradRating.setRating(userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue() / userProfile.getNumber(ParseAdapter.KEY_RATING).intValue());
-                            } else {
-                                rbGradRating.setRating(0);
+                            ParseQuery<ParseObject> query = ParseQuery.getQuery("ratingObject");
+                            query.whereEqualTo("userid", userProfile.getObjectId());
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> list, ParseException e) {
+                                    if (list.size() != 0){
+                                        ratingObject = list.get(0);
+                                        if (ratingObject.getObjectId() != null) {
+                                            // Set ratingbar with database information//
+                                            if (ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue() != 0) {
+                                                Log.d("Debug", "NUMBER OF RATING != 0");
+                                                rbGradRating.setRating(ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue() / ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue());
+                                            } else {
+                                                Log.d("Debug", "NUMBER OF RATING = 0");
+                                                rbGradRating.setRating(0);
+                                            }
+
+                                            btnRating.setOnClickListener(new View.OnClickListener() {
+                                                public void onClick(View v) {
+                                                    float rating = rbGradRating.getRating();
+                                                    float totalRating = ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue();
+                                                    Integer numberOfRatings = ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue();
+
+                                                    totalRating = totalRating + rating;
+                                                    ratingObject.put(ParseAdapter.KEY_TOTALRATING, totalRating);
+                                                    Log.d("Debug", "Writing" + totalRating + " TOTALRATING");
+
+                                                    numberOfRatings = numberOfRatings + 1;
+                                                    ratingObject.put(ParseAdapter.KEY_NUMBEROFRATINGS, numberOfRatings);
+                                                    Log.d("Debug", "Writing" + numberOfRatings + " NUMBEROFRATINGS");
+
+                                                    float currentRating = totalRating / numberOfRatings;
+
+                                                    rbGradRating.setRating(currentRating);
+
+                                                    ratingObject.saveInBackground(new SaveCallback() {
+                                                        @Override
+                                                        public void done(ParseException e) {
+                                                            if (e == null) {
+                                                                Log.d("Test", "succes");
+                                                            } else {
+                                                                Log.d("Test", "failed " + e.getLocalizedMessage());
+                                                            }
+                                                        }
+                                                    });
+                                                }
+                                            });
+
+
+                                        }
+                                    } else {
+                                        rbGradRating.setRating(0);
+                                    }
+                                }
+
+                                }
+
+                                );
+
                             }
+
+
                         }
+                    }else{
+                        Toast.makeText(getActivity(), "Could not find User", Toast.LENGTH_SHORT).show();
                     }
-
-
-                } else {
-                    Toast.makeText(getActivity(), "Could not find User", Toast.LENGTH_SHORT).show();
                 }
-            }
         });
 
-        btnRating.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
 
-                // User rating worked on local database, not possible on parse server, since one user
-                // Cannot change another users information.
-                /*userProfile = dbUserAdapter.getUserProfile(requestId);
-                float rating = rbGradRating.getRating();
-                float totalRating = Float.parseFloat(userProfile.getRating());
-                Integer numberOfRatings = Integer.parseInt(userProfile.getRatingAmount());
-
-                totalRating = totalRating+rating;
-                dbUserAdapter.setRating(requestId.toString(), Float.toString(totalRating));
-
-                numberOfRatings = numberOfRatings + 1;
-                dbUserAdapter.setRatingAmount(requestId.toString(), Integer.toString(numberOfRatings));
-
-                float currentRating = totalRating/numberOfRatings;
-
-                rbGradRating.setRating(currentRating);*/
-
-                float rating = rbGradRating.getRating();
-                float totalRating = userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue();
-                Integer numberOfRatings = userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue();
-
-                totalRating = totalRating + rating;
-                userProfile.put(ParseAdapter.KEY_RATING, totalRating);
-                //dbUserAdapter.setRating(requestId.toString(), Float.toString(totalRating));
-
-                numberOfRatings = numberOfRatings + 1;
-                userProfile.put(ParseAdapter.KEY_RATINGAMOUNT, numberOfRatings);
-                //dbUserAdapter.setRatingAmount(requestId.toString(), Integer.toString(numberOfRatings));
-
-                float currentRating = totalRating / numberOfRatings;
-
-                rbGradRating.setRating(currentRating);
-
-                userProfile.saveInBackground(new SaveCallback() {
-                    @Override
-                    public void done(ParseException e) {
-                        if (e == null) {
-                            Log.d("Test", "succes");
-                        } else {
-                            Log.d("Test", "failed " + e.getLocalizedMessage());
-                        }
-                    }
-                });
-            }
-        });
 
 
 

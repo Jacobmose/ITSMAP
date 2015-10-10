@@ -32,14 +32,18 @@ import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
 import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
+import com.parse.FindCallback;
 import com.parse.GetDataCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 /**
@@ -63,6 +67,8 @@ public class OwnProfileFragment extends Fragment
     String userId;
     ParseUser userProfile = ParseUser.getCurrentUser();
     ParseFile file;
+    ParseObject ratingObject;
+
 
 
     private static final int CAMERA_REQUEST = 1888;
@@ -102,12 +108,30 @@ public class OwnProfileFragment extends Fragment
         // Set picture with database information //
         loadImageFromDB();
 
-        // Set ratingbar with database information//
-        if (userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue() != 0) {
-            rbGradRating.setRating(userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue() / userProfile.getNumber(ParseAdapter.KEY_RATING).intValue());
-        } else {
-            rbGradRating.setRating(0);
-        }
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ratingObject");
+        query.whereEqualTo("userid", userProfile.getObjectId());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (list.size() != 0){
+                    ratingObject = list.get(0);
+                    if (ratingObject.getObjectId() != null) {
+                        // Set ratingbar with database information//
+                        if (ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue() != 0) {
+                            Log.d("Debug", "NUMBER OF RATING != 0");
+                            rbGradRating.setRating(ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue() / ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue());
+                        } else {
+                        Log.d("Debug", "NUMBER OF RATING = 0");
+                        rbGradRating.setRating(0);
+                        }
+                }else{
+                    Log.d("Debug", "LIST IS EMPTY");
+                    rbGradRating.setRating(0);
+                }
+            }
+        }});
+
+
 
         // Set list view with database information//
         loadSubjectFromDB();

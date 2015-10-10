@@ -22,6 +22,8 @@ import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
 import com.parse.Parse;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
@@ -134,16 +136,24 @@ public class CreateUserActivity extends AppCompatActivity {
 
                     ParseUser user = parse.createParseUser(name, actualAge, gender, email, password);
 
+
+
                     user.signUpInBackground(new SignUpCallback() {
                         public void done(com.parse.ParseException e) {
                             if (e == null) {
                                 Toast.makeText(getApplicationContext(), "User was created!", Toast.LENGTH_SHORT).show();
+
+                                ParseObject rating = parse.createParseRatingObject(ParseUser.getCurrentUser().getObjectId(), 0.0, 0);
+                                rating.saveInBackground();
+
                                 startActivity(intent);
                             } else {
                                 Toast.makeText(getApplicationContext(), "There was an error signing up " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+
+
 
                 } else
                     Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_SHORT).show();
