@@ -1,6 +1,5 @@
 package com.jacobmosehansen.themeproject.Tools;
 
-import com.parse.Parse;
 import com.parse.ParseUser;
 
 /**
@@ -14,6 +13,7 @@ public class ParseAdapter {
     public static final String KEY_RATINGAMOUNT = "rating_amount";
     public static final String KEY_RATING = "rating";
     public static final String KEY_SUBJECTS = "subjects";
+    public static final String KEY_LOCATION = "location";
     public static final String KEY_PICTURE = "profilepicture";
 
 

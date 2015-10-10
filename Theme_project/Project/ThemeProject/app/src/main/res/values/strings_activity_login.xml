@@ -5,6 +5,6 @@
     <string name="btn_createUser">Create user</string>
 
     <string name="loginSuccess">Login Success!</string>
-    <string name="a"></string>
+    <string name="io_exception">Oops, IOException occurred..</string>
 
 </resources>
