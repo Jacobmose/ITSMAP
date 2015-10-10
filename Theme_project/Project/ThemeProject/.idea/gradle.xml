@@ -3,17 +3,8 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
-        <option name="distributionType" value="LOCAL" />
+        <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-<<<<<<< HEAD
-        <option name="gradleHome" value="C:\Android\AndroidStudio\gradle\gradle-2.4" />
-=======
-<<<<<<< HEAD
-        <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-2.4" />
-=======
-        <option name="gradleHome" value="D:\Android\Android Studio\gradle\gradle-2.4" />
->>>>>>> c7eab7ee1dbebc6bb1d6803e07c10089c960fa41
->>>>>>> 9f47d760029c0e71aaee0bbe21bab50b6a4470e2
         <option name="gradleJvm" value="1.8" />
         <option name="modules">
           <set>

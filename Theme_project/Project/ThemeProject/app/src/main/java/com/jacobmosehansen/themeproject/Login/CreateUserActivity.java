@@ -2,11 +2,11 @@ package com.jacobmosehansen.themeproject.Login;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.provider.CalendarContract;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,23 +17,21 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.Chat.MessageService;
-import com.jacobmosehansen.themeproject.MainActivity;
 import com.jacobmosehansen.themeproject.R;
-import com.jacobmosehansen.themeproject.Tools.DBUserAdapter;
 import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
+<<<<<<< HEAD
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+=======
+>>>>>>> 4785cab72e4f147a731bea5ab84c70b29f77edb3
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import org.joda.time.DateTime;
 import org.joda.time.Period;
+
+import java.util.ArrayList;
 
 public class CreateUserActivity extends AppCompatActivity {
 
@@ -49,19 +47,13 @@ public class CreateUserActivity extends AppCompatActivity {
     private ArrayAdapter<String> genderArrayAdapter;
     private ArrayList<String> dayValues;
     private ArrayList<String> yearValues;
-    private ArrayList<String> genderValues;
-    private int yourAge;
-    Calendar calenderDoB;
-    Calendar calenderToday;
     DateTime dobDate;
     DateTime currentDate;
     Period period;
     Integer userId;
     Intent intent;
     Intent serviceIntent;
-    DBUserAdapter dbUser;
     String name;
-    String age;
     String gender;
     String email;
     String password;
@@ -104,10 +96,7 @@ public class CreateUserActivity extends AppCompatActivity {
 
         parse = new ParseAdapter();
 
-        genderValues = new ArrayList<String>();
-        genderValues.add("Male");
-        genderValues.add("Female");
-        genderArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, genderValues);
+        genderArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.sa_gender));
         sprGender.setAdapter(genderArrayAdapter);
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -132,10 +121,28 @@ public class CreateUserActivity extends AppCompatActivity {
 
                 if (!name.isEmpty() && !email.isEmpty() && !password.isEmpty()) {
 
-                    dbUser = new DBUserAdapter(CreateUserActivity.this);
+                    if (isEmailValid(email)) {
+                        if (isPasswordValid(password)) {
 
-                    ParseUser user = parse.createParseUser(name, actualAge, gender, email, password);
+                            ParseUser user = parse.createParseUser(name, actualAge, gender, email, password);
 
+                            user.signUpInBackground(new SignUpCallback() {
+                                public void done(com.parse.ParseException e) {
+                                    if (e == null) {
+                                        Toast.makeText(getApplicationContext(), "User was created!", Toast.LENGTH_SHORT).show();
+                                        startActivity(intent);
+                                    } else {
+                                        Toast.makeText(getApplicationContext(), "There was an error signing up " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        } else
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_password), Toast.LENGTH_LONG).show();
+
+                    }else
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
+
+<<<<<<< HEAD
 
 
                     user.signUpInBackground(new SignUpCallback() {
@@ -152,6 +159,8 @@ public class CreateUserActivity extends AppCompatActivity {
                             }
                         }
                     });
+=======
+>>>>>>> 4785cab72e4f147a731bea5ab84c70b29f77edb3
 
 
 
@@ -187,4 +196,18 @@ public class CreateUserActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public boolean isPasswordValid(CharSequence password){
+        int passwordMinLength = 8;
+
+        if (TextUtils.isEmpty(password) || password.length() < passwordMinLength){
+            return false;
+        }else
+            return true;
+    }
+
+    public boolean isEmailValid(CharSequence email){
+        return Patterns.EMAIL_ADDRESS.matcher(email).matches();
+    }
+
 }

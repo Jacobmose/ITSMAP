@@ -1,7 +1,10 @@
 package com.jacobmosehansen.themeproject.Tools;
 
+<<<<<<< HEAD
 import com.parse.Parse;
 import com.parse.ParseObject;
+=======
+>>>>>>> 4785cab72e4f147a731bea5ab84c70b29f77edb3
 import com.parse.ParseUser;
 
 /**
@@ -13,6 +16,7 @@ public class ParseAdapter {
     public static final String KEY_AGE = "age";
     public static final String KEY_GENDER = "gender";
     public static final String KEY_SUBJECTS = "subjects";
+    public static final String KEY_LOCATION = "location";
     public static final String KEY_PICTURE = "profilepicture";
 
     public static final String KEY_USERID = "userid";

@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity {
     //DBUserAdapter dbUser;
     ParseUser currentUser;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
