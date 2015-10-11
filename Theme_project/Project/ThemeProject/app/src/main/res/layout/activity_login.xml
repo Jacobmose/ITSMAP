@@ -19,15 +19,23 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:weightSum="2"
+            android:weightSum="3"
             android:paddingLeft="20dp"
             android:paddingRight="20dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/tv_login_description"
+                android:id="@+id/tvLoginDescription"
+                android:layout_weight="1"
+                android:layout_margin="20dp"
+                android:layout_gravity="center" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:ems="10"
                 android:id="@+id/edLoginEmail"
                 android:layout_weight="1"
                 android:layout_margin="20dp"
@@ -37,7 +45,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:ems="10"
                 android:id="@+id/edLoginPassword"
                 android:layout_weight="1"
                 android:layout_margin="20dp"

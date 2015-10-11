@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -100,13 +101,13 @@ public class OwnProfileFragment extends Fragment
         // Set textView's with database information //
         tvFullName.setText(userProfile.getUsername());
         tvEmail.setText(userProfile.getEmail());
-        tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + " years old");
+        tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + getResources().getString(R.string.userYearsOld_text));
         tvGender.setText(userProfile.get(ParseAdapter.KEY_GENDER).toString());
         // Set location //
         if(userProfile.get(ParseAdapter.KEY_LOCATION) != null){
-            tvLocation.setText("Last logged in at: " + userProfile.get(ParseAdapter.KEY_LOCATION).toString());
+            tvLocation.setText(getResources().getString(R.string.lastLogin_text) + userProfile.get(ParseAdapter.KEY_LOCATION).toString());
         } else {
-            tvLocation.setText("Unknown Location");
+            tvLocation.setText(getResources().getString(R.string.unkownLocation_text));
         }
 
         // Set picture with database information //
@@ -202,25 +203,47 @@ public class OwnProfileFragment extends Fragment
     // This function was inspired by the tutorial http://www.theappguruz.com/blog/android-take-photo-camera-gallery-code-sample//
     // Function makes it possible for user to either take new picture or select a picture from the library for profile picture//
     private void selectImage(){
-        final CharSequence[] options = {"Take new photo", "Choose photo from library", "Cancel"};
-
+        final CharSequence[] optionsCamera = {getResources().getString(R.string.takePhoto_text),
+                getResources().getString(R.string.choosePhoto_text, getResources().getString(R.string.cancelDialog_text))};
+        final CharSequence[] optionsNoCamera = {getResources().getString(R.string.choosePhoto_text,
+                getResources().getString(R.string.cancelDialog_text))};
+        //
+        final PackageManager packageManager = getActivity().getPackageManager();
+        //
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
-        dialogBuilder.setTitle("Add profile picture");
-        dialogBuilder.setItems(options, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (options[item].equals("Take new photo")) {
-                    Intent myPhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(myPhotoIntent, CAMERA_REQUEST);
-                } else if (options[item].equals("Choose photo from library")) {
-                    Intent myPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                    myPhotoIntent.setType("image/*");
-                    startActivityForResult(Intent.createChooser(myPhotoIntent, "Select File"), SELECT_FILE);
-                } else if (options[item].equals("Cancel")) {
-                    dialog.dismiss();
+        dialogBuilder.setTitle(getResources().getString(R.string.dialogTitle_text));
+
+        if(packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+            dialogBuilder.setItems(optionsCamera, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+                    if (optionsCamera[item].equals(getResources().getString(R.string.takePhoto_text))) {
+                        Intent myPhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(myPhotoIntent, CAMERA_REQUEST);
+                    } else if (optionsCamera[item].equals(getResources().getString(R.string.choosePhoto_text))) {
+                        Intent myPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        myPhotoIntent.setType("image/*");
+                        startActivityForResult(Intent.createChooser(myPhotoIntent, "Select File"), SELECT_FILE);
+                    } else if (optionsCamera[item].equals(getResources().getString(R.string.cancelDialog_text))) {
+                        dialog.dismiss();
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            dialogBuilder.setItems(optionsNoCamera, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int item) {
+
+                    if (optionsNoCamera[item].equals(getResources().getString(R.string.choosePhoto_text))) {
+                        Intent myPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                        myPhotoIntent.setType("image/*");
+                        startActivityForResult(Intent.createChooser(myPhotoIntent, "Select File"), SELECT_FILE);
+                    } else if (optionsNoCamera[item].equals(getResources().getString(R.string.cancelDialog_text))) {
+                        dialog.dismiss();
+                    }
+                }
+            });
+        }
         dialogBuilder.show();
     }
 
@@ -293,7 +316,7 @@ public class OwnProfileFragment extends Fragment
         picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] image = stream.toByteArray();
 
-        String name = "picture" + userId + ".png";
+        String name = getResources().getString(R.string.pictureName_text) + userId + ".png";
 
         file = new ParseFile(name, image);
 
@@ -306,15 +329,15 @@ public class OwnProfileFragment extends Fragment
                         @Override
                         public void done(ParseException e) {
                             if (e == null) {
-                                Log.d("TEST", "succes");
+                                Log.d("TEST", "Success @ saveImageToDB");
 
                             } else {
-                                Log.d("Test", "failed" + e.getLocalizedMessage());
+                                Log.d("Test", "Failed @ saveImageToDB" + e.getLocalizedMessage());
                             }
                         }
                     });
                 } else {
-                    Log.d("TEST", "failed create file");
+                    Log.d("TEST", "Failed create file @ saveImageToDB");
                 }
 
             }
@@ -328,13 +351,13 @@ public class OwnProfileFragment extends Fragment
                 @Override
                 public void done(byte[] bytes, ParseException e) {
                     if (e == null) {
-                        Log.d("Debug", "Picture received");
+                        Log.d("Debug", "Picture received @ loadImageFromDB");
                         Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
                         roundImage = new RoundImage(picture);
                         ivProfilePicture.setImageDrawable(roundImage);
                     } else {
-                        Log.d("Debug", "Something went wrong");
+                        Log.d("Debug", "Something went wrong @ loadImageFromDB");
                     }
                 }
             });
@@ -352,9 +375,9 @@ public class OwnProfileFragment extends Fragment
             @Override
             public void done(ParseException e) {
                 if (e == null) {
-                    Log.d("TEST", "succes");
+                    Log.d("TEST", "Success @ saveSubjectsToDB");
                 } else {
-                    Log.d("Test", "failed" + e.getLocalizedMessage());
+                    Log.d("Test", "Failed" + e.getLocalizedMessage());
                 }
             }
         });
@@ -366,7 +389,7 @@ public class OwnProfileFragment extends Fragment
             mySubjectAdapter.addAll(testStringArrayList);
             lvSubjects.setAdapter(mySubjectAdapter);
         } catch (Exception e){
-            Log.d("Debug", "Array empty");
+            Log.d("Debug", "Array empty @ loadSubjectFromDB");
         }
 
     }
@@ -378,7 +401,8 @@ public class OwnProfileFragment extends Fragment
 
             if(subjectArray.size() < 5){
                 if(subjectArray.contains(selectedSubject)){
-                    Toast.makeText(getActivity(), "Subject already added", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.subjectAlreadyAdded_text),
+                            Toast.LENGTH_SHORT).show();
                 }else {
                     mySubjectAdapter.add(selectedSubject);
                     lvSubjects.setAdapter(mySubjectAdapter);

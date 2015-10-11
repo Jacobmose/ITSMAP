@@ -6,7 +6,10 @@
     <string name="email_text">Email</string>
     <string name="userGender_text">Gender</string>
     <string name="userAge_text">Age</string>
+    <string name="userYearsOld_text"> years old</string>
     <string name="userLocation_text">Location</string>
+    <string name="lastLogin_text">Last logged in at: </string>
+    <string name="unkownLocation_text">Unknown Location</string>
     <!-- Buttons -->
     <string name="rateBtn_text">Rate</string>
     <string name="addSubject_text">Add Subject</string>
@@ -34,7 +37,15 @@
         <item>Cooking</item>
     </string-array>
     <string name="selectSubject">Select a subject...</string>
-    <string name="title_activity_login">LoginActivity</string>
-
+    <string name="title_activity_login">LoginActivity</string> <!-- _TODO Consider change this -->
+    <!-- Dialog Builder -->
+    <string name="takePhoto_text">Take new photo</string>
+    <string name="choosePhoto_text">Choose photo from library</string>
+    <string name="cancelDialog_text">Cancel</string>
+    <string name="dialogTitle_text">"Add profile picture"</string>
+    <!-- Picture Builder -->
+    <string name="pictureName_text">picture</string>
+    <!-- Subject Spinner Error Msgs -->
+    <string name="subjectAlreadyAdded_text">Subject already added</string>
 
 </resources>

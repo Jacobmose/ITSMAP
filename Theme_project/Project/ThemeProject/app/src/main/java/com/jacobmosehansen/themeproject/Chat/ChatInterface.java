@@ -1,5 +1,7 @@
 package com.jacobmosehansen.themeproject.Chat;
 
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 
 /**
@@ -8,9 +10,8 @@ import java.util.ArrayList;
 public interface ChatInterface {
 
     public void onChatSelected(int pos);
-    public ArrayList<ChatItem> getChatList();
     public void sendMessage(String recipient, String message);
-    public void populateMessageHistory(String recipient);
+    public void populateMessageHistory(ParseObject topic);
     public void populateMessageList();
 
 
