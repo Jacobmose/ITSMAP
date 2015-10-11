@@ -124,13 +124,9 @@ public class CreateUserActivity extends AppCompatActivity {
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(com.parse.ParseException e) {
                                     if (e == null) {
-<<<<<<< HEAD
                                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_user_created), Toast.LENGTH_SHORT).show();
-=======
                                         ParseObject rating = parse.createParseRatingObject(ParseUser.getCurrentUser().getObjectId(), 0.0, 0);
                                         rating.saveInBackground();
-
->>>>>>> ee1749126d8ea855bc7bb7a874c7d8faf7551f6f
                                         startActivity(intent);
                                     } else {
                                         Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_sign_up_error) + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
