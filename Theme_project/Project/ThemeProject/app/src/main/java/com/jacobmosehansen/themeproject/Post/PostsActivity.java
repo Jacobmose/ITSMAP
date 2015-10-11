@@ -1,41 +1,58 @@
 package com.jacobmosehansen.themeproject.Post;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.util.Log;
+import android.widget.Button;
 
 import com.jacobmosehansen.themeproject.R;
+
 /**
  * Created by Marlene on 08-10-2015.
  */
+    //Skal starte når der trykkes på "Posts" fra starten af.
+    //Skal hente data omkring hvilke posts der er i DB'en.
+    //Skal initiere fragment "details" samt den nye aktivitet "New post".
+
 public class PostsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_posts);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        PostListFragment postListFragment = new PostListFragment();
+        //PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
+
+        fragmentTransaction.replace(android.R.id.content, postListFragment);
+        fragmentTransaction.commit();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_posts, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
 
-        return super.onOptionsItemSelected(item);
-    }
+    /*private void loadImageFromDB() {
+        ParseFile profilePicture = (ParseFile)userProfile.get(ParseAdapter.KEY_PICTURE);
+        profilePicture.getDataInBackground(new GetDataCallback() {
+            @Override
+            public void done(byte[] bytes, ParseException e) {
+                if (e == null){
+                    Log.d("Debug", "Picture received");
+                    Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+
+                    roundImage = new RoundImage(picture);
+                    imageView.setImageDrawable(roundImage);
+                } else {
+                    Log.d("Debug", "Something went wrong");
+                }
+            }
+        });
+    }*/
 }

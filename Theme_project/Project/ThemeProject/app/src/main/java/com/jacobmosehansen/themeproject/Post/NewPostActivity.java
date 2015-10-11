@@ -4,11 +4,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.R;
 /**
  * Created by Marlene on 08-10-2015.
  */
+    //Gemme posten ned i Parse
+    //Koble profil og posts
+
 public class NewPostActivity extends AppCompatActivity {
 
     @Override
@@ -38,4 +42,28 @@ public class NewPostActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void onClickCancel(){this.finish();}
+
+    public void onClickSubmit(String Headline, String level, String course, String post){
+        //Gemme ned i databasen
+    }
+
+    /*public void selectFromSpinner(){
+        try{
+            String selectedSubject = sprSubjects.getSelectedItem().toString();
+
+            if(subjectArray.size() < 5){
+                if(subjectArray.contains(selectedSubject)){
+                    Toast.makeText(getActivity(), "Subject already added", Toast.LENGTH_SHORT).show();
+                }else {
+                    mySubjectAdapter.add(selectedSubject);
+                    lvSubjects.setAdapter(mySubjectAdapter);
+                    //_TODO SAVE SUBJECTS TO DATABASE //
+                }}
+            else{Toast.makeText(getActivity(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
+        }catch(Exception e){
+            Toast.makeText(getActivity(), "No subject selected", Toast.LENGTH_SHORT).show();
+        }
+    }*/
 }
