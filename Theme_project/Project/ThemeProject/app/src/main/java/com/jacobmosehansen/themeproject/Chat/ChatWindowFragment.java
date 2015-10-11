@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -71,6 +72,10 @@ public class ChatWindowFragment extends Fragment {
                 if (etxMessage.getText() != null) {
                     String message = topic.get("topic").toString() + "#-#" + etxMessage.getText().toString();
                     chatInterface.sendMessage(RecipientId, message);
+                    etxMessage.setText("");
+                    hideSoftKeyboard(getActivity());
+                    lvwMessages.scrollTo(0, lvwMessages.getHeight());
+
                 }
             }
         });
@@ -126,5 +131,10 @@ public class ChatWindowFragment extends Fragment {
         super.onAttach(activity);
 
         chatInterface = (ChatInterface) activity;
+    }
+    //From http://stackoverflow.com/questions/4165414/how-to-hide-soft-keyboard-on-android-after-clicking-outside-edittext
+    public static void hideSoftKeyboard(Activity activity) {
+        InputMethodManager inputMethodManager = (InputMethodManager)  activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), 0);
     }
 }

@@ -342,13 +342,13 @@ public class ChatActivity extends AppCompatActivity implements ChatInterface {
                                             Log.d("TEST", "onMessageExist2");
                                             try {
                                                 Log.d("TEST", "onMessageExist3");
-                                                ParseObject object = topicList.get(i).fetch();
+                                                ParseObject object = topicList.get(j).fetch();
                                                 if (object.get("sinchId").equals(message.getMessageId())) {
                                                     Log.d("TEST", "onMessageExist4");
                                                     messageTrue = true;
                                                 }else{
                                                     Log.d("TEST", "onMessageExist4");
-                                                    //topics.add(object);
+                                                    topics.add(object);
                                                 }
                                             } catch (com.parse.ParseException ex) {
                                                 Log.d("ERROR", "onMessageReceive " + ex.getLocalizedMessage());
