@@ -53,7 +53,7 @@ public class OwnProfileFragment extends Fragment
 {
     // UI variables //
     ImageView ivProfilePicture;
-    TextView tvFullName, tvEmail, tvAge, tvGender, tvLocation, tvNumberOfRatings;
+    TextView tvUserName, tvEmail, tvAge, tvGender, tvLocation, tvNumberOfRatings;
     RatingBar rbGradRating;
     Spinner sprSubjects;
     Button btnAddSubject;
@@ -85,7 +85,7 @@ public class OwnProfileFragment extends Fragment
         // Initialize Views//
         ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
 
-        tvFullName = (TextView) myFragmentView.findViewById(R.id.tv_fullName);
+        tvUserName = (TextView) myFragmentView.findViewById(R.id.tv_userName);
         tvEmail = (TextView) myFragmentView.findViewById(R.id.tv_email);
         tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
         tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
@@ -102,7 +102,7 @@ public class OwnProfileFragment extends Fragment
         final String numberOfSubjectsTxt = getResources().getString(R.string.numberOfSubjects_text);
 
         // Set textView's with database information //
-        tvFullName.setText(userProfile.getUsername());
+        tvUserName.setText(userProfile.getUsername());
         tvEmail.setText(userProfile.getEmail());
         tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + getResources().getString(R.string.userYearsOld_text));
         tvGender.setText(userProfile.get(ParseAdapter.KEY_GENDER).toString());

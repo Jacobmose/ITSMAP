@@ -42,7 +42,7 @@ public class AnotherProfileFragment extends Fragment {
 
     // UI variables //
     ImageView ivProfilePicture;
-    TextView tvFullName, tvAge, tvGender, tvLocation, tvUsersSubjects, tvNumberOfRatings;
+    TextView tvUserName, tvAge, tvGender, tvLocation, tvUsersSubjects, tvNumberOfRatings;
     RatingBar rbGradRating;
     Button btnRating;
     ArrayList<String> subjectArray = new ArrayList<String>();
@@ -71,7 +71,7 @@ public class AnotherProfileFragment extends Fragment {
         // Initialize Views//
         ivProfilePicture = (ImageView) myFragmentView.findViewById(R.id.imageView_profilePicture);
 
-        tvFullName = (TextView) myFragmentView.findViewById(R.id.tv_fullName);
+        tvUserName = (TextView) myFragmentView.findViewById(R.id.tv_userName);
         tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
         tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
         tvLocation = (TextView) myFragmentView.findViewById(R.id.tv_location);
@@ -103,7 +103,7 @@ public class AnotherProfileFragment extends Fragment {
                         userProfile = list.get(0);
                         if (userProfile.getObjectId() != null) {
                             // Set textView's with database information //
-                            tvFullName.setText(userProfile.getUsername());
+                            tvUserName.setText(userProfile.getUsername());
                             tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + userYearsOld);
                             tvGender.setText(userProfile.getString(ParseAdapter.KEY_GENDER));
                             // Set location //

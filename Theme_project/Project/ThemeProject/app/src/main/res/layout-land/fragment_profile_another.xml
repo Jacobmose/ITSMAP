@@ -47,8 +47,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="?android:attr/textAppearanceLarge"
-                                android:text="@string/fullName_text"
-                                android:id="@+id/tv_fullName" />
+                                android:text="@string/userName_text"
+                                android:id="@+id/tv_userName" />
                         </TableRow>
 
                         <TableRow
@@ -113,7 +113,7 @@
                                     android:id="@+id/ratingBar_profileRating"
                                     android:stepSize="0.5"
                                     android:numStars="5"
-                                    android:rating="3"
+                                    android:rating="0"
                                     android:layout_alignParentEnd="false" />
 
                                 <TextView
