@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
                             ParseUser.logInInBackground(email, password, new LogInCallback() {
                                 public void done(ParseUser user, com.parse.ParseException e) {
                                     if (user != null) {
+                                        Log.d("TEST", "SUCCES");
                                         Toast.makeText(LoginActivity.this, "Login Success!", Toast.LENGTH_SHORT).show();
                                         startActivity(intent);
                                         startService(serviceIntent);

@@ -1,7 +1,7 @@
 package com.jacobmosehansen.themeproject.Chat;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,11 +10,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.jacobmosehansen.themeproject.R;
+import com.sinch.android.rtc.messaging.WritableMessage;
+
+import java.util.ArrayList;
 
 public class ChatListFragment extends Fragment {
 
     private ListView listView;
     private ChatInterface chatInterface;
+    private ChatListAdaptor chatListAdaptor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -23,9 +27,12 @@ public class ChatListFragment extends Fragment {
 
         listView = (ListView) view.findViewById(R.id.listView3);
 
-        ChatListAdaptor adapter = new ChatListAdaptor(getActivity(), chatInterface.getChatList());
+        chatListAdaptor = new ChatListAdaptor(getActivity());
 
-        listView.setAdapter(adapter);
+        chatInterface.populateMessageList();
+
+        listView.setAdapter(chatListAdaptor);
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -35,6 +42,18 @@ public class ChatListFragment extends Fragment {
         });
 
         return view;
+    }
+
+    public void addChatToList(ChatItem chat){
+        chatListAdaptor.addMessage(chat);
+    }
+
+    public ChatItem getChat(int i){
+        return chatListAdaptor.getItem(i);
+    }
+
+    public ArrayList<ChatItem> getChatItems(){
+        return chatListAdaptor.getChatItems();
     }
 
     @Override

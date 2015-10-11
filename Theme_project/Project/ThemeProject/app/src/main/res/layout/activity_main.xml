@@ -48,7 +48,6 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignStart="@+id/btn_search"
                 android:background="@color/lightGreen"
-                android:layout_alignBottom="@+id/spinner_search"
                 android:layout_alignEnd="@id/btn_search"
                 android:layout_margin="5dp"/>
 
