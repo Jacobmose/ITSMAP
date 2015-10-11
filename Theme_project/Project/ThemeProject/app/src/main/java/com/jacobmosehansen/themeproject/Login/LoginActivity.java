@@ -88,15 +88,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 public void done(ParseUser user, com.parse.ParseException e) {
 
                                     if (user != null) {
-<<<<<<< HEAD
-                                        Log.d("TEST", "SUCCES");
-                                        Toast.makeText(LoginActivity.this, "Login Success!", Toast.LENGTH_SHORT).show();
-=======
                                         Log.d("4", "IN IF USER != NULL");
                                         Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_login_success), Toast.LENGTH_SHORT).show();
->>>>>>> 3808a8879d256fc9c90fdee7cd239d4872d251f6
                                         startActivity(intent);
                                         startService(serviceIntent);
+                                        currentUser = ParseUser.getCurrentUser();
                                         getLocation();
                                     } else {
                                         Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_invalid_email_password), Toast.LENGTH_SHORT).show();

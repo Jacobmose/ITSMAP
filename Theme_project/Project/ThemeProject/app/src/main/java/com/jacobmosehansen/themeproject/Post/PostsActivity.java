@@ -15,7 +15,7 @@ import com.jacobmosehansen.themeproject.R;
 /**
  * Created by Marlene on 08-10-2015.
  */
-    //Skal starte når der trykkes på "Posts" fra starten af.
+    //Skal starte nr der trykkes p "Posts" fra starten af.
     //Skal hente data omkring hvilke posts der er i DB'en.
     //Skal initiere fragment "details" samt den nye aktivitet "New post".
 
