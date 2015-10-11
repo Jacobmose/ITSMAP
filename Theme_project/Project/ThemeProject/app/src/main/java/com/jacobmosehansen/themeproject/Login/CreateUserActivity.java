@@ -123,22 +123,22 @@ public class CreateUserActivity extends AppCompatActivity {
                             user.signUpInBackground(new SignUpCallback() {
                                 public void done(com.parse.ParseException e) {
                                     if (e == null) {
-                                        Toast.makeText(getApplicationContext(), "User was created!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_user_created), Toast.LENGTH_SHORT).show();
                                         startActivity(intent);
                                     } else {
-                                        Toast.makeText(getApplicationContext(), "There was an error signing up " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_sign_up_error) + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
                         } else
-                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_password), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_invalid_password), Toast.LENGTH_LONG).show();
 
                     }else
-                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.invalid_email), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_invalid_email), Toast.LENGTH_LONG).show();
 
 
                 } else
-                    Toast.makeText(getApplicationContext(), "Please enter your details!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_enter_details), Toast.LENGTH_SHORT).show();
             }
         });
     }
