@@ -15,6 +15,7 @@ import android.widget.ListAdapter;
 import android.widget.Spinner;
 
 import com.jacobmosehansen.themeproject.Chat.ChatActivity;
+import com.jacobmosehansen.themeproject.Chat.MessageService;
 import com.jacobmosehansen.themeproject.Login.LoginActivity;
 import com.jacobmosehansen.themeproject.Post.NewPostActivity;
 import com.jacobmosehansen.themeproject.Post.PostsActivity;
@@ -125,6 +126,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 ParseUser currentUser = ParseUser.getCurrentUser();
+                stopService(new Intent(MainActivity.this, MessageService.class));
 
                 currentUser.logOutInBackground(new LogOutCallback() {
                     @Override
@@ -163,5 +165,11 @@ public class MainActivity extends AppCompatActivity {
     private void loadSavedPreferences(){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         userId = sharedPreferences.getInt("USER_ID", 0);
+    }
+
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+
     }
 }

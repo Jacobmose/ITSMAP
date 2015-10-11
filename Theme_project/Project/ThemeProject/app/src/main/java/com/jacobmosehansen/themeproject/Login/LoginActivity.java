@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     Integer userId;
     Intent intent;
     Intent serviceIntent;
-    ParseUser currentUser;
+    private ParseUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,5 +233,14 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     @Override
     public void onConnectionSuspended(int arg0) {
         mGoogleApiClient.connect();
+    }
+
+    @Override
+    public void onDestroy(){
+        stopService(new Intent(this, MessageService.class));
+        if(currentUser != null){
+            currentUser.logOutInBackground();
+        }
+        super.onDestroy();
     }
 }
