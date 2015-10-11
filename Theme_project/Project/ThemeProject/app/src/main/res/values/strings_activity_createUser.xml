@@ -15,9 +15,13 @@
     <string name="btn_sign_up">Sign up</string>
     <string name="btn_back_to_login">Back to Login</string>
 
+    <string name="tv_create_user_description">To create a new user and get the help you need, please complete this form</string>
 
-    <string name="invalid_password">Error: Password must be at least 8 characters!</string>
-    <string name="invalid_email">Error: Email is not valid format!</string>
+    <string name="toast_invalid_password">Error: Password must be at least 8 characters!</string>
+    <string name="toast_invalid_email">Error: Email is not valid format!</string>
+    <string name="toast_sign_up_error">There was an error signing up!</string>
+    <string name="toast_user_created">User was created!</string>
+    <string name="toast_enter_details">Please enter your details!</string>
 
     <string-array name="sa_months">
         <!-- Months -->

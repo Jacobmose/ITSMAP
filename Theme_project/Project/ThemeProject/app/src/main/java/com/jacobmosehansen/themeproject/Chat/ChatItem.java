@@ -18,18 +18,21 @@ public class ChatItem {
     private String Topic;
     private Drawable PersonImg;
     private String PersonId;
+    private String TopicId;
 
-    public ChatItem(String person, String topic, Drawable img, String personId) {
+    public ChatItem(String person, String topic, Drawable img, String personId, String topicId) {
         Person = person;
         Topic = topic;
         PersonImg = img;
         PersonId = personId;
+        TopicId = topicId;
     }
 
-    public ChatItem(String person, String topic, String personId) {
+    public ChatItem(String person, String topic, String personId, String topicId) {
         Person = person;
         Topic = topic;
         PersonId = personId;
+        TopicId = topicId;
     }
 
     public ChatItem(String person, String topic, Drawable img){
@@ -56,6 +59,10 @@ public class ChatItem {
     }
 
     public String getPersonId(){return PersonId;}
+
+    public String getTopicId(){return TopicId;}
+
+    public void setTopicId(String topicId){TopicId = topicId;}
 
     public void setPerson(String person) {
         Person = person;

@@ -115,6 +115,7 @@ public class MainActivity extends AppCompatActivity {
 
                 /*Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                 intent.putExtra("RECIPIENT_ID", "MmDjqfcqR7");
+                intent.putExtra("TOPIC_ID", "Topic Test");
                 startActivity(intent);
                 */
             }

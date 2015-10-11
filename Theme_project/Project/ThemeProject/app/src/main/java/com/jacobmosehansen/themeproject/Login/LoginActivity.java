@@ -66,7 +66,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             buildGoogleApiClient();
         }
 
-
         currentUser = ParseUser.getCurrentUser();
 
         btnLogin = (Button) findViewById(R.id.btn_login);
@@ -85,33 +84,23 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 password = edLoginPassword.getText().toString();
 
                 if (email.length() > 0 && password.length() > 0) {
-
-                        if(currentUser == null)
-                        {
                             ParseUser.logInInBackground(email, password, new LogInCallback() {
                                 public void done(ParseUser user, com.parse.ParseException e) {
+
                                     if (user != null) {
                                         Log.d("4", "IN IF USER != NULL");
-                                        Toast.makeText(LoginActivity.this, "1: Login Success!", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_login_success), Toast.LENGTH_SHORT).show();
                                         startActivity(intent);
                                         startService(serviceIntent);
-                                        getLocationName();
+                                        currentUser = ParseUser.getCurrentUser();
+                                        getLocation();
                                     } else {
-                                        Toast.makeText(LoginActivity.this, "1: Invalid email or password", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_invalid_email_password), Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             });
-                        }
-                        else{
-                            Toast.makeText(LoginActivity.this, "2: Login Success!", Toast.LENGTH_LONG).show();
-                            startActivity(intent);
-                            startService(serviceIntent);
-                            Toast.makeText(LoginActivity.this, "2: Invalid email or password", Toast.LENGTH_LONG).show();
-                            getLocationName();
-
-                        }
                 } else {
-                    Toast.makeText(LoginActivity.this, "Email or Password cannot be null", Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_null_email_password), Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -123,8 +112,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 startActivity(intent);
             }
         });
-
-
     }
 
     private void savePreferences(String key, int userId){
@@ -140,16 +127,19 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         userId = sharedPreferences.getInt("USER_ID", 0);
     }
 
-    private void getLocationName(){
+    private void getLocation(){
 
         Log.d("1", "first");
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
+        Log.d("1", mLastLocation.toString());
+
         geocoder = new Geocoder(this, Locale.getDefault());
 
         _latitude = mLastLocation.getLatitude();
         _longitude = mLastLocation.getLongitude();
+
 
         if (mLastLocation != null){
 
@@ -171,7 +161,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     currentUser.saveInBackground();
                 }
             } catch (IOException e) {
-                Toast.makeText(LoginActivity.this, getResources().getString(R.string.io_exception), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_io_exception), Toast.LENGTH_LONG).show();
             }
 
         }
@@ -198,8 +188,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 GooglePlayServicesUtil.getErrorDialog(resultCode, this,
                         PLAY_SERVICES_RESOLUTION_REQUEST).show();
             } else {
-                Toast.makeText(getApplicationContext(),
-                        "This device is not supported.", Toast.LENGTH_LONG)
+                Toast.makeText(getApplicationContext(), getResources().getString(R.string.toast_device_not_supported), Toast.LENGTH_LONG)
                         .show();
                 finish();
             }
@@ -221,6 +210,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         super.onResume();
 
         checkPlayServices();
+
+        if(currentUser != null) {
+            startActivity(intent);
+            startService(serviceIntent);
+            //getLocation();
+        }
     }
 
     /**

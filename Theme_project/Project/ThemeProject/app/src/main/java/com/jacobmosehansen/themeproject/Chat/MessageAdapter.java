@@ -64,7 +64,6 @@ public class MessageAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
         int direction = getItemViewType(i);
-
         //show message on left or right, depending on if
         //it's incoming or outgoing
         if (convertView == null) {
@@ -80,7 +79,9 @@ public class MessageAdapter extends BaseAdapter {
         WritableMessage message = messages.get(i).first;
 
         TextView txtMessage = (TextView) convertView.findViewById(R.id.txtMessage);
-        txtMessage.setText(message.getTextBody());
+        String pair[] = message.getTextBody().split("#-#");
+
+        txtMessage.setText(pair[1]);
 
         return convertView;
     }

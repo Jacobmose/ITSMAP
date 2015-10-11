@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +25,7 @@ import com.parse.GetDataCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.sinch.android.rtc.messaging.WritableMessage;
@@ -45,6 +46,7 @@ public class ChatWindowFragment extends Fragment {
     private String RecipientId;
     private ChatInterface chatInterface;
     private ParseUser RecipientUser;
+    private ParseObject topic;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,17 +59,17 @@ public class ChatWindowFragment extends Fragment {
         btnSend = (Button) view.findViewById(R.id.btnChatWindow);
         lvwMessages = (ListView) view.findViewById(R.id.lvwChatWindow);
 
-        chatInterface.populateMessageHistory(RecipientId);
-
         messageAdapter = new MessageAdapter(getActivity());
 
         lvwMessages.setAdapter(messageAdapter);
 
+        chatInterface.populateMessageHistory(topic);
+
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                message = etxMessage.getText().toString();
-                if(message != ""){
+                if (etxMessage.getText() != null) {
+                    String message = topic.get("topic").toString() + "#-#" + etxMessage.getText().toString();
                     chatInterface.sendMessage(RecipientId, message);
                 }
             }
@@ -75,49 +77,36 @@ public class ChatWindowFragment extends Fragment {
         return view;
     }
 
-    public void setRecipient(String Recipient){
-        RecipientId = Recipient;
-    }
-
-    public void setChat(String recipientId)
+    public void setChat(ChatItem chat)
     {
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo("objectId", recipientId);
-        query.findInBackground(new FindCallback<ParseUser>() {
+        RecipientId = chat.getPersonId();
+        txtPerson.setText(chat.getPerson());
+        txtTopic.setText(chat.getTopic());
+        if(chat.getPersonImg() != null){
+            imgPerson.setImageDrawable(chat.getPersonImg());
+        }else{
+            Bitmap image = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.default_profile);
+            roundImage = new RoundImage(image);
+            imgPerson.setImageDrawable(roundImage);
+        }
+
+        Log.d("TEST", "TEST" + chat.getTopicId());
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ParseChat");
+        query.whereEqualTo("objectId", chat.getTopicId());
+        query.include("parseMessage");
+        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void done(List<ParseUser> list, ParseException e) {
-                if(e == null) {
-                    if (!list.isEmpty()) {
-                        RecipientUser = list.get(0);
-                        if (RecipientUser != null) {
-
-                            txtPerson.setText(RecipientUser.getUsername());
-                            //TODO set Topic
-                            txtTopic.setText("Topic");
-
-                            ParseFile profilePicture = (ParseFile) RecipientUser.get(ParseAdapter.KEY_PICTURE);
-                            profilePicture.getDataInBackground(new GetDataCallback() {
-                                @Override
-                                public void done(byte[] bytes, ParseException e) {
-                                    if (e == null) {
-                                        Log.d("Debug", "Picture received");
-                                        Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-
-                                        roundImage = new RoundImage(picture);
-                                        imgPerson.setImageDrawable(roundImage);
-                                    } else {
-                                        Log.d("Debug", "Something went wrong");
-                                    }
-                                }
-                            });
-
-                        }
-                    }
-                }else{
-                    Toast.makeText(getActivity(), "Could not find User", Toast.LENGTH_SHORT).show();
+            public void done(List<ParseObject> list, ParseException e) {
+                if (!list.isEmpty()) {
+                    topic = list.get(0);
+                    chatInterface.populateMessageHistory(topic);
+                } else {
+                    Log.d("TEST", "FAILED");
                 }
             }
         });
+
+
     }
 
     public void addMessageToList(WritableMessage message, int direction){
@@ -126,6 +115,10 @@ public class ChatWindowFragment extends Fragment {
 
     public String getRecipientId(){
         return RecipientId;
+    }
+
+    public ParseObject getTopic(){
+        return topic;
     }
 
     @Override
