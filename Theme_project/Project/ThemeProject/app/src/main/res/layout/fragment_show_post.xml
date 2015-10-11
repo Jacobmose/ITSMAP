@@ -9,14 +9,15 @@
         android:layout_height="150dp"
         android:id="@+id/imageView"
         android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:clickable="true" />
 
     <TextView
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Fornavn Efternavn"
-        android:id="@+id/textView7"
+        android:text="First name Last name"
+        android:id="@+id/name"
         android:layout_below="@+id/imageView"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="15dp"/>
@@ -25,27 +26,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Overskrift på opgave"
-        android:id="@+id/textView8"
+        android:text="Headline on assignment"
+        android:id="@+id/Headline"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView7"
+        android:layout_toEndOf="@+id/name"
         android:layout_marginTop="30dp"/>
 
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:hint="Fagniveau"
-        android:layout_below="@+id/textView8"
-        android:layout_toEndOf="@+id/textView7" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText2"
-        android:layout_below="@+id/editText"
-        android:layout_toEndOf="@+id/textView7"
-        android:hint="Kursus" />
+        android:id="@+id/Post_note"
+        android:layout_below="@+id/Headline"
+        android:layout_toEndOf="@+id/name"
+        android:hint="Kursus"
+        android:clickable="false" />
 
     <EditText
         android:layout_width="match_parent"
@@ -53,16 +47,24 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/editText3"
-        android:layout_below="@+id/textView7"
+        android:layout_below="@+id/name"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp" />
 
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:text="Kontakt"
+        android:text="Contact"
         android:id="@+id/button2"
         android:layout_below="@+id/editText3"
         android:layout_alignEnd="@+id/editText3"
         android:layout_marginTop="27dp" />
+
+    <Button
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Show Profile"
+        android:id="@+id/btn_showProfile"
+        android:layout_alignBottom="@+id/button2"
+        android:layout_alignStart="@+id/editText3" />
 </RelativeLayout>

@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //_TODO Remove this! - made for testing//
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                intent.putExtra("USER_ID", "Hp5BsJJmAv");
+                intent.putExtra("USER_ID", "DTRPHYgnwW");
                 startActivityForResult(intent, 1);
                 //Remove this! - made for testing//
 
