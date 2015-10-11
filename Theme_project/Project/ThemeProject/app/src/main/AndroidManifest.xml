@@ -21,10 +21,6 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-<<<<<<< HEAD
-=======
-
->>>>>>> 57a67cb0cfe52cabf29659540edaa44674a49133
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
