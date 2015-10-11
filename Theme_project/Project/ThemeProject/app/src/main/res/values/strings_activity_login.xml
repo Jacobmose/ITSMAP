@@ -6,5 +6,7 @@
 
     <string name="loginSuccess">Login Success!</string>
     <string name="io_exception">Oops, IOException occurred..</string>
+    <!-- activity_profile strings -->
+    <string name="title_activity_login">LoginActivity</string> <!-- _TODO Consider change this -->
 
 </resources>

@@ -53,7 +53,7 @@ public class OwnProfileFragment extends Fragment
 {
     // UI variables //
     ImageView ivProfilePicture;
-    TextView tvFullName, tvEmail, tvAge, tvGender, tvLocation;
+    TextView tvFullName, tvEmail, tvAge, tvGender, tvLocation, tvNumberOfRatings;
     RatingBar rbGradRating;
     Spinner sprSubjects;
     Button btnAddSubject;
@@ -92,17 +92,21 @@ public class OwnProfileFragment extends Fragment
         tvLocation = (TextView) myFragmentView.findViewById(R.id.tv_location);
 
         rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
+        tvNumberOfRatings = (TextView) myFragmentView.findViewById(R.id.tv_numberOfRatings);
 
         sprSubjects = (Spinner) myFragmentView.findViewById(R.id.spinner_subjects);
         btnAddSubject = (Button) myFragmentView.findViewById(R.id.btn_addSubject);
         lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
 
+        final String numberOfSubjectsTxt = getResources().getString(R.string.numberOfSubjects_text);
+
         // Set textView's with database information //
         tvFullName.setText(userProfile.getUsername());
         tvEmail.setText(userProfile.getEmail());
         tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + getResources().getString(R.string.userYearsOld_text));
         tvGender.setText(userProfile.get(ParseAdapter.KEY_GENDER).toString());
+
         // Set location //
         if(userProfile.get(ParseAdapter.KEY_LOCATION) != null){
             tvLocation.setText(getResources().getString(R.string.lastLogin_text) + userProfile.get(ParseAdapter.KEY_LOCATION).toString());
@@ -133,10 +137,8 @@ public class OwnProfileFragment extends Fragment
                     Log.d("Debug", "LIST IS EMPTY");
                     rbGradRating.setRating(0);
                 }
-            }
+            }tvNumberOfRatings.setText("(" + ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).toString() + numberOfSubjectsTxt + ")");
         }});
-
-
 
         // Set list view with database information//
         loadSubjectFromDB();
@@ -204,9 +206,9 @@ public class OwnProfileFragment extends Fragment
     // Function makes it possible for user to either take new picture or select a picture from the library for profile picture//
     private void selectImage(){
         final CharSequence[] optionsCamera = {getResources().getString(R.string.takePhoto_text),
-                getResources().getString(R.string.choosePhoto_text, getResources().getString(R.string.cancelDialog_text))};
-        final CharSequence[] optionsNoCamera = {getResources().getString(R.string.choosePhoto_text,
-                getResources().getString(R.string.cancelDialog_text))};
+                getResources().getString(R.string.choosePhoto_text), getResources().getString(R.string.cancelDialog_text)};
+        final CharSequence[] optionsNoCamera = {getResources().getString(R.string.choosePhoto_text),
+                getResources().getString(R.string.cancelDialog_text)};
         //
         final PackageManager packageManager = getActivity().getPackageManager();
         //
@@ -408,10 +410,10 @@ public class OwnProfileFragment extends Fragment
                     lvSubjects.setAdapter(mySubjectAdapter);
                     saveSubjectsToDB();
                 }}
-            else{Toast.makeText(getActivity(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
+            else{Toast.makeText(getActivity(), getResources().getString(R.string.subjectTooManyAdded_text),
+                    Toast.LENGTH_SHORT).show();}
         }catch(Exception e){
-            Toast.makeText(getActivity(), "No subject selected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.noSubjectSelected_text), Toast.LENGTH_SHORT).show();
         }
     }
-
 }
