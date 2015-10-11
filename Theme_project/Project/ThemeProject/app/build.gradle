@@ -20,12 +20,16 @@ android {
 }
 
 dependencies {
+<<<<<<< HEAD
     /*compile fileTree(dir: 'libs', include: ['*.jar'])
 <<<<<<< HEAD
+=======
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+>>>>>>> 6af6e7937d9d4b22cd122403a31da9fc682623b8
     compile files('libs/sinch-android-rtc-3.7.1.jar')
     compile fileTree(dir: 'libs', include: 'Parse-*.jar')
-
     compile 'com.android.support:appcompat-v7:23.0.1'
+<<<<<<< HEAD
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.android.support:support-v4:23.0.1'*/
 //=======
@@ -36,4 +40,11 @@ dependencies {
     compile 'joda-time:joda-time:2.8.2'
     compile 'com.parse.bolts:bolts-android:1.+'
 //>>>>>>> c7eab7ee1dbebc6bb1d6803e07c10089c960fa41
+=======
+    compile 'com.android.support:support-v4:23.0.1'
+    compile files('libs/Parse-1.10.2.jar')
+    compile 'joda-time:joda-time:2.8.2'
+    compile 'com.parse.bolts:bolts-android:1.+'
+    compile 'com.google.android.gms:play-services:8.1.0'
+>>>>>>> 6af6e7937d9d4b22cd122403a31da9fc682623b8
 }

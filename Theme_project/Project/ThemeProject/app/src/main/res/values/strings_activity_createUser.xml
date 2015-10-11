@@ -15,6 +15,10 @@
     <string name="btn_sign_up">Sign up</string>
     <string name="btn_back_to_login">Back to Login</string>
 
+
+    <string name="invalid_password">Error: Password must be at least 8 characters!</string>
+    <string name="invalid_email">Error: Email is not valid format!</string>
+
     <string-array name="sa_months">
         <!-- Months -->
         <item>January</item>
@@ -29,6 +33,12 @@
         <item>October</item>
         <item>November</item>
         <item>December</item>
+    </string-array>
+
+    <string-array name="sa_gender">
+        <!-- Gender -->
+        <item>Male</item>
+        <item>Female</item>
     </string-array>
 
 </resources>

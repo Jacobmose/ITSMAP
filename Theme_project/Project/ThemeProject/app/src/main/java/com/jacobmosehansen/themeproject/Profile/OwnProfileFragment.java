@@ -3,20 +3,15 @@ package com.jacobmosehansen.themeproject.Profile;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,14 +32,17 @@ import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
 import com.jacobmosehansen.themeproject.Tools.ParseAdapter;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
 import com.jacobmosehansen.themeproject.Tools.SwipeDismissListViewTouchListener;
+import com.parse.FindCallback;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-
+import java.util.List;
 
 
 /**
@@ -68,6 +66,8 @@ public class OwnProfileFragment extends Fragment
     String userId;
     ParseUser userProfile = ParseUser.getCurrentUser();
     ParseFile file;
+    ParseObject ratingObject;
+
 
 
     private static final int CAMERA_REQUEST = 1888;
@@ -97,28 +97,48 @@ public class OwnProfileFragment extends Fragment
         lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
 
-
-        // _REMOVE TEST for own profile id//
-        Toast.makeText(getActivity(), userId.toString(), Toast.LENGTH_SHORT).show();
-
         // Set textView's with database information //
         tvFullName.setText(userProfile.getUsername());
         tvEmail.setText(userProfile.getEmail());
-        tvAge.setText(userProfile.get(ParseAdapter.KEY_AGE).toString());
+        tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + " years old");
         tvGender.setText(userProfile.get(ParseAdapter.KEY_GENDER).toString());
-        //_TODO LOCATION tvLocation.setText(userProfile.getLocation());
+        // Set location //
+        if(userProfile.get(ParseAdapter.KEY_LOCATION) != null){
+            tvLocation.setText("Last logged in at: " + userProfile.get(ParseAdapter.KEY_LOCATION).toString());
+        } else {
+            tvLocation.setText("Unknown Location");
+        }
 
         // Set picture with database information //
         loadImageFromDB();
 
         // Set ratingbar with database information//
-        if (userProfile.getNumber(ParseAdapter.KEY_RATINGAMOUNT).intValue() != 0) {
-            rbGradRating.setRating(userProfile.getNumber(ParseAdapter.KEY_RATING).floatValue() / userProfile.getNumber(ParseAdapter.KEY_RATING).intValue());
-        } else {
-            rbGradRating.setRating(0);
-        }
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("ratingObject");
+        query.whereEqualTo("userid", userProfile.getObjectId());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> list, ParseException e) {
+                if (list.size() != 0){
+                    ratingObject = list.get(0);
+                    if (ratingObject.getObjectId() != null) {
+                        if (ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue() != 0) {
+                            Log.d("Debug", "NUMBER OF RATING != 0");
+                            rbGradRating.setRating(ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue() / ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue());
+                        } else {
+                        Log.d("Debug", "NUMBER OF RATING = 0");
+                        rbGradRating.setRating(0);
+                        }
+                }else{
+                    Log.d("Debug", "LIST IS EMPTY");
+                    rbGradRating.setRating(0);
+                }
+            }
+        }});
 
-        // _TODO Set list view with database information//
+
+
+        // Set list view with database information//
+        loadSubjectFromDB();
 
         // On profile picture press, open camera and take picture for imageView //
         ivProfilePicture.setOnClickListener(new View.OnClickListener() {
@@ -148,8 +168,15 @@ public class OwnProfileFragment extends Fragment
         });
 
         // Do on subject swipe remove subject from array //
-        // This code is based on the Android-SwipeToDismiss example of use of the
-        // SwipeDissmissListViewTouchListener class//
+        setSwipeActive();
+
+        return myFragmentView;
+    }
+
+    // This code is based on the Android-SwipeToDismiss example of use of the
+    // SwipeDissmissListViewTouchListener class//
+    private void setSwipeActive(){
+
         SwipeDismissListViewTouchListener touchListener =
                 new SwipeDismissListViewTouchListener(
                         lvSubjects,
@@ -164,13 +191,11 @@ public class OwnProfileFragment extends Fragment
                                 for (int position : reverseSortedPositions) {
                                     mySubjectAdapter.remove(mySubjectAdapter.getItem(position));
                                 }
-                                //_TODO REMOVE FROM SUBJECT remove from db aswell//
+                                saveSubjectsToDB();
                                 mySubjectAdapter.notifyDataSetChanged();
                             }
                         });
         lvSubjects.setOnTouchListener(touchListener);
-
-        return myFragmentView;
     }
 
     // Note by Morten: //
@@ -209,7 +234,6 @@ public class OwnProfileFragment extends Fragment
             if (requestCode == CAMERA_REQUEST) {
                 Bitmap profilePicture = (Bitmap) data.getExtras().get("data");
                 Bitmap croppedPicture = cropImage(profilePicture);
-
                 saveImageToDB(croppedPicture);
 
                 roundImage = new RoundImage(croppedPicture);
@@ -265,7 +289,6 @@ public class OwnProfileFragment extends Fragment
     }
 
     private void saveImageToDB(Bitmap picture) {
-        //Bitmap test = BitmapFactory.decodeResource(getResources(), R.drawable.books);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         picture.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] image = stream.toByteArray();
@@ -299,21 +322,53 @@ public class OwnProfileFragment extends Fragment
     }
 
     private void loadImageFromDB() {
-        ParseFile profilePicture = (ParseFile)userProfile.get(ParseAdapter.KEY_PICTURE);
-        profilePicture.getDataInBackground(new GetDataCallback() {
-            @Override
-            public void done(byte[] bytes, ParseException e) {
-                if (e == null){
-                    Log.d("Debug", "Picture received");
-                    Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+        try {
+            final ParseFile profilePicture = (ParseFile) userProfile.get(ParseAdapter.KEY_PICTURE);
+            profilePicture.getDataInBackground(new GetDataCallback() {
+                @Override
+                public void done(byte[] bytes, ParseException e) {
+                    if (e == null) {
+                        Log.d("Debug", "Picture received");
+                        Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
-                    roundImage = new RoundImage(picture);
-                    ivProfilePicture.setImageDrawable(roundImage);
+                        roundImage = new RoundImage(picture);
+                        ivProfilePicture.setImageDrawable(roundImage);
+                    } else {
+                        Log.d("Debug", "Something went wrong");
+                    }
+                }
+            });
+        } catch (Exception e) {
+            Bitmap defaultPicture = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.default_profile);
+            roundImage = new RoundImage(defaultPicture);
+            ivProfilePicture.setImageDrawable(roundImage);
+        }
+
+    }
+
+    private void saveSubjectsToDB() {
+        userProfile.put(ParseAdapter.KEY_SUBJECTS, subjectArray);
+        userProfile.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("TEST", "succes");
                 } else {
-                    Log.d("Debug", "Something went wrong");
+                    Log.d("Test", "failed" + e.getLocalizedMessage());
                 }
             }
         });
+    }
+
+    private void loadSubjectFromDB() {
+        try{
+            ArrayList<String> testStringArrayList = (ArrayList<String>)userProfile.get(ParseAdapter.KEY_SUBJECTS);
+            mySubjectAdapter.addAll(testStringArrayList);
+            lvSubjects.setAdapter(mySubjectAdapter);
+        } catch (Exception e){
+            Log.d("Debug", "Array empty");
+        }
+
     }
 
 
@@ -327,7 +382,7 @@ public class OwnProfileFragment extends Fragment
                 }else {
                     mySubjectAdapter.add(selectedSubject);
                     lvSubjects.setAdapter(mySubjectAdapter);
-                    //_TODO SAVE SUBJECTS TO DATABASE //
+                    saveSubjectsToDB();
                 }}
             else{Toast.makeText(getActivity(), "Too many subjects added", Toast.LENGTH_SHORT).show();}
         }catch(Exception e){
