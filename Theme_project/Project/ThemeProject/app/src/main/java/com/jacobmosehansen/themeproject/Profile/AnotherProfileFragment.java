@@ -1,6 +1,7 @@
 package com.jacobmosehansen.themeproject.Profile;
 
 import android.app.Fragment;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,13 +42,16 @@ public class AnotherProfileFragment extends Fragment {
 
     // UI variables //
     ImageView ivProfilePicture;
-    TextView tvFullName, tvAge, tvGender, tvLocation;
+    TextView tvFullName, tvAge, tvGender, tvLocation, tvUsersSubjects, tvNumberOfRatings;
     RatingBar rbGradRating;
     Button btnRating;
     ArrayList<String> subjectArray = new ArrayList<String>();
     private ArrayAdapter<String> mySubjectAdapter;
     ListView lvSubjects;
     RoundImage roundImage;
+
+
+    private String age;
 
     // DB variables //
     String requestId;
@@ -69,12 +75,21 @@ public class AnotherProfileFragment extends Fragment {
         tvAge = (TextView) myFragmentView.findViewById(R.id.tv_age);
         tvGender = (TextView) myFragmentView.findViewById(R.id.tv_gender);
         tvLocation = (TextView) myFragmentView.findViewById(R.id.tv_location);
+        tvUsersSubjects = (TextView) myFragmentView.findViewById(R.id.tv_usersSubjects);
 
         rbGradRating = (RatingBar) myFragmentView.findViewById(R.id.ratingBar_profileRating);
         btnRating = (Button) myFragmentView.findViewById(R.id.btn_rating);
+        tvNumberOfRatings = (TextView) myFragmentView.findViewById(R.id.tv_numberOfRatings);
 
         lvSubjects = (ListView) myFragmentView.findViewById(R.id.lv_subjects);
         mySubjectAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, subjectArray);
+
+        // Fetch resources //
+        final String userYearsOld = getResources().getString(R.string.userYearsOld_text);
+        final String lastLogin = getResources().getString(R.string.lastLogin_text);
+        final String unknownLocation = getResources().getString(R.string.unkownLocation_text);
+        final String anotherUserSubjects = getResources().getString(R.string.anotherUsersSubjects_text);
+        final String numberOfSubjectsTxt = getResources().getString(R.string.numberOfSubjects_text);
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo("objectId", requestId);
@@ -89,89 +104,88 @@ public class AnotherProfileFragment extends Fragment {
                         if (userProfile.getObjectId() != null) {
                             // Set textView's with database information //
                             tvFullName.setText(userProfile.getUsername());
-                            tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + " years old");
+                            tvAge.setText(userProfile.getString(ParseAdapter.KEY_AGE) + userYearsOld);
                             tvGender.setText(userProfile.getString(ParseAdapter.KEY_GENDER));
                             // Set location //
-                            if(userProfile.get(ParseAdapter.KEY_LOCATION) != null){
-                                tvLocation.setText("Last logged in at: " + userProfile.get(ParseAdapter.KEY_LOCATION).toString());
+                            if (userProfile.get(ParseAdapter.KEY_LOCATION) != null) {
+                                tvLocation.setText(lastLogin + userProfile.get(ParseAdapter.KEY_LOCATION).toString());
                             } else {
-                                tvLocation.setText("Unknown Location");
+                                tvLocation.setText(unknownLocation);
                             }
+                            // Set users subjects text //
+                            tvUsersSubjects.setText(userProfile.getUsername() + anotherUserSubjects);
 
                             // Load profile picture
                             loadImageFromDB();
 
                             // load subjects
                             loadSubjectFromDB();
+                            Log.d("Test", "Loaded subjects");
 
                             ParseQuery<ParseObject> query = ParseQuery.getQuery("ratingObject");
                             query.whereEqualTo("userid", userProfile.getObjectId());
                             query.findInBackground(new FindCallback<ParseObject>() {
-                                @Override
-                                public void done(List<ParseObject> list, ParseException e) {
-                                    if (list.size() != 0){
-                                        ratingObject = list.get(0);
-                                        if (ratingObject.getObjectId() != null) {
-                                            // Set ratingbar with database information//
-                                            if (ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue() != 0) {
-                                                Log.d("Debug", "NUMBER OF RATING != 0");
-                                                rbGradRating.setRating(ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue() / ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue());
-                                            } else {
-                                                Log.d("Debug", "NUMBER OF RATING = 0");
-                                                rbGradRating.setRating(0);
-                                            }
+                                                       @Override
+                                                       public void done(List<ParseObject> list, ParseException e) {
+                                                           if (list.size() != 0) {
+                                                               ratingObject = list.get(0);
+                                                               if (ratingObject.getObjectId() != null) {
+                                                                   // Set ratingbar with database information//
+                                                                   if (ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue() != 0) {
+                                                                       Log.d("Debug", "NUMBER OF RATING != 0");
+                                                                       rbGradRating.setRating(ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue() / ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue());
+                                                                   } else {
+                                                                       Log.d("Debug", "NUMBER OF RATING = 0");
+                                                                       rbGradRating.setRating(0);
+                                                                   }
+                                                                   tvNumberOfRatings.setText("(" + ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).toString() + numberOfSubjectsTxt + ")");
+                                                                   btnRating.setOnClickListener(new View.OnClickListener() {
+                                                                       public void onClick(View v) {
+                                                                           float rating = rbGradRating.getRating();
+                                                                           float totalRating = ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue();
+                                                                           Integer numberOfRatings = ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue();
 
-                                            btnRating.setOnClickListener(new View.OnClickListener() {
-                                                public void onClick(View v) {
-                                                    float rating = rbGradRating.getRating();
-                                                    float totalRating = ratingObject.getNumber(ParseAdapter.KEY_TOTALRATING).floatValue();
-                                                    Integer numberOfRatings = ratingObject.getNumber(ParseAdapter.KEY_NUMBEROFRATINGS).intValue();
+                                                                           totalRating = totalRating + rating;
+                                                                           ratingObject.put(ParseAdapter.KEY_TOTALRATING, totalRating);
+                                                                           Log.d("Debug", "Writing " + totalRating + " TOTALRATING");
 
-                                                    totalRating = totalRating + rating;
-                                                    ratingObject.put(ParseAdapter.KEY_TOTALRATING, totalRating);
-                                                    Log.d("Debug", "Writing" + totalRating + " TOTALRATING");
+                                                                           numberOfRatings = numberOfRatings + 1;
+                                                                           ratingObject.put(ParseAdapter.KEY_NUMBEROFRATINGS, numberOfRatings);
+                                                                           Log.d("Debug", "Writing " + numberOfRatings + " NUMBEROFRATINGS");
 
-                                                    numberOfRatings = numberOfRatings + 1;
-                                                    ratingObject.put(ParseAdapter.KEY_NUMBEROFRATINGS, numberOfRatings);
-                                                    Log.d("Debug", "Writing" + numberOfRatings + " NUMBEROFRATINGS");
+                                                                           float currentRating = totalRating / numberOfRatings;
 
-                                                    float currentRating = totalRating / numberOfRatings;
+                                                                           rbGradRating.setRating(currentRating);
 
-                                                    rbGradRating.setRating(currentRating);
-
-                                                    ratingObject.saveInBackground(new SaveCallback() {
-                                                        @Override
-                                                        public void done(ParseException e) {
-                                                            if (e == null) {
-                                                                Log.d("Test", "succes");
-                                                            } else {
-                                                                Log.d("Test", "failed " + e.getLocalizedMessage());
-                                                            }
-                                                        }
-                                                    });
-                                                }
-                                            });
-
-
-                                        }
-                                    } else {
-                                        rbGradRating.setRating(0);
-                                    }
-                                }
-
-                                }
-
-                                );
-
-                            }
+                                                                           ratingObject.saveInBackground(new SaveCallback() {
+                                                                               @Override
+                                                                               public void done(ParseException e) {
+                                                                                   if (e == null) {
+                                                                                       Log.d("Test", "Success @ ratingObject.saveInBackground");
+                                                                                   } else {
+                                                                                       Log.d("Test", "Failed @ ratingObject.saveInBackground " + e.getLocalizedMessage());
+                                                                                   }
+                                                                               }
+                                                                           });
+                                                                       }
+                                                                   });
 
 
+                                                               }
+                                                           } else {
+                                                               rbGradRating.setRating(0);
+                                                           }
+                                                       }
+                            });
                         }
-                    }else{
-                        Toast.makeText(getActivity(), "Could not find User", Toast.LENGTH_SHORT).show();
                     }
+                } else {
+                    Toast.makeText(getActivity(), "Could not find User", Toast.LENGTH_SHORT).show();
                 }
+            }
         });
+
+
         return myFragmentView;
     }
 
@@ -182,13 +196,13 @@ public class AnotherProfileFragment extends Fragment {
                 @Override
                 public void done(byte[] bytes, ParseException e) {
                     if (e == null) {
-                        Log.d("Debug", "Picture received");
+                        Log.d("Debug", "Picture received @ loadImageFromDB");
                         Bitmap picture = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
 
                         roundImage = new RoundImage(picture);
                         ivProfilePicture.setImageDrawable(roundImage);
                     } else {
-                        Log.d("Debug", "Something went wrong");
+                        Log.d("Debug", "Something went wrong @ loadImageFromDB");
                     }
                 }
             });
@@ -211,7 +225,7 @@ public class AnotherProfileFragment extends Fragment {
             mySubjectAdapter.addAll(testStringArrayList);
             lvSubjects.setAdapter(mySubjectAdapter);
         } catch (Exception e){
-            Log.d("Debug", "Array empty");
+            Log.d("Debug", "Array empty @ loadSubjectFromDB");
         }
 
     }

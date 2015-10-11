@@ -51,6 +51,32 @@ class PostAdaptor extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
+
+        /*if (convertView == null){
+            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.post_list, null);
+        }
+        chatItem = chatItems.get(position);
+        if(chatItem != null){
+            TextView txtTopic = (TextView) convertView.findViewById(R.id.txtChatListItemTopic);
+            TextView txtPerson = (TextView) convertView.findViewById(R.id.txtChatListItemPerson);
+            ImageView imgPerson = (ImageView) convertView.findViewById(R.id.imvChatListItem);
+
+            txtTopic.setText(chatItem.getTopic());
+            txtPerson.setText(chatItem.getPerson());
+
+            if(chatItem.getPersonImg() != null){
+                imgPerson.setImageDrawable(chatItem.getPersonImg());
+            }
+            else{
+                Bitmap bm = BitmapFactory.decodeResource(convertView.getResources(), R.drawable.default_profile);
+                roundImage = new RoundImage(bm);
+                imgPerson.setImageDrawable(roundImage);
+            }
+        }
+
+        return convertView;*/
+
         post = posts.get(position);
         if(posts!=null){
             TextView txtName = (TextView) convertView.findViewById(R.id.name);

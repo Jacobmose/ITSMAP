@@ -15,7 +15,15 @@ import com.jacobmosehansen.themeproject.R;
 /**
  * Created by Marlene on 08-10-2015.
  */
+<<<<<<< HEAD
+    //Skal starte naar der trykkes paa "Posts" fra starten af.
+=======
+<<<<<<< HEAD
+    //Skal starte naar der trykkes paa "Posts" fra starten af.
+=======
     //Skal starte nr der trykkes p "Posts" fra starten af.
+>>>>>>> 7741144265b2dc30d1b9aac7e6f96f22a892f31d
+>>>>>>> 4f4af16fbcc0f2238017ceb23ffd50dadda9edd9
     //Skal hente data omkring hvilke posts der er i DB'en.
     //Skal initiere fragment "details" samt den nye aktivitet "New post".
 
