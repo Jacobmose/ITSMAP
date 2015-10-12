@@ -11,11 +11,11 @@
     <string name="txt_username">Username</string>
     <string name="txt_age">Age</string>
     <string name="txt_gender">Gender</string>
-    <string name="txt_password">Password</string>
+    <string name="txt_password">Password (min. 8 digits)</string>
     <string name="btn_sign_up">Sign up</string>
     <string name="btn_back_to_login">Back to Login</string>
 
-    <string name="tv_create_user_description">To create a new user and get the help you need, please complete this form</string>
+    <string name="tv_create_user_description">To create a new user and get the help you need, please enter your details and click create user.</string>
 
     <string name="toast_invalid_password">Error: Password must be at least 8 characters!</string>
     <string name="toast_invalid_email">Error: Email is not valid format!</string>

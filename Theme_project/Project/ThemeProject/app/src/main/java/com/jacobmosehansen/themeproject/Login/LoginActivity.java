@@ -88,12 +88,11 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                 public void done(ParseUser user, com.parse.ParseException e) {
 
                                     if (user != null) {
-                                        Log.d("4", "IN IF USER != NULL");
                                         Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_login_success), Toast.LENGTH_SHORT).show();
-                                        startActivity(intent);
-                                        startService(serviceIntent);
                                         currentUser = ParseUser.getCurrentUser();
                                         getLocation();
+                                        startActivity(intent);
+                                        startService(serviceIntent);
                                     } else {
                                         Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_invalid_email_password), Toast.LENGTH_SHORT).show();
                                     }
@@ -129,31 +128,28 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void getLocation(){
 
-        Log.d("1", "first");
+        Log.d("1", "Entered getLocation()");
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
-        Log.d("1", mLastLocation.toString());
-
         geocoder = new Geocoder(this, Locale.getDefault());
 
-        _latitude = mLastLocation.getLatitude();
-        _longitude = mLastLocation.getLongitude();
-
-
         if (mLastLocation != null){
+
+            _latitude = mLastLocation.getLatitude();
+            _longitude = mLastLocation.getLongitude();
 
             try {
                 List<Address> addresses = geocoder.getFromLocation(_latitude, _longitude, 1);
                 StringBuilder sb = new StringBuilder();
 
-                Log.d("2", "second");
+                Log.d("2", "Location is != null");
 
                 if (addresses.size() > 0){
                     Address address = addresses.get(0);
                     sb.append(address.getSubLocality());
 
-                    Log.d("3", "third");
+                    Log.d("3", "Address is found, should be all good");
 
                     _actualLocation = sb.toString();
 
@@ -161,9 +157,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     currentUser.saveInBackground();
                 }
             } catch (IOException e) {
+                Log.d("4", "IOException is catched. Location was not found");
                 Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_io_exception), Toast.LENGTH_LONG).show();
             }
-
         }
     }
 
@@ -212,9 +208,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         checkPlayServices();
 
         if(currentUser != null) {
+            getLocation();
             startActivity(intent);
             startService(serviceIntent);
-            //getLocation();
         }
     }
 
@@ -242,5 +238,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             currentUser.logOutInBackground();
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 }

@@ -7,5 +7,6 @@
     <item name="darkBlue" type="color">#5C9FD6</item>
     <item name="blueGrey" type="color">#B1C8E1</item>
     <item name="neon" type="color">#439B00</item>
+    <item name="black" type="color">#000000</item>
 
 </resources>

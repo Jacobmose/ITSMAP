@@ -1,71 +1,73 @@
 package com.jacobmosehansen.themeproject.Post;
 
-/**
- * Created by Marlene on 08-10-2015.
- */
+import android.graphics.drawable.Drawable;
+
 public class Post {
 
-    private String headline;
-    private String level;
-    private String course;
-    private String post;
-    private String name;
+    private Drawable _postImg;
+    private String _title;
+    private String _level;
+    private String _subject;
+    private String _post;
+    private String _name;
 
-    public Post(String postHeadline, String level, String course, String postText, String name){
 
-        headline = postHeadline;
-        this.level = level;
-        this.course = course;
-        post = postText;
-        this.name = name;
+    public Post(String title, String level, String subject, String postText, String name){
+
+        this._title = title;
+        this._level = level;
+        this._subject = subject;
+        this._post = postText;
+        this._name = name;
     }
 
-    public Post(String postHeadline, String level, String course, String name){
 
-        headline = postHeadline;
-        this.level = level;
-        this.course = course;
-        post="";
-        this.name = name;
+    public Post(String title, String level, String subject, String name, Drawable img){
+        this._postImg = img;
+        this._title = title;
+        this._level = level;
+        this._subject = subject;
+        this._post="";
+        this._name = name;
     }
 
-    public String getHeadline() {
-        return headline;
+    public Post(Drawable img, String title, String name, String subject, String level) {
+        this._postImg = img;
+        this._title = title;
+        this._name = name;
+        this._subject = subject;
+        this._level = level;
     }
 
-    public void setHeadline(String overskrift) {
-        this.headline = overskrift;
-    }
+    public Drawable getPostImg() { return _postImg; }
 
-    public String getLevel() {
-        return level;
-    }
+    public void setPostImg(Drawable postImg) { _postImg = postImg; }
 
-    public void setLevel(String level) {
-        this.level = level;
-    }
+    public String getTitle() { return _title; }
 
-    public String getCourse() {
-        return course;
-    }
+    public void setTitle(String title) { this._title = title; }
 
-    public void setCourse(String course) {
-        this.course = course;
-    }
+    public String getLevel() { return _level; }
+
+    public void setLevel(String level) { this._level = level; }
+
+    public String getSubject() { return _subject; }
+
+    public void setSubject(String subject) { this._subject = subject; }
 
     public String getPost() {
-        return post;
+        return _post;
     }
 
     public void setPost(String post) {
-        this.post = post;
+        this._post = post;
     }
 
     public String getName() {
-        return name;
+        return _name;
     }
 
-    public void setName(String author) {
-        this.name = author;
+    public void setName(String name) {
+        this._name = name;
     }
 }
