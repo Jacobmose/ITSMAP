@@ -2,6 +2,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@color/blueGrey</item>
     </style>
 
     <style name="ratingBarGraduationHat" parent="@android:style/Widget.RatingBar">
@@ -13,6 +14,11 @@
     <style name="spinnerDayYearStyle" >
         <item name="android:textSize">70sp</item>
     </style>
+
+    <style name="buttonTheme" parent="android:style/Widget.Button">
+        <item name="android:background">@color/lightGreen</item>
+    </style>
+
 </resources>
 
 

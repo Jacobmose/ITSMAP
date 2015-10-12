@@ -30,7 +30,8 @@
                 android:id="@+id/tvLoginDescription"
                 android:layout_weight="1"
                 android:layout_margin="20dp"
-                android:layout_gravity="center" />
+                android:layout_gravity="center"
+                android:gravity="center" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -75,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_login"
-                android:background="@color/lightGreen"
                 android:layout_margin="5dp" />
 
             <Button
@@ -84,7 +84,6 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_createUser"
-                android:background="@color/lightGreen"
                 android:layout_margin="5dp" />
 
         </LinearLayout>
