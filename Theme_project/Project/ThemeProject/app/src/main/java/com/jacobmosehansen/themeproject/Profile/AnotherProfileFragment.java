@@ -50,9 +50,6 @@ public class AnotherProfileFragment extends Fragment {
     ListView lvSubjects;
     RoundImage roundImage;
 
-
-    private String age;
-
     // DB variables //
     String requestId;
     ParseUser userProfile;
