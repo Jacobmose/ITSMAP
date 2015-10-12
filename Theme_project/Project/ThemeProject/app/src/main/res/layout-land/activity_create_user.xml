@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -8,20 +8,20 @@
     android:gravity="center"
     tools:context="com.jacobmosehansen.themeproject.Login.CreateUserActivity">
 
-    <TextView
-        android:id="@+id/tvCreateUserDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/tv_create_user_description"
-        android:layout_margin="20dp"
-        android:gravity="center"/>
-
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
+
+        <TextView
+            android:id="@+id/tvCreateUserDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tv_create_user_description"
+            android:layout_margin="20dp"
+            android:gravity="center"/>
 
         <TableRow
             android:layout_width="match_parent"
@@ -45,21 +45,18 @@
             android:layout_margin="5dp">
 
             <Spinner
-                style="@style/spinnerDayYearStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/sprDay"
                 android:layout_weight="1"/>
 
             <Spinner
-                style="@style/spinnerDayYearStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/sprMonth"
                 android:layout_weight="1"/>
 
             <Spinner
-                style="@style/spinnerDayYearStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/sprYear"
@@ -119,9 +116,10 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/txt_createUser"
+                android:background="@color/lightGreen"
                 android:layout_margin="5dp" />
         </TableRow>
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>

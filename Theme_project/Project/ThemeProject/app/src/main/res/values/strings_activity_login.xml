@@ -7,7 +7,9 @@
     <string name="loginSuccess">Login Success!</string>
     <string name="io_exception">Oops, IOException occurred..</string>
     <!-- activity_profile strings -->
-    <string name="title_activity_login">LoginActivity</string> <!-- _TODO Consider change this -->
+    <string name="title_activity_login">Study Buddy</string> <!-- _TODO Consider change this -->
+
+    <string name="ed_login_user_name">Username</string>
 
     <string name="toast_login_success">Login Success!</string>
     <string name="toast_invalid_email_password">Invalid email or password!</string>

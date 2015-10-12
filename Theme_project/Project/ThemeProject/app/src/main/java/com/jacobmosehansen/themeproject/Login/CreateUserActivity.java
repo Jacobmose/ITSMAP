@@ -79,11 +79,11 @@ public class CreateUserActivity extends AppCompatActivity {
         dayArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, dayValues);
         sprDay.setAdapter(dayArrayAdapter);
 
-        monthArrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.sa_months));
+        monthArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.sa_months));
         sprMonth.setAdapter(monthArrayAdapter);
 
         yearValues = new ArrayList<String>();
-        for (Integer i = 1900; i <= 2015; i++){
+        for (Integer i = 2015; i >= 1900; i--){
             yearValues.add(Integer.toString(i));
         }
         yearArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, yearValues);
@@ -184,5 +184,4 @@ public class CreateUserActivity extends AppCompatActivity {
     public boolean isEmailValid(CharSequence email){
         return Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
-
 }

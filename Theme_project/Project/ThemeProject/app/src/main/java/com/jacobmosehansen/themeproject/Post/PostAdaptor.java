@@ -1,44 +1,85 @@
 package com.jacobmosehansen.themeproject.Post;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jacobmosehansen.themeproject.R;
+import com.jacobmosehansen.themeproject.Tools.RoundImage;
 
 import java.util.ArrayList;
 
 /**
  * Created by Marlene on 10-10-2015.
  */
-class PostAdaptor extends BaseAdapter{
+class PostAdaptor extends BaseAdapter {
 
-    Context context;
-    ArrayList<Post> posts;
-    Post post = null;
+    Context _context;
+    ArrayList<Post> _postItems;
+    Post _postItem = null;
+    RoundImage roundImage;
 
-    public PostAdaptor(Context c, ArrayList<Post> postList){
-        posts = postList;
-        context = c;
+
+    public PostAdaptor(Context context, ArrayList<Post> postItems){
+        this._postItems = postItems;
+        this._context = context;
     }
+
+    public View getView(int position, View convertView, ViewGroup parent){
+
+        if (convertView == null){
+            LayoutInflater mInflater = (LayoutInflater) _context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+            convertView = mInflater.inflate(R.layout.post_list_items, null);
+        }
+
+        _postItem = _postItems.get(position);
+
+        if (_postItem != null){
+            ImageView imgPost = (ImageView) convertView.findViewById(R.id.ivImgPost);
+            TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+            TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
+            TextView tvSubject = (TextView) convertView.findViewById(R.id.tvSubject);
+            TextView tvLevel = (TextView) convertView.findViewById(R.id.tvLevel);
+
+            tvTitle.setText(_postItem.getTitle());
+            tvName.setText(_postItem.getName());
+            tvSubject.setText(_postItem.getSubject());
+            tvLevel.setText(_postItem.getLevel());
+
+            if (_postItem.getPostImg() != null) {
+                imgPost.setImageDrawable(_postItem.getPostImg());
+            }
+            else {
+                Bitmap bm = BitmapFactory.decodeResource(convertView.getResources(), R.drawable.default_profile);
+                roundImage = new RoundImage(bm);
+                imgPost.setImageDrawable(roundImage);
+            }
+        }
+
+        return convertView;
+    }
+
 
     @Override
     public int getCount() {
-        if (posts!=null) {
-            return posts.size();
-        }else {
+        if (_postItems!=null) {
+            return _postItems.size();
+        } else {
             return 0;
         }
     }
 
     @Override
     public Object getItem(int position) {
-        if (posts!=null){
-            return posts.get(position);
+        if (_postItems!=null){
+            return _postItems.get(position);
         }
         return null;
     }
@@ -46,42 +87,5 @@ class PostAdaptor extends BaseAdapter{
     @Override
     public long getItemId(int position) {
         return position;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-
-        /*if (convertView == null){
-            LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.post_list, null);
-        }
-        chatItem = chatItems.get(position);
-        if(chatItem != null){
-            TextView txtTopic = (TextView) convertView.findViewById(R.id.txtChatListItemTopic);
-            TextView txtPerson = (TextView) convertView.findViewById(R.id.txtChatListItemPerson);
-            ImageView imgPerson = (ImageView) convertView.findViewById(R.id.imvChatListItem);
-
-            txtTopic.setText(chatItem.getTopic());
-            txtPerson.setText(chatItem.getPerson());
-
-            if(chatItem.getPersonImg() != null){
-                imgPerson.setImageDrawable(chatItem.getPersonImg());
-            }
-            else{
-                Bitmap bm = BitmapFactory.decodeResource(convertView.getResources(), R.drawable.default_profile);
-                roundImage = new RoundImage(bm);
-                imgPerson.setImageDrawable(roundImage);
-            }
-        }
-
-        return convertView;*/
-
-        post = posts.get(position);
-        if(posts!=null){
-            TextView txtName = (TextView) convertView.findViewById(R.id.name);
-            txtName.setText(post.getName());
-        }
-        return convertView;
     }
 }

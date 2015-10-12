@@ -9,7 +9,7 @@
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/lvPostList"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="58dp" />
@@ -20,7 +20,7 @@
         android:text="New Post"
         android:id="@+id/btn_newPost"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/listView"
+        android:layout_alignEnd="@+id/lvPostList"
         android:nestedScrollingEnabled="false"
         android:onClick="onClickNewPost" />
 

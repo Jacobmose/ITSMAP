@@ -29,9 +29,8 @@
                 android:text="@string/tv_login_description"
                 android:id="@+id/tvLoginDescription"
                 android:layout_weight="1"
-                android:layout_margin="20dp"
-                android:layout_gravity="center"
-                android:gravity="center" />
+                android:layout_margin="5dp"
+                android:layout_gravity="center" />
 
             <EditText
                 android:layout_width="match_parent"
@@ -39,7 +38,7 @@
                 android:inputType="text"
                 android:id="@+id/edLoginEmail"
                 android:layout_weight="1"
-                android:layout_margin="20dp"
+                android:layout_margin="5dp"
                 android:hint="@string/ed_login_user_name"/>
 
             <EditText
@@ -48,7 +47,7 @@
                 android:inputType="textPassword"
                 android:id="@+id/edLoginPassword"
                 android:layout_weight="1"
-                android:layout_margin="20dp"
+                android:layout_margin="5dp"
                 android:hint="@string/txt_password"/>
 
         </LinearLayout>
@@ -76,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_login"
+                android:background="@color/lightGreen"
                 android:layout_margin="5dp" />
 
             <Button
@@ -84,6 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_createUser"
+                android:background="@color/lightGreen"
                 android:layout_margin="5dp" />
 
         </LinearLayout>
