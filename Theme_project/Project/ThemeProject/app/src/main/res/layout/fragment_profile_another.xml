@@ -110,6 +110,7 @@
                         android:layout_height="48dp"
                         android:text="@string/rateBtn_text"
                         android:id="@+id/btn_rating"
+                        android:layout_margin="5dp"
                         android:background="@color/defaultButtonColor" />
 
 
