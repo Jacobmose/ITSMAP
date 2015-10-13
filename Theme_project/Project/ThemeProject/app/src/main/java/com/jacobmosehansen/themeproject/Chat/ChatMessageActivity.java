@@ -160,7 +160,7 @@ public class ChatMessageActivity extends AppCompatActivity {
                     parseChat = list.get(0);
                     populateMessageHistory(parseChat);
                 } else {
-                    Log.d("TEST", "FAILED");
+                    Log.d("Error: ", "FAILED");
                 }
             }
         });
@@ -194,10 +194,10 @@ public class ChatMessageActivity extends AppCompatActivity {
                         }
                     }
                 } else {
-                    Log.d("TEST", "no topics");
+                    Log.d("TEST", "No Topics");
                 }
             } else {
-                Log.d("TEST", "no topic");
+                Log.d("TEST", "No Topic");
             }
             return null;
         }
@@ -263,11 +263,10 @@ public class ChatMessageActivity extends AppCompatActivity {
                                                 topics.add(object);
                                             }
                                         } catch (com.parse.ParseException ex) {
-                                            Log.d("ERROR", "onMessageReceive " + ex.getLocalizedMessage());
+                                            Log.d("ERROR", "onMessageReceive: " + ex.getLocalizedMessage());
                                         }
                                     }
                                     if (!messageTrue) {
-                                        Log.d("TEST", "onMessageExist1");
                                         final ParseObject parseMessageMore = new ParseObject("ParseMessage");
                                         parseMessageMore.put("senderId", wrapper.message.getSenderId());
                                         parseMessageMore.put("recipientId", wrapper.writableMessage.getRecipientIds().get(0));
@@ -348,11 +347,6 @@ public class ChatMessageActivity extends AppCompatActivity {
 
         @Override
         public void onIncomingMessage(MessageClient client, final Message message) {
-            Toast.makeText(ChatMessageActivity.this, "message", Toast.LENGTH_LONG).show();
-
-            //Log.d("Test", client.toString());
-            Log.d("Test", "Sender: " + message.getSenderId());
-            Log.d("Test", "Recipient: " + message.getRecipientIds().get(0));
 
             String[] parts = message.getTextBody().split("#-#");
             String part1 = parts[0];
@@ -361,7 +355,6 @@ public class ChatMessageActivity extends AppCompatActivity {
 
             if (message.getSenderId().equals(chat.getPersonId())
                     && part1.equals(chat.getTopic())) {
-                Log.d("Test", "succes");
                 messageAdapter.addMessage(writableMessage, MessageAdapter.DIRECTION_INCOMING);
             }
 

@@ -46,12 +46,10 @@ class PostAdaptor extends BaseAdapter {
             TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
             TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
             TextView tvSubject = (TextView) convertView.findViewById(R.id.tvSubject);
-            TextView tvLevel = (TextView) convertView.findViewById(R.id.tvLevel);
 
             tvTitle.setText(_postItem.getTitle());
             tvName.setText(_postItem.getName());
             tvSubject.setText(_postItem.getSubject());
-            tvLevel.setText(_postItem.getLevel());
 
             if (_postItem.getPostImg() != null) {
                 imgPost.setImageDrawable(_postItem.getPostImg());

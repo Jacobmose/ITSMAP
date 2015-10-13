@@ -14,19 +14,16 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
 
-import com.jacobmosehansen.themeproject.Chat.ChatActivity;
+import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
 import com.jacobmosehansen.themeproject.Chat.MessageService;
 import com.jacobmosehansen.themeproject.Login.LoginActivity;
 import com.jacobmosehansen.themeproject.Post.NewPostActivity;
 import com.jacobmosehansen.themeproject.Post.PostsActivity;
 import com.jacobmosehansen.themeproject.Profile.ProfileActivity;
 
-//import com.jacobmosehansen.themeproject.Profile.UserProfile;
 import com.parse.LogOutCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
-
-
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -82,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
         btn_chat.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                startActivityForResult(intent, 1);
+                Intent intent = new Intent(MainActivity.this, ChatListActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -114,8 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, 1);
                 //Remove this! - made for testing//
 
-                /*Intent intent = new Intent(MainActivity.this, ChatActivity.class);
-                intent.putExtra("RECIPIENT_ID", "MmDjqfcqR7");
+                /*intent.putExtra("RECIPIENT_ID", "MmDjqfcqR7");
                 intent.putExtra("TOPIC_ID", "Topic Test");
                 startActivity(intent);
                 */
