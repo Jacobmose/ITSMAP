@@ -6,7 +6,7 @@
     <ImageView
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:id="@+id/imageView"
+        android:id="@+id/imageView_post_show"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:clickable="true" />
@@ -17,7 +17,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="First name Last name"
         android:id="@+id/name"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/imageView_post_show"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="15dp"/>
 
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Headline on Post"
-        android:id="@+id/Headline"
+        android:id="@+id/Post_Headline"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/name"
         android:layout_marginTop="30dp"/>
@@ -35,9 +35,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Post_note"
-        android:layout_below="@+id/Headline"
+        android:layout_below="@+id/Post_Headline"
         android:layout_toEndOf="@+id/name"
         android:hint="Subject"
+        android:editable="false"
         android:clickable="false" />
 
     <EditText
@@ -46,6 +47,7 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/editText3"
+        android:editable="false"
         android:layout_below="@+id/name"
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp" />
@@ -54,7 +56,7 @@
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="Contact"
-        android:id="@+id/button2"
+        android:id="@+id/btn_StartChat"
         android:layout_below="@+id/editText3"
         android:layout_alignEnd="@+id/editText3"
         android:layout_marginTop="27dp" />
@@ -64,6 +66,6 @@
         android:layout_height="wrap_content"
         android:text="Show Profile"
         android:id="@+id/btn_showProfile"
-        android:layout_alignBottom="@+id/button2"
+        android:layout_alignBottom="@+id/btn_StartChat"
         android:layout_alignStart="@+id/editText3" />
 </RelativeLayout>

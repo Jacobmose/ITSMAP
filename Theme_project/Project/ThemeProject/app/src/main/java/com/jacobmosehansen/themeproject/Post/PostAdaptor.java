@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.RoundImage;
+import com.parse.ParseObject;
 
 import java.util.ArrayList;
 
@@ -22,24 +23,31 @@ import java.util.ArrayList;
 class PostAdaptor extends BaseAdapter {
 
     Context _context;
-    ArrayList<Post> _postItems;
+    ArrayList<ParseObject> _postItems;
     Post _postItem = null;
     RoundImage roundImage;
 
 
-    public PostAdaptor(Context context, ArrayList<Post> postItems){
+    public PostAdaptor(Context context, ArrayList<ParseObject> postItems){
         this._postItems = postItems;
         this._context = context;
     }
 
     public View getView(int position, View convertView, ViewGroup parent){
 
+        String tagString = "";
+        LayoutInflater inflater = (LayoutInflater) _context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
         if (convertView == null){
             LayoutInflater mInflater = (LayoutInflater) _context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             convertView = mInflater.inflate(R.layout.post_list_items, null);
+            ImageView imgPost = (ImageView) convertView.findViewById(R.id.ivImgPost);
+            TextView tvTitle = (TextView) convertView.findViewById(R.id.tvTitle);
+            TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
+            TextView tvSubject = (TextView) convertView.findViewById(R.id.tvSubject);
         }
 
-        _postItem = _postItems.get(position);
+        ParseObject _postItem = getItem(position);
 
         if (_postItem != null){
             ImageView imgPost = (ImageView) convertView.findViewById(R.id.ivImgPost);
@@ -47,18 +55,25 @@ class PostAdaptor extends BaseAdapter {
             TextView tvName = (TextView) convertView.findViewById(R.id.tvName);
             TextView tvSubject = (TextView) convertView.findViewById(R.id.tvSubject);
 
-            tvTitle.setText(_postItem.getTitle());
-            tvName.setText(_postItem.getName());
-            tvSubject.setText(_postItem.getSubject());
+            tvTitle.setText(_postItem.get("Headline").toString());
+            tvName.setText("User: " + _postItem.get("UserName").toString());
+            ArrayList<String> tagList = (ArrayList<String>) _postItem.get("Topic");
+            for (int i = 0; i < tagList.size(); i++) {
+                if (i != 0) {
+                    tagString += ", ";
+                }
+                tagString = tagList.get(i).toString();
+            }
+            tvSubject.setText("Topics: " + tagString);
 
-            if (_postItem.getPostImg() != null) {
+            /*if (_postItem.getPostImg() != null) {
                 imgPost.setImageDrawable(_postItem.getPostImg());
             }
-            else {
+            else {*/
                 Bitmap bm = BitmapFactory.decodeResource(convertView.getResources(), R.drawable.default_profile);
                 roundImage = new RoundImage(bm);
                 imgPost.setImageDrawable(roundImage);
-            }
+            //}
         }
 
         return convertView;
@@ -75,7 +90,7 @@ class PostAdaptor extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
+    public ParseObject getItem(int position) {
         if (_postItems!=null){
             return _postItems.get(position);
         }

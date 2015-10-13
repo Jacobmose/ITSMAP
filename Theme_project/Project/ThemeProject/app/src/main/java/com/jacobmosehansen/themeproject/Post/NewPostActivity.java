@@ -19,8 +19,10 @@ import android.widget.Toast;
 
 import com.jacobmosehansen.themeproject.R;
 import com.jacobmosehansen.themeproject.Tools.NothingSelectedSpinnerAdapter;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 
@@ -32,10 +34,9 @@ import java.util.ArrayList;
 
 public class NewPostActivity extends AppCompatActivity {
 
-    String headline;
+    EditText headline;
     Spinner subjects;
-    String postText;
-    ParseObject object;
+    EditText postText;
     String userId;
     ParseUser userProfile = ParseUser.getCurrentUser();
     ArrayList<String> subjectArray = new ArrayList<String>();
@@ -43,19 +44,23 @@ public class NewPostActivity extends AppCompatActivity {
     ArrayList<String> topics;
     ListView topicList;
     Button btnAddSubject;
+    Button btnCancel;
+    Button btnSubmit;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
-        object = new ParseObject("ParsePost");
         mySubjectAdapter = new ArrayAdapter<String>(NewPostActivity.this, android.R.layout.simple_list_item_1, subjectArray);
         topicList = (ListView) findViewById(R.id.listView2);
-        headline = (findViewById(R.id.headLine)).toString();
+        headline = (EditText) findViewById(R.id.headLine);
         subjects = (Spinner) findViewById(R.id.spinner2);
-        postText = (findViewById(R.id.postText).toString());
-        //userId = ParseUser.getCurrentUser().getObjectId();
+        postText = (EditText) findViewById(R.id.postText);
+        userId = ParseUser.getCurrentUser().getObjectId();
         btnAddSubject = (Button) findViewById(R.id.btn_AddSubject);
+
+        btnCancel = (Button) findViewById(R.id.btn_cancel);
+        btnSubmit = (Button) findViewById(R.id.btn_submit);
 
         final ArrayAdapter<CharSequence> myAdapter = ArrayAdapter.createFromResource(NewPostActivity.this,
                 R.array.subjects_array, android.R.layout.simple_spinner_item);
@@ -72,62 +77,51 @@ public class NewPostActivity extends AppCompatActivity {
                 selectFromSpinner();
             }
         });
-    }
 
-    protected void onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View myFragmentView = inflater.inflate(R.layout.activity_new_post, container, false);
-
-        Button button = (Button) myFragmentView.findViewById(R.id.btn_cancel);
-        button.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v) {
-                //fragment.finish();??
-            }});
-
-        Button button1 = (Button) myFragmentView.findViewById(R.id.btn_submit);
-        button.setOnClickListener(new View.OnClickListener() {
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Send data to database
-                putDataIntoParse(headline, topics, postText);
+                if (headline.getText() != null) {
+                    if (subjectArray != null) {
+                        if (postText.getText() != null) {
+                            putDataIntoParse(headline.getText().toString(), subjectArray, postText.getText().toString());
+                        } else {
+                            Toast.makeText(NewPostActivity.this, "Description most include text", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(NewPostActivity.this, "No topic selected", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(NewPostActivity.this, "Post Title most include text", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_new_post, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
 
     public void onClickCancel(){this.finish();}
 
     public void putDataIntoParse(String Headline, ArrayList<String> topics, String post){
 
         // Put field values into the object
-        object.put("UserID",userProfile.getUsername());
+        ParseObject object = new ParseObject("ParsePost");
+        object.put("UserName",userProfile.getUsername());
+        object.put("UserID", userProfile.getObjectId());
         object.put("Headline",Headline);
         object.put("Topic", topics);
         object.put("PostText", post);
 
         // Save new post into database
-        object.saveInBackground();
+        object.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null) {
+                    onClickCancel();
+                }else {
+                    Toast.makeText(NewPostActivity.this, "Error: " + e.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     public void selectFromSpinner(){

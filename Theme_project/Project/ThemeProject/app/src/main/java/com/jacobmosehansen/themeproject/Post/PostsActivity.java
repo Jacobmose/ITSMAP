@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Button;
 
 import com.jacobmosehansen.themeproject.R;
+import com.parse.ParseObject;
 
 /**
  * Created by Marlene on 08-10-2015.
@@ -21,24 +22,47 @@ import com.jacobmosehansen.themeproject.R;
     //Skal hente data omkring hvilke posts der er i DB'en.
     //Skal initiere fragment "details" samt den nye aktivitet "New post".
 
-public class PostsActivity extends AppCompatActivity {
+public class PostsActivity extends AppCompatActivity implements PostInterface {
+
+    private FragmentManager fragmentManager;
+    private FragmentTransaction fragmentTransaction;
+
+    private PostListFragment postListFragment;
+    private PostDetailsFragment postDetailsFragment;
+    ParseObject currentTopic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentManager = getFragmentManager();
+        fragmentTransaction = fragmentManager.beginTransaction();
 
-        PostListFragment postListFragment = new PostListFragment();
+        postListFragment = new PostListFragment();
+        postDetailsFragment = new PostDetailsFragment();
         //PostDetailsFragment postDetailsFragment = new PostDetailsFragment();
 
-        fragmentTransaction.replace(android.R.id.content, postListFragment);
+        fragmentTransaction.add(android.R.id.content, postListFragment);
         fragmentTransaction.commit();
     }
 
+    public void onPostSelected(int pos){
+        currentTopic = postListFragment.getTopic(pos);
+        if(currentTopic == null){
+            Log.d("ERROR","onPostSelect");
+        }
+        getFragmentManager().beginTransaction()
+                .replace(android.R.id.content, postDetailsFragment)
+                .commit();
+    }
 
-
+    public ParseObject onGetSelectedTopic(){
+        if(currentTopic == null)
+        {
+            Log.d("ERROR","onGetSelected");
+        }
+        return currentTopic;
+    }
 
     /*private void loadImageFromDB() {
         ParseFile profilePicture = (ParseFile)userProfile.get(ParseAdapter.KEY_PICTURE);

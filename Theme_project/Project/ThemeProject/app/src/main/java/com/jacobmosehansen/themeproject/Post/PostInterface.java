@@ -1,5 +1,7 @@
 package com.jacobmosehansen.themeproject.Post;
 
+import com.parse.ParseObject;
+
 import java.util.ArrayList;
 
 /**
@@ -7,5 +9,6 @@ import java.util.ArrayList;
  */
 public interface PostInterface {
 
-    public ArrayList<Post> getPostList();
+    public void onPostSelected(int pos);
+    public ParseObject onGetSelectedTopic();
 }
