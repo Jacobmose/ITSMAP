@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_activity_profile">Profile</string>
+    <!-- TextViews -->
+    <string name="userName_text">User Name</string>
+    <string name="email_text">Email</string>
+    <string name="userGender_text">Gender</string>
+    <string name="userAge_text">Age</string>
+    <string name="userYearsOld_text">&#160;years old</string>
+    <string name="userLocation_text">Location</string>
+    <string name="lastLogin_text">Last logged in at:&#160;</string>
+    <string name="unkownLocation_text">Unknown Location</string>
+    <string name="anotherUsersSubjects_text">\&apos;s subjects:</string>
+    <string name="numberOfSubjects_text">&#160;ratings</string>
+    <!-- Buttons -->
+    <string name="rateBtn_text">Rate</string>
+    <string name="addSubject_text">Add</string>
+    <!-- Subjects -->
+    <string name="selectSubjectPrefix">Select a subject</string>
+    <string-array name="subjects_array">
+        <!-- Humanities -->
+        <item>Danish</item>
+        <item>English</item>
+        <item>Religions</item>
+        <item>History</item>
+        <item>Social Studies</item>
+        <!-- Natural Subjects -->
+        <item>Mathematics</item>
+        <item>Natural Science</item>
+        <item>Geography</item>
+        <item>Biology</item>
+        <item>Physics/Chemistry</item>
+        <!-- Practical/Music Subjects -->
+        <item>Sports</item>
+        <item>Music</item>
+        <item>Art</item>
+        <item>Needlework</item>
+        <item>Woodwork</item>
+        <item>Cooking</item>
+    </string-array>
+    <string name="selectSubject">Select a subject...</string>
+    <string name="subjectsHelperText">Select the subject(s) that you would like to assist with:</string>
+    <!-- Dialog Builder -->
+    <string name="takePhoto_text">Take new photo</string>
+    <string name="choosePhoto_text">Choose photo from library</string>
+    <string name="cancelDialog_text">Cancel</string>
+    <string name="dialogTitle_text">Add profile picture</string>
+    <!-- Picture Builder -->
+    <string name="pictureName_text">picture</string>
+    <!-- Subject Spinner Error Msgs -->
+    <string name="subjectAlreadyAdded_text">Subject already added</string>
+    <string name="subjectTooManyAdded_text">Too many subjects added</string>
+    <string name="noSubjectSelected_text">No subject selected</string>
+
+</resources>

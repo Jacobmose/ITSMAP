@@ -1,0 +1,88 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:weightSum="3">
+
+    <LinearLayout
+        android:id="@+id/tl_main_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="2">
+
+        <RelativeLayout
+            android:id="@+id/mainLand_buttons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mainActivity_btn_chat"
+                android:id="@+id/btn_chat"
+                android:layout_margin="5dp"
+                android:layout_toEndOf="@+id/btn_newPost"
+                android:layout_alignParentBottom="true"
+                android:background="@color/defaultButtonColor" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mainActivity_btn_newPost"
+                android:id="@+id/btn_newPost"
+                android:layout_margin="5dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentStart="true"
+                android:background="@color/defaultButtonColor" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mainActivity_btn_profile"
+                android:id="@+id/btn_profile"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignTop="@+id/btn_posts"
+                android:layout_toEndOf="@+id/btn_posts"
+                android:background="@color/defaultButtonColor" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/mainActivity_btn_posts"
+                android:id="@+id/btn_posts"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_above="@+id/btn_newPost"
+                android:layout_alignParentStart="true"
+                android:background="@color/defaultButtonColor" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="LogOut"
+                android:id="@+id/btn_logout"
+                android:background="@color/defaultButtonColor"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_gravity="center"
+                android:background="@drawable/mainlogo"
+                android:layout_toEndOf="@+id/btn_chat"
+                android:layout_alignParentTop="true" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

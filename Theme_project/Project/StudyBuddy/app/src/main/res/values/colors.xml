@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <item name="darkGreen" type="color">#044C44</item>
+    <item name="lightGreenShade" type="color">#5D9365</item>
+    <item name="darkBlue" type="color">#5C9FD6</item>
+    <item name="blueGrey" type="color">#B1C8E1</item>
+    <item name="neon" type="color">#439B00</item>
+    <item name="black" type="color">#000000</item>
+
+    <color name="lightGreen">#a1dab4</color>
+    <color name="grayblue">#5dbbc1</color>
+    <color name="beige">#fcfffc</color>
+
+    <color name="white">#ffffff</color>
+    <color name="defaultButtonColor">#80B31A</color>
+
+</resources>
