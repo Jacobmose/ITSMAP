@@ -8,57 +8,6 @@
     android:weightSum="3">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:id="@+id/Grid1">
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:weightSum="1">
-
-            <EditText
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/et_search"
-                android:text="@string/mainActivity_search"
-                android:background="@color/blueGrey"
-                android:layout_margin="5dp"
-                android:layout_weight="1" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/mainActivity_search"
-                android:id="@+id/btn_search"
-                android:layout_margin="5dp"
-                android:background="@color/defaultButtonColor" />
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Spinner
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/spinner_search"
-                android:spinnerMode="dialog"
-                android:layout_margin="5dp" />
-        </TableRow>
-
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/tl_main_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,10 +66,20 @@
                 android:layout_height="wrap_content"
                 android:text="LogOut"
                 android:id="@+id/btn_logout"
-                android:layout_margin="5dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:background="@color/defaultButtonColor" />
+                android:background="@color/defaultButtonColor"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentStart="true" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/imageView"
+                android:layout_gravity="center"
+                android:background="@drawable/mainLogo"
+                android:layout_toEndOf="@+id/btn_chat"
+                android:layout_alignParentTop="true" />
 
         </RelativeLayout>
 

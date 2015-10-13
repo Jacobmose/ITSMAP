@@ -7,8 +7,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.ImageView;
 
 import com.jacobmosehansen.themeproject.Chat.ChatListActivity;
 import com.jacobmosehansen.themeproject.Chat.MessageService;
@@ -22,10 +21,9 @@ import com.parse.ParseUser;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btn_posts, btn_chat, btn_newPost, btn_profile, btn_search, btn_logOut;
-    EditText etSearch;
-    Spinner sprSearch;
+    Button btn_posts, btn_chat, btn_newPost, btn_profile, btn_logOut;
     Integer userId;
+    ImageView img_appLogo;
     ParseUser currentUser;
 
     @Override
@@ -41,10 +39,8 @@ public class MainActivity extends AppCompatActivity {
         btn_chat = (Button) findViewById(R.id.btn_chat);
         btn_newPost = (Button) findViewById(R.id.btn_newPost);
         btn_profile = (Button) findViewById(R.id.btn_profile);
-        btn_search = (Button) findViewById(R.id.btn_search);
         btn_logOut = (Button) findViewById(R.id.btn_logout);
-        etSearch = (EditText) findViewById(R.id.et_search);
-        sprSearch = (Spinner) findViewById(R.id.spinner_search);
+        img_appLogo = (ImageView) findViewById(R.id.img_appLogo);
 
         btn_posts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,23 +72,6 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
                 intent.putExtra("USER_ID", currentUser.getObjectId());
                 startActivityForResult(intent, 1);
-            }
-        });
-
-
-        btn_search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //_TODO Remove this! - made for testing//
-                Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
-                intent.putExtra("USER_ID", "DTRPHYgnwW");
-                startActivityForResult(intent, 1);
-                //Remove this! - made for testing//
-
-                /*intent.putExtra("RECIPIENT_ID", "MmDjqfcqR7");
-                intent.putExtra("TOPIC_ID", "Topic Test");
-                startActivity(intent);
-                */
             }
         });
 
