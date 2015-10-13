@@ -75,8 +75,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_login"
-                android:background="@color/lightGreen"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/defaultButtonColor" />
 
             <Button
                 android:id="@+id/btn_createUser"
@@ -84,8 +84,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_createUser"
-                android:background="@color/lightGreen"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/defaultButtonColor" />
 
         </LinearLayout>
 

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- Strings related to create user -->
+    <!-- TextViews, EditTexts, Buttons -->
     <string name="txt_title">Create new user</string>
     <string name="txt_createUser">Create User</string>
-
     <string name="txt_first_name">First Name</string>
     <string name="txt_last_name">Last Name</string>
     <string name="txt_email">Email</string>
@@ -14,15 +13,16 @@
     <string name="txt_password">Password (min. 8 digits)</string>
     <string name="btn_sign_up">Sign up</string>
     <string name="btn_back_to_login">Back to Login</string>
-
     <string name="tv_create_user_description">To create a new user and get the help you need, please enter your details and click create user.</string>
 
+    <!-- Toast strings -->
     <string name="toast_invalid_password">Error: Password must be at least 8 characters!</string>
     <string name="toast_invalid_email">Error: Email is not valid format!</string>
     <string name="toast_sign_up_error">There was an error signing up!</string>
     <string name="toast_user_created">User was created!</string>
     <string name="toast_enter_details">Please enter your details!</string>
 
+    <!-- String Arrays for spinners -->
     <string-array name="sa_months">
         <!-- Months -->
         <item>January</item>

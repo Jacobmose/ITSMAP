@@ -31,12 +31,10 @@ import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    // LogCat tag
     private static final String TAG = MainActivity.class.getSimpleName();
 
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
 
-    // Google client to interact with Google API
     private GoogleApiClient mGoogleApiClient;
 
     private Location mLastLocation;
@@ -128,7 +126,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     private void getLocation(){
 
-        Log.d("1", "Entered getLocation()");
+        Log.d(TAG, "Entered getLocation()");
 
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
@@ -143,13 +141,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 List<Address> addresses = geocoder.getFromLocation(_latitude, _longitude, 1);
                 StringBuilder sb = new StringBuilder();
 
-                Log.d("2", "Location is != null");
+                Log.d(TAG, "Location is != null");
 
                 if (addresses.size() > 0){
                     Address address = addresses.get(0);
                     sb.append(address.getSubLocality());
 
-                    Log.d("3", "Address is found, should be all good");
+                    Log.d(TAG, "Address is found, should be all good");
 
                     _actualLocation = sb.toString();
 
@@ -157,15 +155,12 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                     currentUser.saveInBackground();
                 }
             } catch (IOException e) {
-                Log.d("4", "IOException is catched. Location was not found");
+                Log.d(TAG, "IOException is catched. Location was not found");
                 Toast.makeText(LoginActivity.this, getResources().getString(R.string.toast_io_exception), Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    /**
-     * Creating google api client object
-     * */
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addConnectionCallbacks(this)
@@ -173,9 +168,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .addApi(LocationServices.API).build();
     }
 
-    /**
-     * Method to verify google play services on the device
-     * */
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil
                 .isGooglePlayServicesAvailable(this);
@@ -214,9 +206,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         }
     }
 
-    /**
-     * Google api callback methods
-     */
     @Override
     public void onConnectionFailed(ConnectionResult result) {
         Log.i(TAG, "Connection failed: ConnectionResult.getErrorCode() = "

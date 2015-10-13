@@ -1,21 +1,18 @@
 <resources>
 
-    <!-- Strings related to login -->
+    <!-- Buttons, TextView, Title -->
     <string name="btn_login">Login</string>
     <string name="btn_createUser">Create user</string>
+    <string name="tv_login_description">If you need help you are in the right place. To get the help you need, simply login or sign up. Its free!</string>
+    <string name="title_activity_login">LoginActivity</string>
 
-    <string name="loginSuccess">Login Success!</string>
-    <string name="io_exception">Oops, IOException occurred..</string>
-    <!-- activity_profile strings -->
-    <string name="title_activity_login">LoginActivity</string> <!-- _TODO Consider change this -->
-
+    <!-- Toast strings -->
     <string name="toast_login_success">Login Success!</string>
     <string name="toast_invalid_email_password">Invalid email or password!</string>
     <string name="toast_null_email_password">Email or Password cannot be null!</string>
     <string name="toast_io_exception">Oops, IOException occurred..</string>
     <string name="toast_device_not_supported">This device is not supported. Google Play Services is required</string>
-
-    <string name="tv_login_description">If you need help you are in the right place. To get the help you need, simply login or sign up. Its free!</string>
-
+    <string name="loginSuccess">Login Success!</string>
+    <string name="io_exception">Oops, IOException occurred..</string>
 
 </resources>
