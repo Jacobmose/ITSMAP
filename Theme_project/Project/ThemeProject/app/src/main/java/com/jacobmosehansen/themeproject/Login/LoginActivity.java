@@ -219,7 +219,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     @Override
     public void onConnected(Bundle arg0) {
-        getLocation();
     }
 
     @Override
@@ -234,7 +233,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             currentUser.logOutInBackground();
         }
         if (mGoogleApiClient != null){
-            mGoogleApiClient.disconnect();
+           mGoogleApiClient.disconnect();
         }
         super.onDestroy();
     }
