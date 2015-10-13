@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Fornavn Efternavn"
+        android:text="First Name Last Name"
         android:id="@+id/tvName"
         android:layout_below="@+id/ivImgPost"
         android:layout_alignParentStart="true"
@@ -27,7 +27,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Overskrift på opgave"
+        android:text="Headline on Post"
         android:id="@+id/tvTitle"
         android:layout_alignTop="@+id/ivImgPost"
         android:layout_toEndOf="@+id/tvName"
@@ -37,19 +37,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Fagniveau"
-        android:id="@+id/tvLevel"
+        android:text="Subject"
+        android:id="@+id/tvSubject"
         android:layout_below="@+id/tvTitle"
         android:layout_alignStart="@+id/tvTitle" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Kursus"
-        android:id="@+id/tvSubject"
-        android:layout_below="@+id/tvLevel"
-        android:layout_alignStart="@+id/tvLevel" />
 
     <EditText
         android:layout_width="180dp"

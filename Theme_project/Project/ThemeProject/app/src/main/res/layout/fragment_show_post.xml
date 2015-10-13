@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Headline on assignment"
+        android:text="Headline on Post"
         android:id="@+id/Headline"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/name"
@@ -37,7 +37,7 @@
         android:id="@+id/Post_note"
         android:layout_below="@+id/Headline"
         android:layout_toEndOf="@+id/name"
-        android:hint="Kursus"
+        android:hint="Subject"
         android:clickable="false" />
 
     <EditText

@@ -26,15 +26,15 @@
         </activity>
         <activity
             android:name=".Post.PostsActivity"
-            android:label="@string/title_activity_posts" >
+            android:label="Study Buddy" >
         </activity>
         <activity
             android:name=".Post.NewPostActivity"
-            android:label="@string/title_activity_new_post" >
+            android:label="Study Buddy" >
         </activity>
         <activity
             android:name=".Chat.ChatActivity"
-            android:label="@string/title_activity_chat_list" >
+            android:label="Study Buddy" >
         </activity>
         <activity
             android:name=".Profile.ProfileActivity"
@@ -46,7 +46,7 @@
         </activity>
         <activity
             android:name=".Login.CreateUserActivity"
-            android:label="@string/title_activity_create_user" >
+            android:label="Study Buddy" >
         </activity>
 
         <service
