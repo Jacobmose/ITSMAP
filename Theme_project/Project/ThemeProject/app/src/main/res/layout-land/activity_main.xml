@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/imageView"
                 android:layout_gravity="center"
-                android:background="@drawable/mainLogo"
+                android:background="@drawable/mainlogo"
                 android:layout_toEndOf="@+id/btn_chat"
                 android:layout_alignParentTop="true" />
 
