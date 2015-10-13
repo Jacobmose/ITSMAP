@@ -12,8 +12,8 @@
     <string name="mainActivity_search">Search</string>
     <string name="title_activity_posts">PostsActivity</string>
     <string name="title_activity_new_post">NewPostActivity</string>
-    <string name="title_activity_chat_list">ChatListActivity</string>
-    <string name="title_activity_chat_window">ChatWindowActivity</string>
+    <string name="title_activity_chat_list">Chat List</string>
+    <string name="title_activity_chat_window">Chat</string>
     <string name="ed_login_user_name">Username</string>
 
 

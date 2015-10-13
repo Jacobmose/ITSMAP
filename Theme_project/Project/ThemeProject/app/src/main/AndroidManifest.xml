@@ -46,7 +46,7 @@
         </activity>
         <activity
             android:name=".Chat.ChatMessageActivity"
-            android:label="Chat Message" >
+            android:label="@string/title_activity_chat_window" >
         </activity>
         <activity
             android:name=".Chat.ChatListActivity"
