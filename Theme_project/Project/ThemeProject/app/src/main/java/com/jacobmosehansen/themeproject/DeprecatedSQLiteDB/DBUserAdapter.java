@@ -16,7 +16,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Created by Jacobmosehansen on 03-10-2015.
  */

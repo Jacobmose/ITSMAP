@@ -29,6 +29,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ **  The location used in this activity is greatly inspired from the following link:
+ **  http://www.androidhive.info/2015/02/android-location-api-using-google-play-services/
+ **/
+
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -213,7 +218,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     @Override
-    public void onConnected(Bundle arg0) {}
+    public void onConnected(Bundle arg0) {
+        getLocation();
+    }
 
     @Override
     public void onConnectionSuspended(int arg0) {
@@ -225,6 +232,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         stopService(new Intent(this, MessageService.class));
         if(currentUser != null){
             currentUser.logOutInBackground();
+        }
+        if (mGoogleApiClient != null){
+            mGoogleApiClient.disconnect();
         }
         super.onDestroy();
     }
