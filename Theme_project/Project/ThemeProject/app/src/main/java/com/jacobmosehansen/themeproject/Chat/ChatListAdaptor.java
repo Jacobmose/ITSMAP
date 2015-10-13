@@ -79,10 +79,7 @@ public class ChatListAdaptor extends BaseAdapter {
                     imgPerson.setImageDrawable(roundImage);
                 }
             }
-
-
         }
         return convertView;
     }
-
 }

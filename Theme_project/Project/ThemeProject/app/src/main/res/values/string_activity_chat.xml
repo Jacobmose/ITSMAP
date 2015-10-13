@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="txtTopic">Topic</string>
+    <string name="txtPerson">Person</string>
+    <string name="etxMessage">Message...</string>
+    <string name="btnSend">Send</string>
+</resources>

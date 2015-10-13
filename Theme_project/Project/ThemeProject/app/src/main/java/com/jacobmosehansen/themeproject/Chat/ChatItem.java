@@ -1,18 +1,16 @@
 package com.jacobmosehansen.themeproject.Chat;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
+
 import android.graphics.drawable.Drawable;
-
-import com.jacobmosehansen.themeproject.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 /**
  * Created by Andersen on 06-10-2015.
  */
-public class ChatItem {
+
+//This is a wrapper class for the ChatItem for the ListView and the ChatMessageActivity
+@SuppressWarnings("serial")
+public class ChatItem implements Serializable {
 
     private String Person;
     private String Topic;
@@ -35,17 +33,6 @@ public class ChatItem {
         TopicId = topicId;
     }
 
-    public ChatItem(String person, String topic, Drawable img){
-        Person = person;
-        Topic = topic;
-        PersonImg = img;
-    }
-    public ChatItem(String person, String topic){
-        Person = person;
-        Topic = topic;
-        PersonImg = null;
-    }
-
     public String getPerson(){
        return Person;
     }
@@ -61,25 +48,5 @@ public class ChatItem {
     public String getPersonId(){return PersonId;}
 
     public String getTopicId(){return TopicId;}
-
-    public void setTopicId(String topicId){TopicId = topicId;}
-
-    public void setPerson(String person) {
-        Person = person;
-    }
-
-    public void setTopic(String topic) {
-        Topic = topic;
-    }
-
-    public void setPersonImg(Drawable personImg) {
-        PersonImg = personImg;
-    }
-
-    public void setPersonId(String personId){PersonId = personId;}
-
-
-
-
 }
 
