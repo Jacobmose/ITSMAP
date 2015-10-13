@@ -12,13 +12,13 @@
         android:id="@+id/headLine"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:hint="Overskrift for opgave" />
+        android:hint="Headline on Post" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Fag"
+        android:text="Subject"
         android:id="@+id/textView2"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/headLine" />
