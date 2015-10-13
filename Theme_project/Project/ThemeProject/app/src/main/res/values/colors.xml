@@ -12,4 +12,7 @@
     <color name="grayblue">#5dbbc1</color>
     <color name="beige">#fcfffc</color>
 
+    <color name="white">#ffffff</color>
+    <color name="defaultButtonColor">#80B31A</color>
+
 </resources>

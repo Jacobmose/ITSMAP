@@ -71,7 +71,8 @@
             android:text="@string/btnSend"
             android:id="@+id/btnChatMessage"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:background="@color/defaultButtonColor"/>
     </RelativeLayout>
 
 </RelativeLayout>

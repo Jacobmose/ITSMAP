@@ -59,13 +59,21 @@
         android:id="@+id/btn_StartChat"
         android:layout_below="@+id/editText3"
         android:layout_alignEnd="@+id/editText3"
-        android:layout_marginTop="27dp" />
+        android:layout_marginTop="27dp"
+        android:background="@color/defaultButtonColor" />
 
     <Button
         android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:text="Show Profile"
         android:id="@+id/btn_showProfile"
+<<<<<<< HEAD
         android:layout_alignBottom="@+id/btn_StartChat"
         android:layout_alignStart="@+id/editText3" />
+=======
+        android:layout_alignBottom="@+id/button2"
+        android:layout_alignStart="@+id/editText3"
+        android:background="@color/defaultButtonColor" />
+
+>>>>>>> f987cfd4c816ccfaab458a1f9e2b26b1b0c74c5b
 </RelativeLayout>

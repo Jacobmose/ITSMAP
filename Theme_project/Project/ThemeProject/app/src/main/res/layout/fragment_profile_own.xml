@@ -162,10 +162,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:text="@string/addSubject_text"
-                    android:id="@+id/btn_addSubject" />
-
+                    android:layout_margin="5dp"
+                    android:id="@+id/btn_addSubject"
+                    android:background="@color/defaultButtonColor" />
 
             </LinearLayout>
+
         </TableRow>
 
         <TableRow
@@ -179,6 +181,7 @@
                 android:layout_weight="1"
                 android:contextClickable="false"
                 android:drawSelectorOnTop="true" />
+
         </TableRow>
 
     </LinearLayout>

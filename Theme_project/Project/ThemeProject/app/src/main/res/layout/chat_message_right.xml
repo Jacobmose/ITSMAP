@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:padding="12dp"
-        android:background="@drawable/blue_bubble">
+        android:background="@drawable/green_bubble">
 
         <TextView
             android:id="@+id/txtMessage"

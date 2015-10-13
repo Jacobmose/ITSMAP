@@ -14,7 +14,7 @@
     <string name="numberOfSubjects_text">&#160;ratings</string>
     <!-- Buttons -->
     <string name="rateBtn_text">Rate</string>
-    <string name="addSubject_text">Add Subject</string>
+    <string name="addSubject_text">Add</string>
     <!-- Subjects -->
     <string name="selectSubjectPrefix">Select a subject</string>
     <string-array name="subjects_array">

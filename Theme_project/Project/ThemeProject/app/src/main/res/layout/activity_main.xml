@@ -24,7 +24,9 @@
                 android:layout_height="wrap_content"
                 android:text="LogOut"
                 android:id="@+id/btn_logout"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/defaultButtonColor" />
+
         </TableRow>
 
         <TableRow
@@ -45,7 +47,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/mainActivity_search"
                 android:id="@+id/btn_search"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/defaultButtonColor" />
 
         </TableRow>
 
@@ -81,14 +84,16 @@
                 android:layout_height="match_parent"
                 android:text="@string/mainActivity_btn_posts"
                 android:id="@+id/btn_posts"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/defaultButtonColor" />
 
             <Button
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:text="@string/mainActivity_btn_profile"
                 android:id="@+id/btn_profile"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/defaultButtonColor" />
 
         </TableRow>
 
@@ -102,14 +107,17 @@
                 android:layout_height="match_parent"
                 android:text="@string/mainActivity_btn_newPost"
                 android:id="@+id/btn_newPost"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/defaultButtonColor" />
 
             <Button
                 android:layout_width="0dip"
                 android:layout_height="match_parent"
                 android:text="@string/mainActivity_btn_chat"
                 android:id="@+id/btn_chat"
-                android:layout_margin="5dp" />
+                android:layout_margin="5dp"
+                android:background="@color/defaultButtonColor" />
+
         </TableRow>
 
     </TableLayout>

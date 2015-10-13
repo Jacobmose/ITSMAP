@@ -22,6 +22,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignEnd="@+id/lvPostList"
         android:nestedScrollingEnabled="false"
-        android:onClick="onClickNewPost" />
+        android:onClick="onClickNewPost"
+        android:background="@color/defaultButtonColor" />
 
 </RelativeLayout>
